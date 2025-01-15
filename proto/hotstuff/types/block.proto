@@ -1,0 +1,15 @@
+syntax = "proto3";
+package hotstuff.types;
+
+option go_package = "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types";
+
+import "gogoproto/gogo.proto";
+import "hotstuff/types/types.proto";
+import "hotstuff/types/evidence.proto";
+
+message Block {
+  Header                        header      = 1 [(gogoproto.nullable) = false];
+  Data                          data        = 2 [(gogoproto.nullable) = false];
+  hotstuff.types.EvidenceList evidence    = 3 [(gogoproto.nullable) = false];
+  Commit                        last_commit = 4;
+}

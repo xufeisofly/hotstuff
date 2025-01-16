@@ -1,6 +1,6 @@
 module github.com/xufeisofly/hotstuff-core
 
-go 1.21.5
+go 1.18
 
 require (
 	github.com/BurntSushi/toml v1.2.1

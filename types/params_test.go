@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	abci "github.com/xufeisofly/hotstuff-core/abci/types"
+	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
 )
 
 var (

@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/tendermint/tendermint/crypto/merkle"
-	"github.com/tendermint/tendermint/libs/bits"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmjson "github.com/tendermint/tendermint/libs/json"
-	tmmath "github.com/tendermint/tendermint/libs/math"
-	tmsync "github.com/tendermint/tendermint/libs/sync"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
+	"github.com/xufeisofly/hotstuff-core/libs/bits"
+	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
+	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
+	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
+	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
 )
 
 var (

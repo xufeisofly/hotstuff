@@ -15,16 +15,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/merkle"
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	"github.com/tendermint/tendermint/libs/bits"
-	"github.com/tendermint/tendermint/libs/bytes"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	tmversion "github.com/tendermint/tendermint/proto/tendermint/version"
-	tmtime "github.com/tendermint/tendermint/types/time"
-	"github.com/tendermint/tendermint/version"
+	"github.com/xufeisofly/hotstuff-core/crypto"
+	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
+	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff-core/libs/bits"
+	"github.com/xufeisofly/hotstuff-core/libs/bytes"
+	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
+	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	"github.com/xufeisofly/hotstuff-core/version"
 )
 
 func TestMain(m *testing.M) {

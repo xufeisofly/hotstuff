@@ -16,14 +16,14 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/p2p"
-	"github.com/tendermint/tendermint/privval"
-	e2e "github.com/tendermint/tendermint/test/e2e/pkg"
-	"github.com/tendermint/tendermint/test/e2e/pkg/infra"
-	"github.com/tendermint/tendermint/types"
+	"github.com/xufeisofly/hotstuff-core/config"
+	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff-core/p2p"
+	"github.com/xufeisofly/hotstuff-core/privval"
+	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff-core/test/e2e/pkg/infra"
+	"github.com/xufeisofly/hotstuff-core/types"
 )
 
 const (

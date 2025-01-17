@@ -8,10 +8,10 @@ import (
 	"math"
 	"time"
 
-	"github.com/tendermint/tendermint/libs/log"
-	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
-	e2e "github.com/tendermint/tendermint/test/e2e/pkg"
-	"github.com/tendermint/tendermint/types"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
+	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff-core/types"
 )
 
 // Load generates transactions against the network until the given context is

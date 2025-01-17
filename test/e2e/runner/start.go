@@ -5,8 +5,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/tendermint/tendermint/libs/log"
-	e2e "github.com/tendermint/tendermint/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
 )
 
 func Start(testnet *e2e.Testnet) error {

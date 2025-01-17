@@ -9,10 +9,10 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/tendermint/tendermint/abci/example/code"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/version"
+	"github.com/xufeisofly/hotstuff-core/abci/example/code"
+	abci "github.com/xufeisofly/hotstuff-core/abci/types"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff-core/version"
 )
 
 const appVersion = 1

@@ -9,19 +9,19 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	tmcon "github.com/tendermint/tendermint/consensus"
-	cstypes "github.com/tendermint/tendermint/consensus/types"
-	"github.com/tendermint/tendermint/libs/bits"
-	tmevents "github.com/tendermint/tendermint/libs/events"
-	tmjson "github.com/tendermint/tendermint/libs/json"
-	"github.com/tendermint/tendermint/libs/log"
-	tmsync "github.com/tendermint/tendermint/libs/sync"
-	"github.com/tendermint/tendermint/p2p"
-	tmcons "github.com/tendermint/tendermint/proto/tendermint/consensus"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	sm "github.com/tendermint/tendermint/state"
-	"github.com/tendermint/tendermint/types"
-	tmtime "github.com/tendermint/tendermint/types/time"
+	tmcon "github.com/xufeisofly/hotstuff-core/consensus"
+	cstypes "github.com/xufeisofly/hotstuff-core/consensus/types"
+	"github.com/xufeisofly/hotstuff-core/libs/bits"
+	tmevents "github.com/xufeisofly/hotstuff-core/libs/events"
+	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	"github.com/xufeisofly/hotstuff-core/p2p"
+	tmcons "github.com/xufeisofly/hotstuff-core/proto/hotstuff/consensus"
+	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	sm "github.com/xufeisofly/hotstuff-core/state"
+	"github.com/xufeisofly/hotstuff-core/types"
+	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
 )
 
 const (

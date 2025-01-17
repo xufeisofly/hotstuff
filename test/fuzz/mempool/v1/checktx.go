@@ -1,13 +1,13 @@
 package v1
 
 import (
-	"github.com/tendermint/tendermint/abci/example/kvstore"
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/libs/log"
-	mempl "github.com/tendermint/tendermint/mempool"
-	"github.com/tendermint/tendermint/proxy"
+	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff-core/config"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	mempl "github.com/xufeisofly/hotstuff-core/mempool"
+	"github.com/xufeisofly/hotstuff-core/proxy"
 
-	mempoolv1 "github.com/tendermint/tendermint/mempool/v1"
+	mempoolv1 "github.com/xufeisofly/hotstuff-core/mempool/v1"
 )
 
 var mempool mempl.Mempool

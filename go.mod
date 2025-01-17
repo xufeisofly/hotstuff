@@ -33,7 +33,7 @@ require (
 	github.com/rs/cors v1.8.2
 	github.com/sasha-s/go-deadlock v0.3.1
 	github.com/snikch/goodman v0.0.0-20171125024755-10e37e294daa
-	github.com/spf13/cobra v1.6.0
+	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.10.0
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
@@ -51,8 +51,8 @@ require github.com/vektra/mockery/v2 v2.14.0
 
 require (
 	github.com/gogo/protobuf v1.3.2
-	github.com/informalsystems/tm-load-test v1.0.0
-	gonum.org/v1/gonum v0.12.0
+	github.com/informalsystems/tm-load-test v1.3.0
+	gonum.org/v1/gonum v0.15.1
 	google.golang.org/protobuf v1.34.2
 )
 

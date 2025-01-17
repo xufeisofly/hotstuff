@@ -3,13 +3,13 @@ package consensus
 import (
 	"fmt"
 
-	tmcon "github.com/tendermint/tendermint/consensus"
-	cstypes "github.com/tendermint/tendermint/consensus/types"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/p2p"
-	tmcons "github.com/tendermint/tendermint/proto/tendermint/consensus"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	tmcon "github.com/xufeisofly/hotstuff-core/consensus"
+	cstypes "github.com/xufeisofly/hotstuff-core/consensus/types"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff-core/p2p"
+	tmcons "github.com/xufeisofly/hotstuff-core/proto/hotstuff/consensus"
+	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff-core/types"
 )
 
 // MisbehaviorList encompasses a list of all possible behaviors

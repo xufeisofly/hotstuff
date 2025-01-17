@@ -3,8 +3,8 @@ package privval
 import (
 	"time"
 
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/libs/service"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff-core/libs/service"
 )
 
 const (

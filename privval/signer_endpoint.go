@@ -5,10 +5,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/tendermint/tendermint/libs/protoio"
-	"github.com/tendermint/tendermint/libs/service"
-	tmsync "github.com/tendermint/tendermint/libs/sync"
-	privvalproto "github.com/tendermint/tendermint/proto/tendermint/privval"
+	"github.com/xufeisofly/hotstuff-core/libs/protoio"
+	"github.com/xufeisofly/hotstuff-core/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	privvalproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval"
 )
 
 const (

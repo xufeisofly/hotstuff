@@ -10,13 +10,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/abci/example/kvstore"
-	"github.com/tendermint/tendermint/light/provider"
-	lighthttp "github.com/tendermint/tendermint/light/provider/http"
-	rpcclient "github.com/tendermint/tendermint/rpc/client"
-	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
-	rpctest "github.com/tendermint/tendermint/rpc/test"
-	"github.com/tendermint/tendermint/types"
+	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff-core/light/provider"
+	lighthttp "github.com/xufeisofly/hotstuff-core/light/provider/http"
+	rpcclient "github.com/xufeisofly/hotstuff-core/rpc/client"
+	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
+	rpctest "github.com/xufeisofly/hotstuff-core/rpc/test"
+	"github.com/xufeisofly/hotstuff-core/types"
 )
 
 func TestNewProvider(t *testing.T) {

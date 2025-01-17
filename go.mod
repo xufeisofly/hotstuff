@@ -1,4 +1,4 @@
-module github.com/xufeisofly/hotstuff-core
+module github.com/xufeisofly/hotstuff
 
 go 1.18
 

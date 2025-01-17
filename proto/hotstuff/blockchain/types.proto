@@ -1,7 +1,7 @@
 syntax = "proto3";
 package hotstuff.blockchain;
 
-option go_package = "github.com/xufeisofly/hotstuff-core/proto/hotstuff/blockchain";
+option go_package = "github.com/xufeisofly/hotstuff/proto/hotstuff/blockchain";
 
 import "hotstuff/types/block.proto";
 

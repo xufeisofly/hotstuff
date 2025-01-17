@@ -1,7 +1,7 @@
 syntax = "proto3";
 package hotstuff.mempool;
 
-option go_package = "github.com/xufeisofly/hotstuff-core/proto/hotstuff/mempool";
+option go_package = "github.com/xufeisofly/hotstuff/proto/hotstuff/mempool";
 
 message Txs {
   repeated bytes txs = 1;

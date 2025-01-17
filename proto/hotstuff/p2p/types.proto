@@ -1,7 +1,7 @@
 syntax = "proto3";
 package tendermint.p2p;
 
-option go_package = "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p";
+option go_package = "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p";
 
 import "gogoproto/gogo.proto";
 

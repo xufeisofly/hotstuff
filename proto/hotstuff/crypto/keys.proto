@@ -1,7 +1,7 @@
 syntax = "proto3";
 package hotstuff.crypto;
 
-option go_package = "github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto";
+option go_package = "github.com/xufeisofly/hotstuff/proto/hotstuff/crypto";
 
 import "gogoproto/gogo.proto";
 

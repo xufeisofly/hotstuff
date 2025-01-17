@@ -11,18 +11,18 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/tendermint/tendermint/libs/log"
-	tmos "github.com/tendermint/tendermint/libs/os"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
 
-	abcicli "github.com/tendermint/tendermint/abci/client"
-	"github.com/tendermint/tendermint/abci/example/code"
-	"github.com/tendermint/tendermint/abci/example/counter"
-	"github.com/tendermint/tendermint/abci/example/kvstore"
-	"github.com/tendermint/tendermint/abci/server"
-	servertest "github.com/tendermint/tendermint/abci/tests/server"
-	"github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/abci/version"
-	"github.com/tendermint/tendermint/proto/tendermint/crypto"
+	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
+	"github.com/xufeisofly/hotstuff-core/abci/example/code"
+	"github.com/xufeisofly/hotstuff-core/abci/example/counter"
+	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff-core/abci/server"
+	servertest "github.com/xufeisofly/hotstuff-core/abci/tests/server"
+	"github.com/xufeisofly/hotstuff-core/abci/types"
+	"github.com/xufeisofly/hotstuff-core/abci/version"
+	"github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto"
 )
 
 // client is a global variable so it can be reused by the console

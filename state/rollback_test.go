@@ -7,14 +7,14 @@ import (
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/state/mocks"
-	"github.com/xufeisofly/hotstuff-core/types"
-	"github.com/xufeisofly/hotstuff-core/version"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/state/mocks"
+	"github.com/xufeisofly/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 func TestRollback(t *testing.T) {

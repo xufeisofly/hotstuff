@@ -5,10 +5,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	privvalproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	privvalproto "github.com/xufeisofly/hotstuff/proto/hotstuff/privval"
 )
 
 // SignerListenerEndpointOption sets an optional parameter on the SignerListenerEndpoint.

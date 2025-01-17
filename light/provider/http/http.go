@@ -8,14 +8,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/light/provider"
-	rpcclient "github.com/xufeisofly/hotstuff-core/rpc/client"
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/light/provider"
+	rpcclient "github.com/xufeisofly/hotstuff/rpc/client"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 var (
-	// This is very brittle, see: https://github.com/xufeisofly/hotstuff-core/issues/4740
+	// This is very brittle, see: https://github.com/xufeisofly/hotstuff/issues/4740
 	regexpMissingHeight = regexp.MustCompile(`height \d+ is not available`)
 	regexpTooHigh       = regexp.MustCompile(`height \d+ must be less than or equal to`)
 	regexpTimedOut      = regexp.MustCompile(`Timeout exceeded`)

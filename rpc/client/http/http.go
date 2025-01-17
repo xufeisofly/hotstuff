@@ -7,16 +7,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmpubsub "github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	rpcclient "github.com/xufeisofly/hotstuff-core/rpc/client"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	jsonrpcclient "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/client"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	rpcclient "github.com/xufeisofly/hotstuff/rpc/client"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	jsonrpcclient "github.com/xufeisofly/hotstuff/rpc/jsonrpc/client"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 /*

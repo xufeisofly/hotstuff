@@ -3,10 +3,10 @@ package types
 import (
 	"fmt"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmpubsub "github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	tmquery "github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
+	tmquery "github.com/xufeisofly/hotstuff/libs/pubsub/query"
 )
 
 // Reserved event types (alphabetically sorted).

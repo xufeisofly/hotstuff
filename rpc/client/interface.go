@@ -23,10 +23,10 @@ implementation.
 import (
 	"context"
 
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Client wraps most important rpc calls a client would make if you want to

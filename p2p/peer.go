@@ -8,11 +8,11 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	"github.com/xufeisofly/hotstuff-core/libs/cmap"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
+	"github.com/xufeisofly/hotstuff/libs/cmap"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/service"
 
-	tmconn "github.com/xufeisofly/hotstuff-core/p2p/conn"
+	tmconn "github.com/xufeisofly/hotstuff/p2p/conn"
 )
 
 //go:generate ../scripts/mockery_generate.sh Peer

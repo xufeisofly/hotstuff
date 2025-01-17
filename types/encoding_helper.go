@@ -3,7 +3,7 @@ package types
 import (
 	gogotypes "github.com/gogo/protobuf/types"
 
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
 )
 
 // cdcEncode returns nil if the input is nil, otherwise returns

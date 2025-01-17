@@ -6,9 +6,9 @@ import (
 	"io"
 	"log"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/libs/async"
-	sc "github.com/xufeisofly/hotstuff-core/p2p/conn"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/libs/async"
+	sc "github.com/xufeisofly/hotstuff/p2p/conn"
 )
 
 func Fuzz(data []byte) int {

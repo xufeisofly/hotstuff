@@ -8,11 +8,11 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	tmlog "github.com/xufeisofly/hotstuff-core/libs/log"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	tmlog "github.com/xufeisofly/hotstuff/libs/log"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 // var maxNumberConnections = 2

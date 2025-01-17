@@ -3,7 +3,7 @@ package indexer
 import (
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
+	"github.com/xufeisofly/hotstuff/libs/pubsub/query"
 )
 
 // QueryRanges defines a mapping between a composite event key and a QueryRange.

@@ -11,18 +11,18 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
 
-	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
-	"github.com/xufeisofly/hotstuff-core/abci/example/code"
-	"github.com/xufeisofly/hotstuff-core/abci/example/counter"
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	"github.com/xufeisofly/hotstuff-core/abci/server"
-	servertest "github.com/xufeisofly/hotstuff-core/abci/tests/server"
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/abci/version"
-	"github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto"
+	abcicli "github.com/xufeisofly/hotstuff/abci/client"
+	"github.com/xufeisofly/hotstuff/abci/example/code"
+	"github.com/xufeisofly/hotstuff/abci/example/counter"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff/abci/server"
+	servertest "github.com/xufeisofly/hotstuff/abci/tests/server"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/abci/version"
+	"github.com/xufeisofly/hotstuff/proto/hotstuff/crypto"
 )
 
 // client is a global variable so it can be reused by the console

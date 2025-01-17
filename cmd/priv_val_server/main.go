@@ -5,12 +5,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
 
-	"github.com/xufeisofly/hotstuff-core/privval"
+	"github.com/xufeisofly/hotstuff/privval"
 )
 
 func main() {

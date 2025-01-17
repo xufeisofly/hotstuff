@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
 )
 
 // Cleanup removes the Docker Compose containers and testnet directory.

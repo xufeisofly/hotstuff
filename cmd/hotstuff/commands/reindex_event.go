@@ -8,16 +8,16 @@ import (
 	"github.com/spf13/cobra"
 	dbm "github.com/tendermint/tm-db"
 
-	abcitypes "github.com/xufeisofly/hotstuff-core/abci/types"
-	tmcfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/progressbar"
-	"github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/state/indexer"
-	blockidxkv "github.com/xufeisofly/hotstuff-core/state/indexer/block/kv"
-	"github.com/xufeisofly/hotstuff-core/state/indexer/sink/psql"
-	"github.com/xufeisofly/hotstuff-core/state/txindex"
-	"github.com/xufeisofly/hotstuff-core/state/txindex/kv"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abcitypes "github.com/xufeisofly/hotstuff/abci/types"
+	tmcfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/progressbar"
+	"github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/state/indexer"
+	blockidxkv "github.com/xufeisofly/hotstuff/state/indexer/block/kv"
+	"github.com/xufeisofly/hotstuff/state/indexer/sink/psql"
+	"github.com/xufeisofly/hotstuff/state/txindex"
+	"github.com/xufeisofly/hotstuff/state/txindex/kv"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

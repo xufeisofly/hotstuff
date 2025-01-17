@@ -9,9 +9,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto/merkle"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 const (

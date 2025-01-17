@@ -14,16 +14,16 @@ import (
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmstore "github.com/xufeisofly/hotstuff-core/proto/hotstuff/store"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
-	"github.com/xufeisofly/hotstuff-core/version"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmstore "github.com/xufeisofly/hotstuff/proto/hotstuff/store"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 // A cleanupFunc cleans up any config / test files created for a particular

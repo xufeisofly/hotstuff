@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmpubsub "github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
+	"github.com/xufeisofly/hotstuff/libs/service"
 )
 
 const defaultCapacity = 0

@@ -8,10 +8,10 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/os"
-	"github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/store"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/os"
+	"github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/store"
 )
 
 var RollbackStateCmd = &cobra.Command{

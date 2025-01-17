@@ -2,8 +2,8 @@ package p2p
 
 import (
 	"github.com/gogo/protobuf/proto"
-	"github.com/xufeisofly/hotstuff-core/p2p/conn"
-	tmp2p "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/p2p/conn"
+	tmp2p "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p"
 )
 
 type ChannelDescriptor = conn.ChannelDescriptor

@@ -8,10 +8,10 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/cli"
-	tmflags "github.com/xufeisofly/hotstuff-core/libs/cli/flags"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/cli"
+	tmflags "github.com/xufeisofly/hotstuff/libs/cli/flags"
+	"github.com/xufeisofly/hotstuff/libs/log"
 )
 
 var (

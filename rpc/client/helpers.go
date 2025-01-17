@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Waiter is informed of current height, decided whether to quit early

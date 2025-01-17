@@ -10,15 +10,15 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	service "github.com/xufeisofly/hotstuff-core/libs/service"
-	rpcclient "github.com/xufeisofly/hotstuff-core/rpc/client"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/crypto/merkle"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	service "github.com/xufeisofly/hotstuff/libs/service"
+	rpcclient "github.com/xufeisofly/hotstuff/rpc/client"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 var errNegOrZeroHeight = errors.New("negative or zero height")

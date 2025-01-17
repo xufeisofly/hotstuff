@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	abcimocks "github.com/xufeisofly/hotstuff-core/abci/client/mocks"
-	"github.com/xufeisofly/hotstuff-core/proxy/mocks"
+	abcimocks "github.com/xufeisofly/hotstuff/abci/client/mocks"
+	"github.com/xufeisofly/hotstuff/proxy/mocks"
 )
 
 func TestAppConns_Start_Stop(t *testing.T) {

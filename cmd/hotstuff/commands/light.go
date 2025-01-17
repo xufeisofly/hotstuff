@@ -15,14 +15,14 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	"github.com/xufeisofly/hotstuff-core/light"
-	lproxy "github.com/xufeisofly/hotstuff-core/light/proxy"
-	lrpc "github.com/xufeisofly/hotstuff-core/light/rpc"
-	dbs "github.com/xufeisofly/hotstuff-core/light/store/db"
-	rpcserver "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	"github.com/xufeisofly/hotstuff/light"
+	lproxy "github.com/xufeisofly/hotstuff/light/proxy"
+	lrpc "github.com/xufeisofly/hotstuff/light/rpc"
+	dbs "github.com/xufeisofly/hotstuff/light/store/db"
+	rpcserver "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
 )
 
 // LightCmd represents the base command when called without any subcommands
@@ -207,7 +207,7 @@ func runProxy(cmd *cobra.Command, args []string) error {
 	cfg.MaxOpenConnections = maxOpenConnections
 	// If necessary adjust global WriteTimeout to ensure it's greater than
 	// TimeoutBroadcastTxCommit.
-	// See https://github.com/xufeisofly/hotstuff-core/issues/3435
+	// See https://github.com/xufeisofly/hotstuff/issues/3435
 	if cfg.WriteTimeout <= config.RPC.TimeoutBroadcastTxCommit {
 		cfg.WriteTimeout = config.RPC.TimeoutBroadcastTxCommit + 1*time.Second
 	}

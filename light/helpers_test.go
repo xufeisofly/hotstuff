@@ -3,14 +3,14 @@ package light_test
 import (
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff-core/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
-	"github.com/xufeisofly/hotstuff-core/version"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 // privKeys is a helper type for testing.

@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/cli"
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/cli"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
 )
 
 var dumpCmd = &cobra.Command{

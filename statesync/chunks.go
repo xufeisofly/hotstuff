@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	"github.com/xufeisofly/hotstuff-core/p2p"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	"github.com/xufeisofly/hotstuff/p2p"
 )
 
 // errDone is returned by chunkQueue.Next() when all chunks have been returned.

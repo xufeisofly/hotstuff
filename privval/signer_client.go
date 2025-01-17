@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	cryptoenc "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	privvalproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
+	privvalproto "github.com/xufeisofly/hotstuff/proto/hotstuff/privval"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // SignerClient implements PrivValidator.

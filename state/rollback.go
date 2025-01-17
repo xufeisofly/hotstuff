@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	tmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff-core/version"
+	tmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 // Rollback overwrites the current Tendermint state (height n) with the most

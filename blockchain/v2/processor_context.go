@@ -3,8 +3,8 @@ package v2
 import (
 	"fmt"
 
-	"github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 type processorContext interface {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/xufeisofly/hotstuff-core/p2p"
+	"github.com/xufeisofly/hotstuff/p2p"
 )
 
 // ShowNodeIDCmd dumps node's ID to the standard output.

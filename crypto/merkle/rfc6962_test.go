@@ -20,7 +20,7 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
 )
 
 func TestRFC6962Hasher(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	auto "github.com/xufeisofly/hotstuff-core/libs/autofile"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
+	auto "github.com/xufeisofly/hotstuff/libs/autofile"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
 )
 
 const Version = "0.0.1"

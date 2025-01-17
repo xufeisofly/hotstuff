@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
-	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	"github.com/xufeisofly/hotstuff-core/abci/server"
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	abcicli "github.com/xufeisofly/hotstuff/abci/client"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff/abci/server"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 //----------------------------------------

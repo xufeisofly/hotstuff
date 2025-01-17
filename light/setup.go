@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/light/provider"
-	"github.com/xufeisofly/hotstuff-core/light/provider/http"
-	"github.com/xufeisofly/hotstuff-core/light/store"
+	"github.com/xufeisofly/hotstuff/light/provider"
+	"github.com/xufeisofly/hotstuff/light/provider/http"
+	"github.com/xufeisofly/hotstuff/light/store"
 )
 
 // NewHTTPClient initiates an instance of a light client using HTTP addresses

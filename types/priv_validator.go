@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 // PrivValidator defines the functionality of a local Tendermint validator

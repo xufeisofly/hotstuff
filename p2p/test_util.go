@@ -5,14 +5,14 @@ import (
 	"net"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 
-	"github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/p2p/conn"
+	"github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/p2p/conn"
 )
 
 const testCh = 0x01

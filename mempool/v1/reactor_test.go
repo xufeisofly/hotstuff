@@ -12,17 +12,17 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	"github.com/xufeisofly/hotstuff-core/p2p/mock"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff/p2p/mock"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
+	cfg "github.com/xufeisofly/hotstuff/config"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/mempool"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	memproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/mempool"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/mempool"
+	"github.com/xufeisofly/hotstuff/p2p"
+	memproto "github.com/xufeisofly/hotstuff/proto/hotstuff/mempool"
+	"github.com/xufeisofly/hotstuff/proxy"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

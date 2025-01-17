@@ -2,7 +2,7 @@
 Package core defines the Tendermint RPC endpoints.
 
 Tendermint ships with its own JSONRPC library -
-https://github.com/xufeisofly/hotstuff-core/tree/v0.34.x/rpc/jsonrpc.
+https://github.com/xufeisofly/hotstuff/tree/v0.34.x/rpc/jsonrpc.
 
 ## Get the list
 

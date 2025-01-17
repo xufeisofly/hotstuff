@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmcrypto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmcrypto "github.com/xufeisofly/hotstuff/proto/hotstuff/crypto"
 )
 
 const (

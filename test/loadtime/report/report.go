@@ -8,8 +8,8 @@ import (
 	"github.com/gofrs/uuid"
 	"gonum.org/v1/gonum/stat"
 
-	"github.com/xufeisofly/hotstuff-core/test/loadtime/payload"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/test/loadtime/payload"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // BlockStore defines the set of methods needed by the report generator from

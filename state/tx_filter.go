@@ -1,8 +1,8 @@
 package state
 
 import (
-	mempl "github.com/xufeisofly/hotstuff-core/mempool"
-	"github.com/xufeisofly/hotstuff-core/types"
+	mempl "github.com/xufeisofly/hotstuff/mempool"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // TxPreCheck returns a function to filter transactions before processing.

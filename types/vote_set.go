@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/xufeisofly/hotstuff-core/libs/bits"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/libs/bits"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 const (

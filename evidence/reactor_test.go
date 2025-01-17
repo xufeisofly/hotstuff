@@ -16,17 +16,17 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	"github.com/xufeisofly/hotstuff-core/evidence"
-	"github.com/xufeisofly/hotstuff-core/evidence/mocks"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	p2pmocks "github.com/xufeisofly/hotstuff-core/p2p/mocks"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff/evidence"
+	"github.com/xufeisofly/hotstuff/evidence/mocks"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/p2p"
+	p2pmocks "github.com/xufeisofly/hotstuff/p2p/mocks"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 var (

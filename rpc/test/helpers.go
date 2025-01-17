@@ -8,18 +8,18 @@ import (
 	"strings"
 	"time"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
-	nm "github.com/xufeisofly/hotstuff-core/node"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/privval"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	core_grpc "github.com/xufeisofly/hotstuff-core/rpc/grpc"
-	rpcclient "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/client"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
+	nm "github.com/xufeisofly/hotstuff/node"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/privval"
+	"github.com/xufeisofly/hotstuff/proxy"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	core_grpc "github.com/xufeisofly/hotstuff/rpc/grpc"
+	rpcclient "github.com/xufeisofly/hotstuff/rpc/jsonrpc/client"
 )
 
 // Options helps with specifying some parameters for our RPC testing for greater

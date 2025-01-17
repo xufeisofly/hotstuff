@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"text/template"
 
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
-	"github.com/xufeisofly/hotstuff-core/test/e2e/pkg/infra"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/test/e2e/pkg/infra"
 )
 
 var _ infra.Provider = &Provider{}

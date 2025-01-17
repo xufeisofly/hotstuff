@@ -11,8 +11,8 @@ import (
 	secp256k1 "github.com/btcsuite/btcd/btcec"
 	"golang.org/x/crypto/ripemd160" //nolint: staticcheck // necessary for Bitcoin address format
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
+	"github.com/xufeisofly/hotstuff/crypto"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 )
 
 // -------------------------------------

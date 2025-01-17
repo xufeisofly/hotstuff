@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
 )
 
 // Perturbs a running testnet.

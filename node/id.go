@@ -3,7 +3,7 @@ package node
 import (
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
+	"github.com/xufeisofly/hotstuff/crypto"
 )
 
 type ID struct {

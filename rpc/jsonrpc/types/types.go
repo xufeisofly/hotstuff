@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"strings"
 
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 )
 
 // a wrapper to emulate a sum type: jsonrpcid = string | int

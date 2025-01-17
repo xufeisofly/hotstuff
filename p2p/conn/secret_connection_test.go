@@ -17,12 +17,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/crypto/sr25519"
-	"github.com/xufeisofly/hotstuff-core/libs/async"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/crypto/sr25519"
+	"github.com/xufeisofly/hotstuff/libs/async"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 // Run go test -update from within this module

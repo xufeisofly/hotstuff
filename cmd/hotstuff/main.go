@@ -4,11 +4,11 @@ import (
 	"os"
 	"path/filepath"
 
-	cmd "github.com/xufeisofly/hotstuff-core/cmd/hotstuff/commands"
-	"github.com/xufeisofly/hotstuff-core/cmd/hotstuff/commands/debug"
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/cli"
-	nm "github.com/xufeisofly/hotstuff-core/node"
+	cmd "github.com/xufeisofly/hotstuff/cmd/hotstuff/commands"
+	"github.com/xufeisofly/hotstuff/cmd/hotstuff/commands/debug"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/cli"
+	nm "github.com/xufeisofly/hotstuff/node"
 )
 
 func main() {

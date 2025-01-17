@@ -10,13 +10,13 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/light"
-	"github.com/xufeisofly/hotstuff-core/light/provider"
-	httpp "github.com/xufeisofly/hotstuff-core/light/provider/http"
-	dbs "github.com/xufeisofly/hotstuff-core/light/store/db"
-	rpctest "github.com/xufeisofly/hotstuff-core/rpc/test"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/light"
+	"github.com/xufeisofly/hotstuff/light/provider"
+	httpp "github.com/xufeisofly/hotstuff/light/provider/http"
+	dbs "github.com/xufeisofly/hotstuff/light/store/db"
+	rpctest "github.com/xufeisofly/hotstuff/rpc/test"
 )
 
 // Automatically getting new headers and verifying them.

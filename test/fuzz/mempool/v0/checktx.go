@@ -1,11 +1,11 @@
 package v0
 
 import (
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	"github.com/xufeisofly/hotstuff-core/config"
-	mempl "github.com/xufeisofly/hotstuff-core/mempool"
-	mempoolv0 "github.com/xufeisofly/hotstuff-core/mempool/v0"
-	"github.com/xufeisofly/hotstuff-core/proxy"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff/config"
+	mempl "github.com/xufeisofly/hotstuff/mempool"
+	mempoolv0 "github.com/xufeisofly/hotstuff/mempool/v0"
+	"github.com/xufeisofly/hotstuff/proxy"
 )
 
 var mempool mempl.Mempool

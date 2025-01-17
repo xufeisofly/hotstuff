@@ -8,14 +8,14 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	cryptoenc "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	cryptoproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto"
-	privproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	cryptoproto "github.com/xufeisofly/hotstuff/proto/hotstuff/crypto"
+	privproto "github.com/xufeisofly/hotstuff/proto/hotstuff/privval"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 var stamp = time.Date(2019, 10, 13, 16, 14, 44, 0, time.UTC)

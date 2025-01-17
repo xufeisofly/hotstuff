@@ -8,7 +8,7 @@ import (
 	"syscall"
 	"time"
 
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 /* AutoFile usage

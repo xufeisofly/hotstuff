@@ -12,12 +12,12 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/light"
-	"github.com/xufeisofly/hotstuff-core/light/provider"
-	mockp "github.com/xufeisofly/hotstuff-core/light/provider/mock"
-	dbs "github.com/xufeisofly/hotstuff-core/light/store/db"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/light"
+	"github.com/xufeisofly/hotstuff/light/provider"
+	mockp "github.com/xufeisofly/hotstuff/light/provider/mock"
+	dbs "github.com/xufeisofly/hotstuff/light/store/db"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

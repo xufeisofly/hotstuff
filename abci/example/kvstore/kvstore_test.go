@@ -8,14 +8,14 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/service"
 
-	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
-	"github.com/xufeisofly/hotstuff-core/abci/example/code"
-	abciserver "github.com/xufeisofly/hotstuff-core/abci/server"
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	abcicli "github.com/xufeisofly/hotstuff/abci/client"
+	"github.com/xufeisofly/hotstuff/abci/example/code"
+	abciserver "github.com/xufeisofly/hotstuff/abci/server"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 const (

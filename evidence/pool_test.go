@@ -11,16 +11,16 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/evidence"
-	"github.com/xufeisofly/hotstuff-core/evidence/mocks"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	smmocks "github.com/xufeisofly/hotstuff-core/state/mocks"
-	"github.com/xufeisofly/hotstuff-core/store"
-	"github.com/xufeisofly/hotstuff-core/types"
-	"github.com/xufeisofly/hotstuff-core/version"
+	"github.com/xufeisofly/hotstuff/evidence"
+	"github.com/xufeisofly/hotstuff/evidence/mocks"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	sm "github.com/xufeisofly/hotstuff/state"
+	smmocks "github.com/xufeisofly/hotstuff/state/mocks"
+	"github.com/xufeisofly/hotstuff/store"
+	"github.com/xufeisofly/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 func TestMain(m *testing.M) {

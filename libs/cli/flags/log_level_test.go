@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	tmflags "github.com/xufeisofly/hotstuff-core/libs/cli/flags"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
+	tmflags "github.com/xufeisofly/hotstuff/libs/cli/flags"
+	"github.com/xufeisofly/hotstuff/libs/log"
 )
 
 const (

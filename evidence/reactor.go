@@ -5,11 +5,11 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/proto"
-	clist "github.com/xufeisofly/hotstuff-core/libs/clist"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	clist "github.com/xufeisofly/hotstuff/libs/clist"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/p2p"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

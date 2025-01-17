@@ -8,7 +8,7 @@ import (
 	"strings"
 	"text/template"
 
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
 )
 
 // DefaultDirPerm is the default permissions used when creating directories.

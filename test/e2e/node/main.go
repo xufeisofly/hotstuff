@@ -13,25 +13,25 @@ import (
 
 	"github.com/spf13/viper"
 
-	"github.com/xufeisofly/hotstuff-core/abci/server"
-	"github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	tmflags "github.com/xufeisofly/hotstuff-core/libs/cli/flags"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
-	"github.com/xufeisofly/hotstuff-core/light"
-	lproxy "github.com/xufeisofly/hotstuff-core/light/proxy"
-	lrpc "github.com/xufeisofly/hotstuff-core/light/rpc"
-	dbs "github.com/xufeisofly/hotstuff-core/light/store/db"
-	"github.com/xufeisofly/hotstuff-core/node"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/privval"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	rpcserver "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
-	"github.com/xufeisofly/hotstuff-core/test/e2e/app"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
-	mcs "github.com/xufeisofly/hotstuff-core/test/maverick/consensus"
-	maverick "github.com/xufeisofly/hotstuff-core/test/maverick/node"
+	"github.com/xufeisofly/hotstuff/abci/server"
+	"github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	tmflags "github.com/xufeisofly/hotstuff/libs/cli/flags"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
+	"github.com/xufeisofly/hotstuff/light"
+	lproxy "github.com/xufeisofly/hotstuff/light/proxy"
+	lrpc "github.com/xufeisofly/hotstuff/light/rpc"
+	dbs "github.com/xufeisofly/hotstuff/light/store/db"
+	"github.com/xufeisofly/hotstuff/node"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/privval"
+	"github.com/xufeisofly/hotstuff/proxy"
+	rpcserver "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
+	"github.com/xufeisofly/hotstuff/test/e2e/app"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
+	mcs "github.com/xufeisofly/hotstuff/test/maverick/consensus"
+	maverick "github.com/xufeisofly/hotstuff/test/maverick/node"
 )
 
 var logger = log.NewTMLogger(log.NewSyncWriter(os.Stdout))
@@ -182,7 +182,7 @@ func startLightClient(cfg *Config) error {
 	rpccfg.MaxOpenConnections = tmcfg.RPC.MaxOpenConnections
 	// If necessary adjust global WriteTimeout to ensure it's greater than
 	// TimeoutBroadcastTxCommit.
-	// See https://github.com/xufeisofly/hotstuff-core/issues/3435
+	// See https://github.com/xufeisofly/hotstuff/issues/3435
 	if rpccfg.WriteTimeout <= tmcfg.RPC.TimeoutBroadcastTxCommit {
 		rpccfg.WriteTimeout = tmcfg.RPC.TimeoutBroadcastTxCommit + 1*time.Second
 	}

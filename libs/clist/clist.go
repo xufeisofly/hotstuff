@@ -15,7 +15,7 @@ import (
 	"fmt"
 	"sync"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 // MaxLength is the max allowed number of elements a linked list is

@@ -1,7 +1,7 @@
 package behaviour
 
 import (
-	"github.com/xufeisofly/hotstuff-core/p2p"
+	"github.com/xufeisofly/hotstuff/p2p"
 )
 
 // PeerBehaviour is a struct describing a behaviour a peer performed.

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 const (

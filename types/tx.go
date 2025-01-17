@@ -6,10 +6,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto/merkle"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 // TxKeySize is the size of the transaction key index

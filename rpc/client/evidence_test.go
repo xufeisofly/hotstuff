@@ -9,16 +9,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	cryptoenc "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	"github.com/xufeisofly/hotstuff-core/privval"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/rpc/client"
-	rpctest "github.com/xufeisofly/hotstuff-core/rpc/test"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	"github.com/xufeisofly/hotstuff/privval"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/rpc/client"
+	rpctest "github.com/xufeisofly/hotstuff/rpc/test"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // For some reason the empty node used in tests has a time of

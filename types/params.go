@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 const (

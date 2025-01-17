@@ -1,8 +1,8 @@
 package p2p
 
 import (
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	"github.com/xufeisofly/hotstuff-core/p2p/conn"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	"github.com/xufeisofly/hotstuff/p2p/conn"
 )
 
 // Reactor is responsible for handling incoming messages on one or more

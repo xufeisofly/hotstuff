@@ -3,10 +3,10 @@ package proxy
 import (
 	"fmt"
 
-	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
-	tmlog "github.com/xufeisofly/hotstuff-core/libs/log"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
+	abcicli "github.com/xufeisofly/hotstuff/abci/client"
+	tmlog "github.com/xufeisofly/hotstuff/libs/log"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	"github.com/xufeisofly/hotstuff/libs/service"
 )
 
 const (

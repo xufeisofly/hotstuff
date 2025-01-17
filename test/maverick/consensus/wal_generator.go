@@ -11,16 +11,16 @@ import (
 
 	db "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	tmcon "github.com/xufeisofly/hotstuff-core/consensus"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	"github.com/xufeisofly/hotstuff-core/privval"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/store"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	tmcon "github.com/xufeisofly/hotstuff/consensus"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	"github.com/xufeisofly/hotstuff/privval"
+	"github.com/xufeisofly/hotstuff/proxy"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/store"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // WALGenerateNBlocks generates a consensus WAL. It does this by spinning up a

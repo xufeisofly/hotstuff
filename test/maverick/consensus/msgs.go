@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 
-	tmcon "github.com/xufeisofly/hotstuff-core/consensus"
-	cstypes "github.com/xufeisofly/hotstuff-core/consensus/types"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	tmcons "github.com/xufeisofly/hotstuff-core/proto/hotstuff/consensus"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	tmcon "github.com/xufeisofly/hotstuff/consensus"
+	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	"github.com/xufeisofly/hotstuff/p2p"
+	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 func WALToProto(msg tmcon.WALMessage) (*tmcons.WALMessage, error) {

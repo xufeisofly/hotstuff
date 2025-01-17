@@ -5,10 +5,10 @@ import (
 	"math"
 	"time"
 
-	flow "github.com/xufeisofly/hotstuff-core/libs/flowrate"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/types"
+	flow "github.com/xufeisofly/hotstuff/libs/flowrate"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 //--------

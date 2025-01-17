@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"sort"
 
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmquery "github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
-	"github.com/xufeisofly/hotstuff-core/state/txindex/null"
-	"github.com/xufeisofly/hotstuff-core/types"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmquery "github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/state/txindex/null"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Tx allows you to query the transaction results. `nil` could mean the

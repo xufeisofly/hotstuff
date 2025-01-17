@@ -10,7 +10,7 @@ import (
 	"math"
 	"time"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 // Monitor monitors and limits the transfer rate of a data stream.

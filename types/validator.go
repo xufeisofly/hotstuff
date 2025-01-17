@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	ce "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	ce "github.com/xufeisofly/hotstuff/crypto/encoding"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 // Volatile state for each Validator

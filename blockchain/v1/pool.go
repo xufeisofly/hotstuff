@@ -3,9 +3,9 @@ package v1
 import (
 	"sort"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // BlockPool keeps track of the fast sync peers, block requests and block responses.

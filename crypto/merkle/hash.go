@@ -1,7 +1,7 @@
 package merkle
 
 import (
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
 )
 
 // TODO: make these have a large predefined capacity

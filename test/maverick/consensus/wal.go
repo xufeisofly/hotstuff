@@ -11,14 +11,14 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	// tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmcon "github.com/xufeisofly/hotstuff-core/consensus"
-	auto "github.com/xufeisofly/hotstuff-core/libs/autofile"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmcons "github.com/xufeisofly/hotstuff-core/proto/hotstuff/consensus"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	// tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmcon "github.com/xufeisofly/hotstuff/consensus"
+	auto "github.com/xufeisofly/hotstuff/libs/autofile"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 const (

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 var (

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // ErrOldHeaderExpired means the old (trusted) header has expired according to

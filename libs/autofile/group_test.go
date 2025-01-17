@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 func createTestGroupWithHeadSizeLimit(t *testing.T, headSizeLimit int64) *Group {

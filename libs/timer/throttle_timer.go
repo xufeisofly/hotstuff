@@ -3,7 +3,7 @@ package timer
 import (
 	"time"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 /*

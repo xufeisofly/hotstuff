@@ -15,43 +15,43 @@ import (
 	"github.com/rs/cors"
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	bcv0 "github.com/xufeisofly/hotstuff-core/blockchain/v0"
-	bcv1 "github.com/xufeisofly/hotstuff-core/blockchain/v1"
-	bcv2 "github.com/xufeisofly/hotstuff-core/blockchain/v2"
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	cs "github.com/xufeisofly/hotstuff-core/consensus"
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/evidence"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	bcv0 "github.com/xufeisofly/hotstuff/blockchain/v0"
+	bcv1 "github.com/xufeisofly/hotstuff/blockchain/v1"
+	bcv2 "github.com/xufeisofly/hotstuff/blockchain/v2"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	cs "github.com/xufeisofly/hotstuff/consensus"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/evidence"
 
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmpubsub "github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	"github.com/xufeisofly/hotstuff-core/light"
-	mempl "github.com/xufeisofly/hotstuff-core/mempool"
-	mempoolv0 "github.com/xufeisofly/hotstuff-core/mempool/v0"
-	mempoolv1 "github.com/xufeisofly/hotstuff-core/mempool/v1"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/p2p/pex"
-	"github.com/xufeisofly/hotstuff-core/privval"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	rpccore "github.com/xufeisofly/hotstuff-core/rpc/core"
-	grpccore "github.com/xufeisofly/hotstuff-core/rpc/grpc"
-	rpcserver "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/state/indexer"
-	blockidxkv "github.com/xufeisofly/hotstuff-core/state/indexer/block/kv"
-	blockidxnull "github.com/xufeisofly/hotstuff-core/state/indexer/block/null"
-	"github.com/xufeisofly/hotstuff-core/state/indexer/sink/psql"
-	"github.com/xufeisofly/hotstuff-core/state/txindex"
-	"github.com/xufeisofly/hotstuff-core/state/txindex/kv"
-	"github.com/xufeisofly/hotstuff-core/state/txindex/null"
-	"github.com/xufeisofly/hotstuff-core/statesync"
-	"github.com/xufeisofly/hotstuff-core/store"
-	"github.com/xufeisofly/hotstuff-core/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
-	"github.com/xufeisofly/hotstuff-core/version"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	"github.com/xufeisofly/hotstuff/light"
+	mempl "github.com/xufeisofly/hotstuff/mempool"
+	mempoolv0 "github.com/xufeisofly/hotstuff/mempool/v0"
+	mempoolv1 "github.com/xufeisofly/hotstuff/mempool/v1"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/p2p/pex"
+	"github.com/xufeisofly/hotstuff/privval"
+	"github.com/xufeisofly/hotstuff/proxy"
+	rpccore "github.com/xufeisofly/hotstuff/rpc/core"
+	grpccore "github.com/xufeisofly/hotstuff/rpc/grpc"
+	rpcserver "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/state/indexer"
+	blockidxkv "github.com/xufeisofly/hotstuff/state/indexer/block/kv"
+	blockidxnull "github.com/xufeisofly/hotstuff/state/indexer/block/null"
+	"github.com/xufeisofly/hotstuff/state/indexer/sink/psql"
+	"github.com/xufeisofly/hotstuff/state/txindex"
+	"github.com/xufeisofly/hotstuff/state/txindex/kv"
+	"github.com/xufeisofly/hotstuff/state/txindex/null"
+	"github.com/xufeisofly/hotstuff/statesync"
+	"github.com/xufeisofly/hotstuff/store"
+	"github.com/xufeisofly/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
+	"github.com/xufeisofly/hotstuff/version"
 
 	_ "net/http/pprof" //nolint: gosec // securely exposed on separate, optional port
 
@@ -135,7 +135,7 @@ func DefaultMetricsProvider(config *cfg.InstrumentationConfig) MetricsProvider {
 type Option func(*Node)
 
 // Temporary interface for switching to fast sync, we should get rid of v0 and v1 reactors.
-// See: https://github.com/xufeisofly/hotstuff-core/issues/4595
+// See: https://github.com/xufeisofly/hotstuff/issues/4595
 type fastSyncReactor interface {
 	SwitchToFastSync(sm.State) error
 }
@@ -636,7 +636,7 @@ func createPEXReactorAndAddToSwitch(addrBook pex.AddrBook, config *cfg.Config,
 			// blocks assuming 10s blocks ~ 28 hours.
 			// TODO (melekes): make it dynamic based on the actual block latencies
 			// from the live network.
-			// https://github.com/xufeisofly/hotstuff-core/issues/3523
+			// https://github.com/xufeisofly/hotstuff/issues/3523
 			SeedDisconnectWaitPeriod:     28 * time.Hour,
 			PersistentPeersMaxDialPeriod: config.P2P.PersistentPeersMaxDialPeriod,
 		})
@@ -835,7 +835,7 @@ func NewNode(config *cfg.Config,
 	// Set up state sync reactor, and schedule a sync if requested.
 	// FIXME The way we do phased startups (e.g. replay -> fast sync -> consensus) is very messy,
 	// we should clean this whole thing up. See:
-	// https://github.com/xufeisofly/hotstuff-core/issues/4644
+	// https://github.com/xufeisofly/hotstuff/issues/4644
 	stateSyncReactor := statesync.NewReactor(
 		*config.StateSync,
 		proxyApp.Snapshot(),
@@ -1114,7 +1114,7 @@ func (n *Node) startRPC() ([]net.Listener, error) {
 	config.MaxOpenConnections = n.config.RPC.MaxOpenConnections
 	// If necessary adjust global WriteTimeout to ensure it's greater than
 	// TimeoutBroadcastTxCommit.
-	// See https://github.com/xufeisofly/hotstuff-core/issues/3435
+	// See https://github.com/xufeisofly/hotstuff/issues/3435
 	if config.WriteTimeout <= n.config.RPC.TimeoutBroadcastTxCommit {
 		config.WriteTimeout = n.config.RPC.TimeoutBroadcastTxCommit + 1*time.Second
 	}
@@ -1194,7 +1194,7 @@ func (n *Node) startRPC() ([]net.Listener, error) {
 		config.MaxOpenConnections = n.config.RPC.GRPCMaxOpenConnections
 		// If necessary adjust global WriteTimeout to ensure it's greater than
 		// TimeoutBroadcastTxCommit.
-		// See https://github.com/xufeisofly/hotstuff-core/issues/3435
+		// See https://github.com/xufeisofly/hotstuff/issues/3435
 		if config.WriteTimeout <= n.config.RPC.TimeoutBroadcastTxCommit {
 			config.WriteTimeout = n.config.RPC.TimeoutBroadcastTxCommit + 1*time.Second
 		}

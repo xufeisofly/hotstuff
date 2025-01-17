@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
-	"github.com/xufeisofly/hotstuff-core/libs/bits"
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto/merkle"
+	"github.com/xufeisofly/hotstuff/libs/bits"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 var (

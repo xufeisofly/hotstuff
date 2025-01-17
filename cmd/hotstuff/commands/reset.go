@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	"github.com/xufeisofly/hotstuff-core/privval"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	"github.com/xufeisofly/hotstuff/privval"
 )
 
 // ResetAllCmd removes the database of this Tendermint core

@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/require"
 	db "github.com/tendermint/tm-db"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	blockidxkv "github.com/xufeisofly/hotstuff-core/state/indexer/block/kv"
-	"github.com/xufeisofly/hotstuff-core/state/txindex"
-	"github.com/xufeisofly/hotstuff-core/state/txindex/kv"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	blockidxkv "github.com/xufeisofly/hotstuff/state/indexer/block/kv"
+	"github.com/xufeisofly/hotstuff/state/txindex"
+	"github.com/xufeisofly/hotstuff/state/txindex/kv"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 func TestIndexerServiceIndexesBlocks(t *testing.T) {

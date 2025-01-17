@@ -15,8 +15,8 @@ import (
 
 	"golang.org/x/net/netutil"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 // Config is a RPC server configuration.

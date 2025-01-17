@@ -5,10 +5,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	privvalproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	privvalproto "github.com/xufeisofly/hotstuff/proto/hotstuff/privval"
 )
 
 const (

@@ -7,9 +7,9 @@ import (
 	"strings"
 	"sync"
 
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmprotobits "github.com/xufeisofly/hotstuff-core/proto/hotstuff/libs/bits"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmprotobits "github.com/xufeisofly/hotstuff/proto/hotstuff/libs/bits"
 )
 
 // BitArray is a thread-safe implementation of a bit array.

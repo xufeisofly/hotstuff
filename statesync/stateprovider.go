@@ -8,18 +8,18 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	"github.com/xufeisofly/hotstuff-core/light"
-	lightprovider "github.com/xufeisofly/hotstuff-core/light/provider"
-	lighthttp "github.com/xufeisofly/hotstuff-core/light/provider/http"
-	lightrpc "github.com/xufeisofly/hotstuff-core/light/rpc"
-	lightdb "github.com/xufeisofly/hotstuff-core/light/store/db"
-	tmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
-	"github.com/xufeisofly/hotstuff-core/version"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	"github.com/xufeisofly/hotstuff/light"
+	lightprovider "github.com/xufeisofly/hotstuff/light/provider"
+	lighthttp "github.com/xufeisofly/hotstuff/light/provider/http"
+	lightrpc "github.com/xufeisofly/hotstuff/light/rpc"
+	lightdb "github.com/xufeisofly/hotstuff/light/store/db"
+	tmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 //go:generate ../scripts/mockery_generate.sh StateProvider

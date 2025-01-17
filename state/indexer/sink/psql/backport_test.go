@@ -1,8 +1,8 @@
 package psql
 
 import (
-	"github.com/xufeisofly/hotstuff-core/state/indexer"
-	"github.com/xufeisofly/hotstuff-core/state/txindex"
+	"github.com/xufeisofly/hotstuff/state/indexer"
+	"github.com/xufeisofly/hotstuff/state/txindex"
 )
 
 var (

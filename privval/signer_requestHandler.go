@@ -3,12 +3,12 @@ package privval
 import (
 	"fmt"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	cryptoenc "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	cryptoproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto"
-	privvalproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
+	cryptoproto "github.com/xufeisofly/hotstuff/proto/hotstuff/crypto"
+	privvalproto "github.com/xufeisofly/hotstuff/proto/hotstuff/privval"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 func DefaultValidationRequestHandler(

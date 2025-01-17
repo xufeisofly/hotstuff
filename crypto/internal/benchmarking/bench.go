@@ -4,7 +4,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
+	"github.com/xufeisofly/hotstuff/crypto"
 )
 
 // The code in this file is adapted from agl/ed25519.

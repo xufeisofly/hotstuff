@@ -1,8 +1,8 @@
 package crypto
 
 import (
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
 )
 
 const (

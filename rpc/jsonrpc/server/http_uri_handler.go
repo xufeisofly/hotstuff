@@ -8,9 +8,9 @@ import (
 	"regexp"
 	"strings"
 
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 // HTTP + URI handler

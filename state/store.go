@@ -7,18 +7,18 @@ import (
 	"github.com/gogo/protobuf/proto"
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	tmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	tmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (
 	// persist validators every valSetCheckpointInterval blocks to avoid
 	// LoadValidators taking too much time.
-	// https://github.com/xufeisofly/hotstuff-core/pull/3438
+	// https://github.com/xufeisofly/hotstuff/pull/3438
 	// 100000 results in ~ 100ms to get 100 validators (see BenchmarkLoadValidators)
 	valSetCheckpointInterval = 100000
 )
@@ -237,7 +237,7 @@ func (store dbStore) Bootstrap(state State) error {
 // e.g. `LastHeightChanged` must remain. The state at to must also exist.
 //
 // The from parameter is necessary since we can't do a key scan in a performant way due to the key
-// encoding not preserving ordering: https://github.com/xufeisofly/hotstuff-core/issues/4567
+// encoding not preserving ordering: https://github.com/xufeisofly/hotstuff/issues/4567
 // This will cause some old states to be left behind when doing incremental partial prunes,
 // specifically older checkpoints and LastHeightChanged targets.
 func (store dbStore) PruneStates(from int64, to int64) error {

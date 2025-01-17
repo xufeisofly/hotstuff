@@ -7,10 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	. "github.com/xufeisofly/hotstuff-core/libs/test"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	. "github.com/xufeisofly/hotstuff/libs/test"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
 )
 
 type testItem []byte

@@ -9,10 +9,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
-	"github.com/xufeisofly/hotstuff-core/test/e2e/pkg/infra"
-	"github.com/xufeisofly/hotstuff-core/test/e2e/pkg/infra/docker"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/test/e2e/pkg/infra"
+	"github.com/xufeisofly/hotstuff/test/e2e/pkg/infra/docker"
 )
 
 var (

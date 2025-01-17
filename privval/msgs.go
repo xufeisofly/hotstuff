@@ -5,7 +5,7 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	privvalproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval"
+	privvalproto "github.com/xufeisofly/hotstuff/proto/hotstuff/privval"
 )
 
 // TODO: Add ChainIDRequest

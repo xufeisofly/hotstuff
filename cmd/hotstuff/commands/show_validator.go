@@ -5,9 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	"github.com/xufeisofly/hotstuff-core/privval"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	"github.com/xufeisofly/hotstuff/privval"
 )
 
 // ShowValidatorCmd adds capabilities for showing the validator info.

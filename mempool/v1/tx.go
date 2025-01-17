@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // WrappedTx defines a wrapper around a raw transaction with additional metadata

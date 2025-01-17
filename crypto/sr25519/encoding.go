@@ -1,8 +1,8 @@
 package sr25519
 
 import (
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
+	"github.com/xufeisofly/hotstuff/crypto"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 )
 
 var _ crypto.PrivKey = PrivKey{}

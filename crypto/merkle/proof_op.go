@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	tmcrypto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto"
+	tmcrypto "github.com/xufeisofly/hotstuff/proto/hotstuff/crypto"
 )
 
 //----------------------------------------

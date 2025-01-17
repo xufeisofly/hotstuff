@@ -1,12 +1,12 @@
 package types
 
 import (
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	cryptoenc "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	"github.com/xufeisofly/hotstuff-core/crypto/secp256k1"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
+	"github.com/xufeisofly/hotstuff/crypto/secp256k1"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 //-------------------------------------------------------

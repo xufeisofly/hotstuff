@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 // ValidateTime does a basic time validation ensuring time does not drift too

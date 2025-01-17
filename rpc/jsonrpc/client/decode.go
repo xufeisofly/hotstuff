@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 func unmarshalResponseBytes(

@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/xufeisofly/hotstuff-core/test/loadtime/payload"
+	"github.com/xufeisofly/hotstuff/test/loadtime/payload"
 )
 
 const payloadSizeTarget = 1024 // 1kb

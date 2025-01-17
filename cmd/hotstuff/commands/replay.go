@@ -3,7 +3,7 @@ package commands
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/xufeisofly/hotstuff-core/consensus"
+	"github.com/xufeisofly/hotstuff/consensus"
 )
 
 // ReplayCmd allows replaying of messages from the WAL.

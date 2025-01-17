@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	abcicli "github.com/xufeisofly/hotstuff/abci/client"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 func InitChain(client abcicli.Client) error {

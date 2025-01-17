@@ -8,12 +8,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	"github.com/xufeisofly/hotstuff/crypto"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 const (

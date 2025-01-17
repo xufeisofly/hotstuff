@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
-	"github.com/xufeisofly/hotstuff-core/state/txindex"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	"github.com/xufeisofly/hotstuff/state/txindex"
 )
 
 var _ txindex.TxIndexer = (*TxIndex)(nil)

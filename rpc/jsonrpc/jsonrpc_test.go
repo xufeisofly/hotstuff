@@ -18,13 +18,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 
-	client "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/client"
-	server "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	client "github.com/xufeisofly/hotstuff/rpc/jsonrpc/client"
+	server "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 // Client and Server should work over tcp or unix sockets

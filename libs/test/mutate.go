@@ -1,7 +1,7 @@
 package test
 
 import (
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 // Contract: !bytes.Equal(input, output) && len(input) >= len(output)

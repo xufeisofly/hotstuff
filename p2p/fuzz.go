@@ -4,9 +4,9 @@ import (
 	"net"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/config"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	"github.com/xufeisofly/hotstuff/config"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 // FuzzedConnection wraps any net.Conn and depending on the mode either delays

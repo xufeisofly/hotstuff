@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	rpcserver "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	rpcserver "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 var routes = map[string]*rpcserver.RPCFunc{

@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	p2pmocks "github.com/xufeisofly/hotstuff-core/p2p/mocks"
-	ssproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/statesync"
-	proxymocks "github.com/xufeisofly/hotstuff-core/proxy/mocks"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/p2p"
+	p2pmocks "github.com/xufeisofly/hotstuff/p2p/mocks"
+	ssproto "github.com/xufeisofly/hotstuff/proto/hotstuff/statesync"
+	proxymocks "github.com/xufeisofly/hotstuff/proxy/mocks"
 )
 
 func TestReactor_Receive_ChunkRequest(t *testing.T) {

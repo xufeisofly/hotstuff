@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	"github.com/xufeisofly/hotstuff-core/privval"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	"github.com/xufeisofly/hotstuff/privval"
 )
 
 // GenValidatorCmd allows the generation of a keypair for a

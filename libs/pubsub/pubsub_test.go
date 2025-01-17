@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/log"
 
-	"github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	"github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
+	"github.com/xufeisofly/hotstuff/libs/pubsub"
+	"github.com/xufeisofly/hotstuff/libs/pubsub/query"
 )
 
 const (

@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"time"
 
-	tmpubsub "github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	tmquery "github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
+	tmquery "github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 const (

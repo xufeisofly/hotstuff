@@ -11,11 +11,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/crypto/secp256k1"
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
-	mcs "github.com/xufeisofly/hotstuff-core/test/maverick/consensus"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/crypto/secp256k1"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
+	mcs "github.com/xufeisofly/hotstuff/test/maverick/consensus"
 )
 
 const (

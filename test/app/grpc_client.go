@@ -7,8 +7,8 @@ import (
 
 	"context"
 
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	coregrpc "github.com/xufeisofly/hotstuff-core/rpc/grpc"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	coregrpc "github.com/xufeisofly/hotstuff/rpc/grpc"
 )
 
 var grpcAddr = "tcp://localhost:36656"

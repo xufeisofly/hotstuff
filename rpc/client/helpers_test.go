@@ -8,9 +8,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/rpc/client"
-	"github.com/xufeisofly/hotstuff-core/rpc/client/mock"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
+	"github.com/xufeisofly/hotstuff/rpc/client"
+	"github.com/xufeisofly/hotstuff/rpc/client/mock"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
 )
 
 func TestWaitForHeight(t *testing.T) {

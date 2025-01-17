@@ -9,10 +9,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
-	"github.com/xufeisofly/hotstuff-core/types"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 func init() {

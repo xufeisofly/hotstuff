@@ -8,10 +8,10 @@ import (
 	"math"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Load generates transactions against the network until the given context is

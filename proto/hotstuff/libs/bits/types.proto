@@ -1,0 +1,9 @@
+syntax = "proto3";
+package hotstuff.libs.bits;
+
+option go_package = "github.com/xufeisofly/hotstuff-core/proto/hotstuff/libs/bits";
+
+message BitArray {
+  int64           bits  = 1;
+  repeated uint64 elems = 2;
+}

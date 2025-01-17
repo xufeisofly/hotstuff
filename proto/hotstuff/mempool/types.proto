@@ -1,0 +1,14 @@
+syntax = "proto3";
+package hotstuff.mempool;
+
+option go_package = "github.com/xufeisofly/hotstuff-core/proto/hotstuff/mempool";
+
+message Txs {
+  repeated bytes txs = 1;
+}
+
+message Message {
+  oneof sum {
+    Txs txs = 1;
+  }
+}

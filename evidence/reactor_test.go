@@ -16,17 +16,17 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	cfg "github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	"github.com/tendermint/tendermint/evidence"
-	"github.com/tendermint/tendermint/evidence/mocks"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/p2p"
-	p2pmocks "github.com/tendermint/tendermint/p2p/mocks"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	sm "github.com/tendermint/tendermint/state"
-	"github.com/tendermint/tendermint/types"
+	cfg "github.com/xufeisofly/hotstuff-core/config"
+	"github.com/xufeisofly/hotstuff-core/crypto"
+	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff-core/evidence"
+	"github.com/xufeisofly/hotstuff-core/evidence/mocks"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff-core/p2p"
+	p2pmocks "github.com/xufeisofly/hotstuff-core/p2p/mocks"
+	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	sm "github.com/xufeisofly/hotstuff-core/state"
+	"github.com/xufeisofly/hotstuff-core/types"
 )
 
 var (

@@ -10,17 +10,17 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	"github.com/tendermint/tendermint/evidence"
-	"github.com/tendermint/tendermint/evidence/mocks"
-	"github.com/tendermint/tendermint/libs/log"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	tmversion "github.com/tendermint/tendermint/proto/tendermint/version"
-	sm "github.com/tendermint/tendermint/state"
-	smmocks "github.com/tendermint/tendermint/state/mocks"
-	"github.com/tendermint/tendermint/types"
-	"github.com/tendermint/tendermint/version"
+	"github.com/xufeisofly/hotstuff-core/crypto"
+	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff-core/evidence"
+	"github.com/xufeisofly/hotstuff-core/evidence/mocks"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
+	sm "github.com/xufeisofly/hotstuff-core/state"
+	smmocks "github.com/xufeisofly/hotstuff-core/state/mocks"
+	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff-core/version"
 )
 
 const (

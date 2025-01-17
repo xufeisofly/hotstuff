@@ -11,11 +11,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/chacha20poly1305"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	cryptoenc "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	tmp2p "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	tmp2p "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p"
 )
 
 type buffer struct {

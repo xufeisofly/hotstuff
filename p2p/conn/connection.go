@@ -14,14 +14,14 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	flow "github.com/xufeisofly/hotstuff-core/libs/flowrate"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	"github.com/xufeisofly/hotstuff-core/libs/timer"
-	tmp2p "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p"
+	flow "github.com/xufeisofly/hotstuff/libs/flowrate"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	"github.com/xufeisofly/hotstuff/libs/timer"
+	tmp2p "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p"
 )
 
 const (

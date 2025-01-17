@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/log"
 )
 
 func TestLoggerLogsItsErrors(t *testing.T) {

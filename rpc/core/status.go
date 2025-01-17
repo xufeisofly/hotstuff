@@ -3,11 +3,11 @@ package core
 import (
 	"time"
 
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/p2p"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Status returns Tendermint status including node info, pubkey, latest block

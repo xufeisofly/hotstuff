@@ -3,8 +3,8 @@ package mock
 import (
 	"context"
 
-	"github.com/xufeisofly/hotstuff-core/rpc/client"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
+	"github.com/xufeisofly/hotstuff/rpc/client"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
 )
 
 // StatusMock returns the result specified by the Call

@@ -12,11 +12,11 @@ import (
 	gogotypes "github.com/gogo/protobuf/types"
 	dbm "github.com/tendermint/tm-db"
 
-	clist "github.com/xufeisofly/hotstuff-core/libs/clist"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
+	clist "github.com/xufeisofly/hotstuff/libs/clist"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

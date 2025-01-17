@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 // BlockMeta contains meta information.

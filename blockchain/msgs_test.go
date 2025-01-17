@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	bcproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/blockchain"
-	"github.com/xufeisofly/hotstuff-core/types"
+	bcproto "github.com/xufeisofly/hotstuff/proto/hotstuff/blockchain"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 func TestBcBlockRequestMessageValidateBasic(t *testing.T) {

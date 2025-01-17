@@ -10,8 +10,8 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 const defaultStorePeriodicSaveInterval = 1 * time.Minute

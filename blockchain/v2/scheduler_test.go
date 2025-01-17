@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 type scTestParams struct {

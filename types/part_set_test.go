@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	"github.com/xufeisofly/hotstuff/crypto/merkle"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 const (

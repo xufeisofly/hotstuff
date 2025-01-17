@@ -9,10 +9,10 @@ import (
 	"golang.org/x/net/netutil"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	"github.com/xufeisofly/hotstuff-core/p2p/conn"
-	tmp2p "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	"github.com/xufeisofly/hotstuff/p2p/conn"
+	tmp2p "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p"
 )
 
 const (
@@ -297,7 +297,7 @@ func (mt *MultiplexTransport) acceptPeers() {
 
 		// Connection upgrade and filtering should be asynchronous to avoid
 		// Head-of-line blocking[0].
-		// Reference:  https://github.com/xufeisofly/hotstuff-core/issues/2047
+		// Reference:  https://github.com/xufeisofly/hotstuff/issues/2047
 		//
 		// [0] https://en.wikipedia.org/wiki/Head-of-line_blocking
 		go func(c net.Conn) {

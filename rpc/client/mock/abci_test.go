@@ -9,13 +9,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/rpc/client"
-	"github.com/xufeisofly/hotstuff-core/rpc/client/mock"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/rpc/client"
+	"github.com/xufeisofly/hotstuff/rpc/client/mock"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 func TestABCIMock(t *testing.T) {

@@ -11,13 +11,13 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	abcitypes "github.com/xufeisofly/hotstuff-core/abci/types"
-	tmcfg "github.com/xufeisofly/hotstuff-core/config"
-	prototmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	blockmocks "github.com/xufeisofly/hotstuff-core/state/indexer/mocks"
-	"github.com/xufeisofly/hotstuff-core/state/mocks"
-	txmocks "github.com/xufeisofly/hotstuff-core/state/txindex/mocks"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abcitypes "github.com/xufeisofly/hotstuff/abci/types"
+	tmcfg "github.com/xufeisofly/hotstuff/config"
+	prototmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	blockmocks "github.com/xufeisofly/hotstuff/state/indexer/mocks"
+	"github.com/xufeisofly/hotstuff/state/mocks"
+	txmocks "github.com/xufeisofly/hotstuff/state/txindex/mocks"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

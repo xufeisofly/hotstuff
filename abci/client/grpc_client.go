@@ -9,10 +9,10 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 var _ Client = (*grpcClient)(nil)

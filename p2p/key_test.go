@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 func TestLoadOrGenNodeKey(t *testing.T) {

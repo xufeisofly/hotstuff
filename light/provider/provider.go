@@ -3,7 +3,7 @@ package provider
 import (
 	"context"
 
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Provider provides information for the light client to sync (verification

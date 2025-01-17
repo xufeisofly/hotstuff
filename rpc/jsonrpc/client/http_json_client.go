@@ -11,8 +11,8 @@ import (
 	"net/url"
 	"strings"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 const (

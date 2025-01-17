@@ -1,8 +1,8 @@
 package core
 
 import (
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 // UnsafeFlushMempool removes all transactions from the mempool.

@@ -9,8 +9,8 @@ import (
 	"path"
 	"path/filepath"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
 )
 
 // dumpStatus gets node status state dump from the Tendermint RPC and writes it

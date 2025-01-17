@@ -16,14 +16,14 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/privval"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
-	"github.com/xufeisofly/hotstuff-core/test/e2e/pkg/infra"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/privval"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/test/e2e/pkg/infra"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

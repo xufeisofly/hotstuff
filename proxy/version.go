@@ -1,8 +1,8 @@
 package proxy
 
 import (
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/version"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 // RequestInfo contains all the information for sending

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/log"
 )
 
 func TestVariousLevels(t *testing.T) {

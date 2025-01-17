@@ -5,7 +5,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/log"
 )
 
 type Capabilities struct {

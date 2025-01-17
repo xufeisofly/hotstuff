@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	"github.com/xufeisofly/hotstuff-core/p2p/conn"
-	tmp2p "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	"github.com/xufeisofly/hotstuff/p2p/conn"
+	tmp2p "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p"
 )
 
 var defaultNodeName = "host_peer"

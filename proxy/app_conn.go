@@ -1,8 +1,8 @@
 package proxy
 
 import (
-	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
-	"github.com/xufeisofly/hotstuff-core/abci/types"
+	abcicli "github.com/xufeisofly/hotstuff/abci/client"
+	"github.com/xufeisofly/hotstuff/abci/types"
 )
 
 //go:generate ../scripts/mockery_generate.sh AppConnConsensus|AppConnMempool|AppConnQuery|AppConnSnapshot

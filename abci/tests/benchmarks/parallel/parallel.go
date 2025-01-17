@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
 )
 
 func main() {

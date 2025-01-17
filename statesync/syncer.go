@@ -7,16 +7,16 @@ import (
 	"fmt"
 	"time"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	"github.com/xufeisofly/hotstuff-core/light"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	ssproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/statesync"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	"github.com/xufeisofly/hotstuff/light"
+	"github.com/xufeisofly/hotstuff/p2p"
+	ssproto "github.com/xufeisofly/hotstuff/proto/hotstuff/statesync"
+	"github.com/xufeisofly/hotstuff/proxy"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/service"
+	"github.com/xufeisofly/hotstuff/libs/service"
 )
 
 const (

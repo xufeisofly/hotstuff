@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	"github.com/xufeisofly/hotstuff-core/light"
-	"github.com/xufeisofly/hotstuff-core/types"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	"github.com/xufeisofly/hotstuff/light"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

@@ -8,8 +8,8 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 func TestWebsocketManagerHandler(t *testing.T) {

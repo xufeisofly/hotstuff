@@ -10,12 +10,12 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff-core/types"
-	"github.com/xufeisofly/hotstuff-core/version"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 func TestLast_FirstLightBlockHeight(t *testing.T) {

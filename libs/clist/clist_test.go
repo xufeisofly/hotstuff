@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 func TestPanicOnMaxLength(t *testing.T) {

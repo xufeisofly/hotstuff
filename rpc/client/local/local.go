@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmpubsub "github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	tmquery "github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
-	nm "github.com/xufeisofly/hotstuff-core/node"
-	rpcclient "github.com/xufeisofly/hotstuff-core/rpc/client"
-	"github.com/xufeisofly/hotstuff-core/rpc/core"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
+	tmquery "github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	nm "github.com/xufeisofly/hotstuff/node"
+	rpcclient "github.com/xufeisofly/hotstuff/rpc/client"
+	"github.com/xufeisofly/hotstuff/rpc/core"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 /*

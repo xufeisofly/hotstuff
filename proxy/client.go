@@ -3,12 +3,12 @@ package proxy
 import (
 	"fmt"
 
-	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
-	"github.com/xufeisofly/hotstuff-core/abci/example/counter"
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/app"
+	abcicli "github.com/xufeisofly/hotstuff/abci/client"
+	"github.com/xufeisofly/hotstuff/abci/example/counter"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/app"
 )
 
 //go:generate ../scripts/mockery_generate.sh ClientCreator

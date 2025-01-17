@@ -3,8 +3,8 @@ package types
 import (
 	"time"
 
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 // Canonical* wraps the structs in types for amino encoding them for use in SignBytes / the Signable interface.

@@ -6,8 +6,8 @@ import (
 	"math"
 	"time"
 
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
-	"github.com/xufeisofly/hotstuff-core/types"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Benchmark is a simple function for fetching, calculating and printing

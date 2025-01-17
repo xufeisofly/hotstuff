@@ -12,10 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	"github.com/xufeisofly/hotstuff-core/p2p"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	"github.com/xufeisofly/hotstuff/p2p"
 )
 
 // FIXME These tests should not rely on .(*addrBook) assertions

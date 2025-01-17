@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
 )
 
 func TestSIGHUP(t *testing.T) {

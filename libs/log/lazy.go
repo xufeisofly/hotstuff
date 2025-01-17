@@ -3,7 +3,7 @@ package log
 import (
 	"fmt"
 
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
 )
 
 type LazySprintf struct {

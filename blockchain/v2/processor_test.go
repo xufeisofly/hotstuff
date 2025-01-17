@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	tmState "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/p2p"
+	tmState "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // pcBlock is a test helper structure with simple types. Its purpose is to help with test readability.

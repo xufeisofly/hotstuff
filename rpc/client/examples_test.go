@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctest "github.com/xufeisofly/hotstuff-core/rpc/test"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctest "github.com/xufeisofly/hotstuff/rpc/test"
 )
 
 func ExampleHTTP_simple() {

@@ -7,14 +7,14 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/clist"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	"github.com/xufeisofly/hotstuff-core/mempool"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	protomem "github.com/xufeisofly/hotstuff-core/proto/hotstuff/mempool"
-	"github.com/xufeisofly/hotstuff-core/types"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/clist"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	"github.com/xufeisofly/hotstuff/mempool"
+	"github.com/xufeisofly/hotstuff/p2p"
+	protomem "github.com/xufeisofly/hotstuff/proto/hotstuff/mempool"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Reactor handles mempool tx broadcasting amongst peers.
@@ -260,7 +260,7 @@ func (memR *Reactor) broadcastTxRoutine(peer p2p.Peer) {
 		}
 
 		// NOTE: Transaction batching was disabled due to
-		// https://github.com/xufeisofly/hotstuff-core/issues/5796
+		// https://github.com/xufeisofly/hotstuff/issues/5796
 		if !memTx.HasPeer(peerID) {
 			success := p2p.SendEnvelopeShim(peer, p2p.Envelope{ //nolint: staticcheck
 				ChannelID: mempool.MempoolChannel,

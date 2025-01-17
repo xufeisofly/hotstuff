@@ -18,13 +18,13 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	"github.com/xufeisofly/hotstuff-core/rpc/client"
-	"github.com/xufeisofly/hotstuff-core/rpc/core"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	"github.com/xufeisofly/hotstuff/rpc/client"
+	"github.com/xufeisofly/hotstuff/rpc/core"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Client wraps arbitrary implementations of the various interfaces.

@@ -8,11 +8,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 var (

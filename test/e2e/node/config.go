@@ -6,7 +6,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/xufeisofly/hotstuff-core/test/e2e/app"
+	"github.com/xufeisofly/hotstuff/test/e2e/app"
 )
 
 // Config is the application configuration.

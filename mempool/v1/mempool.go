@@ -10,13 +10,13 @@ import (
 
 	"github.com/creachadair/taskgroup"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/clist"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/mempool"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/clist"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/mempool"
+	"github.com/xufeisofly/hotstuff/proxy"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 var _ mempool.Mempool = (*TxMempool)(nil)

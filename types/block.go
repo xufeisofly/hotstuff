@@ -10,16 +10,16 @@ import (
 	"github.com/gogo/protobuf/proto"
 	gogotypes "github.com/gogo/protobuf/types"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	"github.com/xufeisofly/hotstuff-core/libs/bits"
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff-core/version"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/merkle"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff/libs/bits"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 const (
@@ -321,7 +321,7 @@ func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
 // NOTE: changes to the Header should be duplicated in:
 // - header.Hash()
 // - abci.Header
-// - https://github.com/xufeisofly/hotstuff-core/blob/v0.34.x/spec/blockchain/blockchain.md
+// - https://github.com/xufeisofly/hotstuff/blob/v0.34.x/spec/blockchain/blockchain.md
 type Header struct {
 	// basic block info
 	Version tmversion.Consensus `json:"version"`

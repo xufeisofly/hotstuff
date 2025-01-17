@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
-	"github.com/xufeisofly/hotstuff-core/types"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Tests that any initial state given in genesis has made it into the app.

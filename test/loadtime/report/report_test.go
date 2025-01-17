@@ -7,9 +7,9 @@ import (
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/xufeisofly/hotstuff-core/test/loadtime/payload"
-	"github.com/xufeisofly/hotstuff-core/test/loadtime/report"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/test/loadtime/payload"
+	"github.com/xufeisofly/hotstuff/test/loadtime/report"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 type mockBlockStore struct {

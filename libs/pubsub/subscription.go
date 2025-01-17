@@ -3,7 +3,7 @@ package pubsub
 import (
 	"errors"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 var (

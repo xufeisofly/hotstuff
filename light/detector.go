@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/light/provider"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/light/provider"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // The detector component of the light client detects and handles attacks on the light client.
@@ -245,7 +245,7 @@ func (c *Client) handleConflictingHeaders(
 	if primaryBlock.Commit.Round != witnessTrace[len(witnessTrace)-1].Commit.Round {
 		c.logger.Info("The light client has detected, and prevented, an attempted amnesia attack." +
 			" We think this attack is pretty unlikely, so if you see it, that's interesting to us." +
-			" Can you let us know by opening an issue through https://github.com/xufeisofly/hotstuff-core/issues/new?")
+			" Can you let us know by opening an issue through https://github.com/xufeisofly/hotstuff/issues/new?")
 	}
 
 	// This may not be valid because the witness itself is at fault. So now we reverse it, examining the

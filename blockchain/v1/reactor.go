@@ -6,14 +6,14 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	"github.com/xufeisofly/hotstuff-core/behaviour"
-	bc "github.com/xufeisofly/hotstuff-core/blockchain"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	bcproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/blockchain"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/store"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/behaviour"
+	bc "github.com/xufeisofly/hotstuff/blockchain"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/p2p"
+	bcproto "github.com/xufeisofly/hotstuff/proto/hotstuff/blockchain"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/store"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

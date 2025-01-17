@@ -1,9 +1,9 @@
 package mock
 
 import (
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/p2p/conn"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/p2p/conn"
 )
 
 type Reactor struct {

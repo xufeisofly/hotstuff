@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
 )
 
 // TrustOptions are the trust parameters needed when a new light client

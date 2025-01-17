@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff-core/version"
+	"github.com/xufeisofly/hotstuff/crypto"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 func TestLightBlockValidateBasic(t *testing.T) {

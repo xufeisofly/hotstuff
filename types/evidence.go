@@ -9,12 +9,12 @@ import (
 	"strings"
 	"time"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/crypto/merkle"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 // Evidence represents any provable malicious activity by a validator.

@@ -1,8 +1,8 @@
 package types
 
 import (
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/crypto/merkle"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/crypto/merkle"
 )
 
 // ABCIResults wraps the deliver tx results to return a proof.

@@ -3,8 +3,8 @@ package indexer
 import (
 	"context"
 
-	"github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 //go:generate ../../scripts/mockery_generate.sh BlockIndexer

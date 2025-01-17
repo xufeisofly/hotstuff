@@ -4,8 +4,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	p2pconn "github.com/xufeisofly/hotstuff-core/p2p/conn"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	p2pconn "github.com/xufeisofly/hotstuff/p2p/conn"
 )
 
 const (
@@ -140,7 +140,7 @@ func (ln *UnixListener) Accept() (net.Conn, error) {
 	conn := newTimeoutConn(tc, ln.timeoutReadWrite)
 
 	// TODO: wrap in something that authenticates
-	// with a MAC - https://github.com/xufeisofly/hotstuff-core/issues/3099
+	// with a MAC - https://github.com/xufeisofly/hotstuff/issues/3099
 
 	return conn, nil
 }

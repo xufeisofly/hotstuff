@@ -11,10 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	tmp2p "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p"
-	"github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	tmp2p "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 const maxPingPongPacketSize = 1024 // bytes

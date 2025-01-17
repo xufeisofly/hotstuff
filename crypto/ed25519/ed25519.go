@@ -8,9 +8,9 @@ import (
 
 	"golang.org/x/crypto/ed25519"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 )
 
 //-------------------------------------

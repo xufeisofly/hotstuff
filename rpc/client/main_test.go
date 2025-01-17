@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	nm "github.com/xufeisofly/hotstuff-core/node"
-	rpctest "github.com/xufeisofly/hotstuff-core/rpc/test"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	nm "github.com/xufeisofly/hotstuff/node"
+	rpctest "github.com/xufeisofly/hotstuff/rpc/test"
 )
 
 var node *nm.Node

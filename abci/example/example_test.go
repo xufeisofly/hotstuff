@@ -15,14 +15,14 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
 
-	abcicli "github.com/xufeisofly/hotstuff-core/abci/client"
-	"github.com/xufeisofly/hotstuff-core/abci/example/code"
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	abciserver "github.com/xufeisofly/hotstuff-core/abci/server"
-	"github.com/xufeisofly/hotstuff-core/abci/types"
+	abcicli "github.com/xufeisofly/hotstuff/abci/client"
+	"github.com/xufeisofly/hotstuff/abci/example/code"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	abciserver "github.com/xufeisofly/hotstuff/abci/server"
+	"github.com/xufeisofly/hotstuff/abci/types"
 )
 
 func init() {

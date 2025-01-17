@@ -5,9 +5,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	"github.com/xufeisofly/hotstuff-core/mempool"
-	"github.com/xufeisofly/hotstuff-core/proxy"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	"github.com/xufeisofly/hotstuff/mempool"
+	"github.com/xufeisofly/hotstuff/proxy"
 )
 
 func BenchmarkReap(b *testing.B) {

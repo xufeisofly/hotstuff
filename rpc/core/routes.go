@@ -1,7 +1,7 @@
 package core
 
 import (
-	rpc "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
+	rpc "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
 )
 
 // TODO: better system than "unsafe" prefix

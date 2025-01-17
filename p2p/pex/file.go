@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/xufeisofly/hotstuff-core/libs/tempfile"
+	"github.com/xufeisofly/hotstuff/libs/tempfile"
 )
 
 /* Loading & Saving */

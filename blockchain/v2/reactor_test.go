@@ -14,20 +14,20 @@ import (
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/behaviour"
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	"github.com/xufeisofly/hotstuff-core/mempool/mock"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	"github.com/xufeisofly/hotstuff-core/p2p/conn"
-	bcproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/blockchain"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/store"
-	"github.com/xufeisofly/hotstuff-core/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/behaviour"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	"github.com/xufeisofly/hotstuff/mempool/mock"
+	"github.com/xufeisofly/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/p2p/conn"
+	bcproto "github.com/xufeisofly/hotstuff/proto/hotstuff/blockchain"
+	"github.com/xufeisofly/hotstuff/proxy"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/store"
+	"github.com/xufeisofly/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 type mockPeer struct {
@@ -160,7 +160,7 @@ func newTestReactor(p testReactorParams) *BlockchainReactor {
 }
 
 // This test is left here and not deleted to retain the termination cases for
-// future improvement in [#4482](https://github.com/xufeisofly/hotstuff-core/issues/4482).
+// future improvement in [#4482](https://github.com/xufeisofly/hotstuff/issues/4482).
 // func TestReactorTerminationScenarios(t *testing.T) {
 
 // 	config := cfg.ResetTestRoot("blockchain_reactor_v2_test")

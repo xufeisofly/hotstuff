@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	nm "github.com/xufeisofly/hotstuff-core/node"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	nm "github.com/xufeisofly/hotstuff/node"
 )
 
 var (

@@ -8,13 +8,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	cryptoproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto"
-	privvalproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	cryptoproto "github.com/xufeisofly/hotstuff/proto/hotstuff/crypto"
+	privvalproto "github.com/xufeisofly/hotstuff/proto/hotstuff/privval"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 type signerTestCase struct {

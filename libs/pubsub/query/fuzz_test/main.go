@@ -3,7 +3,7 @@ package fuzz_test
 import (
 	"fmt"
 
-	"github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
+	"github.com/xufeisofly/hotstuff/libs/pubsub/query"
 )
 
 func Fuzz(data []byte) int {

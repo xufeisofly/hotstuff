@@ -5,9 +5,9 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/xufeisofly/hotstuff-core/abci/types"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
+	"github.com/xufeisofly/hotstuff/abci/types"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
+	"github.com/xufeisofly/hotstuff/libs/service"
 )
 
 type GRPCServer struct {

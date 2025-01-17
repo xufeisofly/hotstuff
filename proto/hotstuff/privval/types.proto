@@ -5,7 +5,7 @@ import "hotstuff/crypto/keys.proto";
 import "hotstuff/types/types.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/xufeisofly/hotstuff-core/proto/hotstuff/privval";
+option go_package = "github.com/xufeisofly/hotstuff/proto/hotstuff/privval";
 
 enum Errors {
   ERRORS_UNKNOWN             = 0;

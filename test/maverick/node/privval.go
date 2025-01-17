@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	"github.com/xufeisofly/hotstuff-core/libs/tempfile"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	"github.com/xufeisofly/hotstuff/libs/tempfile"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // *******************************************************************************************************************

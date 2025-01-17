@@ -1,13 +1,13 @@
 package proxy
 
 import (
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
-	lrpc "github.com/xufeisofly/hotstuff-core/light/rpc"
-	rpcclient "github.com/xufeisofly/hotstuff-core/rpc/client"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpcserver "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
+	lrpc "github.com/xufeisofly/hotstuff/light/rpc"
+	rpcclient "github.com/xufeisofly/hotstuff/rpc/client"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpcserver "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 func RPCRoutes(c *lrpc.Client) map[string]*rpcserver.RPCFunc {

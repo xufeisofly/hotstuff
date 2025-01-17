@@ -9,19 +9,19 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	tmcon "github.com/xufeisofly/hotstuff-core/consensus"
-	cstypes "github.com/xufeisofly/hotstuff-core/consensus/types"
-	"github.com/xufeisofly/hotstuff-core/libs/bits"
-	tmevents "github.com/xufeisofly/hotstuff-core/libs/events"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	tmcons "github.com/xufeisofly/hotstuff-core/proto/hotstuff/consensus"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	tmcon "github.com/xufeisofly/hotstuff/consensus"
+	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	"github.com/xufeisofly/hotstuff/libs/bits"
+	tmevents "github.com/xufeisofly/hotstuff/libs/events"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	"github.com/xufeisofly/hotstuff/p2p"
+	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 const (

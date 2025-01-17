@@ -1,8 +1,8 @@
 package core
 
 import (
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 // Health gets node health. Returns empty result (200 OK) on success, no

@@ -4,8 +4,8 @@ import (
 	"sync"
 	"testing"
 
-	bh "github.com/xufeisofly/hotstuff-core/behaviour"
-	"github.com/xufeisofly/hotstuff-core/p2p"
+	bh "github.com/xufeisofly/hotstuff/behaviour"
+	"github.com/xufeisofly/hotstuff/p2p"
 )
 
 // TestMockReporter tests the MockReporter's ability to store reported

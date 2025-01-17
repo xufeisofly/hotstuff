@@ -12,11 +12,11 @@ import (
 	"github.com/gorilla/websocket"
 	metrics "github.com/rcrowley/go-metrics"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 const (
@@ -501,7 +501,7 @@ func (c *WSClient) readRoutine() {
 		// because they are implemented as responses with the subscribe request's
 		// ID. According to the spec, they should be notifications (requests
 		// without IDs).
-		// https://github.com/xufeisofly/hotstuff-core/issues/2949
+		// https://github.com/xufeisofly/hotstuff/issues/2949
 		// c.mtx.Lock()
 		// if _, ok := c.sentIDs[response.ID.(types.JSONRPCIntID)]; !ok {
 		// 	c.Logger.Error("unsolicited response ID", "id", response.ID, "expected", c.sentIDs)

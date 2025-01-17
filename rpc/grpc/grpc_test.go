@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	core_grpc "github.com/xufeisofly/hotstuff-core/rpc/grpc"
-	rpctest "github.com/xufeisofly/hotstuff-core/rpc/test"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	core_grpc "github.com/xufeisofly/hotstuff/rpc/grpc"
+	rpctest "github.com/xufeisofly/hotstuff/rpc/test"
 )
 
 func TestMain(m *testing.M) {

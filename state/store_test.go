@@ -10,15 +10,15 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 func TestStoreLoadValidators(t *testing.T) {

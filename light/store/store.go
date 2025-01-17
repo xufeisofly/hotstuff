@@ -1,6 +1,6 @@
 package store
 
-import "github.com/xufeisofly/hotstuff-core/types"
+import "github.com/xufeisofly/hotstuff/types"
 
 // Store is anything that can persistently store headers.
 type Store interface {

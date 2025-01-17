@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"sort"
 
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	tmquery "github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
-	blockidxnull "github.com/xufeisofly/hotstuff-core/state/indexer/block/null"
-	"github.com/xufeisofly/hotstuff-core/types"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	tmquery "github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
+	blockidxnull "github.com/xufeisofly/hotstuff/state/indexer/block/null"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // BlockchainInfo gets block headers for minHeight <= height <= maxHeight.

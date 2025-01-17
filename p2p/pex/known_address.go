@@ -3,7 +3,7 @@ package pex
 import (
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/p2p"
+	"github.com/xufeisofly/hotstuff/p2p"
 )
 
 // knownAddress tracks information about a known network address

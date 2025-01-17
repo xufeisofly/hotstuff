@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	rs "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	rs "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 var rpcFuncMap = map[string]*rs.RPCFunc{

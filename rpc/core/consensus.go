@@ -1,11 +1,11 @@
 package core
 
 import (
-	cm "github.com/xufeisofly/hotstuff-core/consensus"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	cm "github.com/xufeisofly/hotstuff/consensus"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Validators gets the validator set at the given block height.

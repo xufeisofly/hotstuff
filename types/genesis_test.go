@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 func TestGenesisBad(t *testing.T) {

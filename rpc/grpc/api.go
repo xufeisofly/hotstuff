@@ -3,9 +3,9 @@ package coregrpc
 import (
 	"context"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	core "github.com/xufeisofly/hotstuff-core/rpc/core"
-	rpctypes "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	core "github.com/xufeisofly/hotstuff/rpc/core"
+	rpctypes "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 type broadcastAPI struct {

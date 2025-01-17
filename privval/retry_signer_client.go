@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // RetrySignerClient wraps SignerClient adding retry for each operation (except

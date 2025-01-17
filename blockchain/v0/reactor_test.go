@@ -13,17 +13,17 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/mempool/mock"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	bcproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/blockchain"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/store"
-	"github.com/xufeisofly/hotstuff-core/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/mempool/mock"
+	"github.com/xufeisofly/hotstuff/p2p"
+	bcproto "github.com/xufeisofly/hotstuff/proto/hotstuff/blockchain"
+	"github.com/xufeisofly/hotstuff/proxy"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/store"
+	"github.com/xufeisofly/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 var config *cfg.Config

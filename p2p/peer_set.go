@@ -3,7 +3,7 @@ package p2p
 import (
 	"net"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 )
 
 // IPeerSet has a (immutable) subset of the methods of PeerSet.

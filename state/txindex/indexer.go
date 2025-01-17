@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/libs/pubsub/query"
 )
 
 // XXX/TODO: These types should be moved to the indexer package.

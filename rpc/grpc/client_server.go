@@ -6,7 +6,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
 )
 
 // Config is an gRPC server configuration.

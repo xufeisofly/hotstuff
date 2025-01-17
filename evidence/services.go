@@ -1,7 +1,7 @@
 package evidence
 
 import (
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 //go:generate ../scripts/mockery_generate.sh BlockStore

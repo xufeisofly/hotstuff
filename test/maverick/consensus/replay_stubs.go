@@ -1,12 +1,12 @@
 package consensus
 
 import (
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/libs/clist"
-	mempl "github.com/xufeisofly/hotstuff-core/mempool"
-	tmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/libs/clist"
+	mempl "github.com/xufeisofly/hotstuff/mempool"
+	tmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/proxy"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 //-----------------------------------------------------------------------------

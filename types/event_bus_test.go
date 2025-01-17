@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	tmpubsub "github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	tmquery "github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
+	tmquery "github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 )
 
 func TestEventBusPublishEventTx(t *testing.T) {

@@ -21,13 +21,13 @@ import (
 	"golang.org/x/crypto/hkdf"
 	"golang.org/x/crypto/nacl/box"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	cryptoenc "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	"github.com/xufeisofly/hotstuff-core/libs/async"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	tmp2p "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
+	"github.com/xufeisofly/hotstuff/libs/async"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	tmp2p "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p"
 )
 
 // 4 + 1024 == 1028 total frame size
@@ -53,13 +53,13 @@ var (
 
 // SecretConnection implements net.Conn.
 // It is an implementation of the STS protocol.
-// See https://github.com/xufeisofly/hotstuff-core/blob/0.1/docs/sts-final.pdf for
+// See https://github.com/xufeisofly/hotstuff/blob/0.1/docs/sts-final.pdf for
 // details on the protocol.
 //
 // Consumers of the SecretConnection are responsible for authenticating
 // the remote peer's pubkey against known information, like a nodeID.
 // Otherwise they are vulnerable to MITM.
-// (TODO(ismail): see also https://github.com/xufeisofly/hotstuff-core/issues/3010)
+// (TODO(ismail): see also https://github.com/xufeisofly/hotstuff/issues/3010)
 type SecretConnection struct {
 
 	// immutable
@@ -456,7 +456,7 @@ func incrNonce(nonce *[aeadNonceSize]byte) {
 	counter := binary.LittleEndian.Uint64(nonce[4:])
 	if counter == math.MaxUint64 {
 		// Terminates the session and makes sure the nonce would not re-used.
-		// See https://github.com/xufeisofly/hotstuff-core/issues/3531
+		// See https://github.com/xufeisofly/hotstuff/issues/3531
 		panic("can't increase nonce without overflow")
 	}
 	counter++

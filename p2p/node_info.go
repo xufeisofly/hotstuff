@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"reflect"
 
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	tmstrings "github.com/xufeisofly/hotstuff-core/libs/strings"
-	tmp2p "github.com/xufeisofly/hotstuff-core/proto/hotstuff/p2p"
-	"github.com/xufeisofly/hotstuff-core/version"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	tmstrings "github.com/xufeisofly/hotstuff/libs/strings"
+	tmp2p "github.com/xufeisofly/hotstuff/proto/hotstuff/p2p"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 const (

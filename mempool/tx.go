@@ -1,7 +1,7 @@
 package mempool
 
 import (
-	"github.com/xufeisofly/hotstuff-core/p2p"
+	"github.com/xufeisofly/hotstuff/p2p"
 )
 
 // TxInfo are parameters that get passed when attempting to add a tx to the

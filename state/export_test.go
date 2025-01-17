@@ -3,10 +3,10 @@ package state
 import (
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	tmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	tmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 //

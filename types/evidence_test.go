@@ -8,12 +8,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	tmversion "github.com/xufeisofly/hotstuff-core/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff-core/version"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/version"
 )
 
 var defaultVoteTime = time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)

@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 func TestCanonicalizeBlockID(t *testing.T) {

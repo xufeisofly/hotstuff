@@ -12,14 +12,14 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	tmcon "github.com/xufeisofly/hotstuff-core/consensus"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/store"
-	"github.com/xufeisofly/hotstuff-core/types"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	tmcon "github.com/xufeisofly/hotstuff/consensus"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
+	"github.com/xufeisofly/hotstuff/proxy"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/store"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 const (

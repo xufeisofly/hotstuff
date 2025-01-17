@@ -3,11 +3,11 @@ package encoding
 import (
 	"fmt"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/crypto/secp256k1"
-	"github.com/xufeisofly/hotstuff-core/libs/json"
-	pc "github.com/xufeisofly/hotstuff-core/proto/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/crypto/secp256k1"
+	"github.com/xufeisofly/hotstuff/libs/json"
+	pc "github.com/xufeisofly/hotstuff/proto/hotstuff/crypto"
 )
 
 func init() {

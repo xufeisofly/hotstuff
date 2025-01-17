@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/light"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/light"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // verify verifies the evidence fully by checking:

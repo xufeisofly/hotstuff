@@ -3,8 +3,8 @@ package mempool
 import (
 	"container/list"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	"github.com/xufeisofly/hotstuff-core/types"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // TxCache defines an interface for raw transaction caching in a mempool.

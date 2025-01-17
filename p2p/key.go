@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	tmjson "github.com/xufeisofly/hotstuff-core/libs/json"
-	tmos "github.com/xufeisofly/hotstuff-core/libs/os"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	tmos "github.com/xufeisofly/hotstuff/libs/os"
 )
 
 // ID is a hex-encoded crypto.Address

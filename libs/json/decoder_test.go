@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/libs/json"
+	"github.com/xufeisofly/hotstuff/libs/json"
 )
 
 func TestUnmarshal(t *testing.T) {

@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"time"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/p2p"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // List of blocks

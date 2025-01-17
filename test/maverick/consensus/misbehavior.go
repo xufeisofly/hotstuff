@@ -3,13 +3,13 @@ package consensus
 import (
 	"fmt"
 
-	tmcon "github.com/xufeisofly/hotstuff-core/consensus"
-	cstypes "github.com/xufeisofly/hotstuff-core/consensus/types"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	tmcons "github.com/xufeisofly/hotstuff-core/proto/hotstuff/consensus"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	tmcon "github.com/xufeisofly/hotstuff/consensus"
+	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/p2p"
+	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // MisbehaviorList encompasses a list of all possible behaviors

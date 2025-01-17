@@ -6,12 +6,12 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmpubsub "github.com/xufeisofly/hotstuff-core/libs/pubsub"
-	"github.com/xufeisofly/hotstuff-core/light"
-	lrpc "github.com/xufeisofly/hotstuff-core/light/rpc"
-	rpchttp "github.com/xufeisofly/hotstuff-core/rpc/client/http"
-	rpcserver "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/server"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
+	"github.com/xufeisofly/hotstuff/light"
+	lrpc "github.com/xufeisofly/hotstuff/light/rpc"
+	rpchttp "github.com/xufeisofly/hotstuff/rpc/client/http"
+	rpcserver "github.com/xufeisofly/hotstuff/rpc/jsonrpc/server"
 )
 
 // A Proxy defines parameters for running an HTTP server proxy.

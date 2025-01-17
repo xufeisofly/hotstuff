@@ -15,18 +15,18 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	abciclient "github.com/xufeisofly/hotstuff-core/abci/client"
-	abciclimocks "github.com/xufeisofly/hotstuff-core/abci/client/mocks"
-	"github.com/xufeisofly/hotstuff-core/abci/example/kvstore"
-	abciserver "github.com/xufeisofly/hotstuff-core/abci/server"
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	"github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	"github.com/xufeisofly/hotstuff-core/mempool"
-	"github.com/xufeisofly/hotstuff-core/proxy"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abciclient "github.com/xufeisofly/hotstuff/abci/client"
+	abciclimocks "github.com/xufeisofly/hotstuff/abci/client/mocks"
+	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
+	abciserver "github.com/xufeisofly/hotstuff/abci/server"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	"github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	"github.com/xufeisofly/hotstuff/mempool"
+	"github.com/xufeisofly/hotstuff/proxy"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // A cleanupFunc cleans up any config / test files created for a particular
@@ -639,7 +639,7 @@ func TestMempoolTxsBytes(t *testing.T) {
 }
 
 // This will non-deterministically catch some concurrency failures like
-// https://github.com/xufeisofly/hotstuff-core/issues/3509
+// https://github.com/xufeisofly/hotstuff/issues/3509
 // TODO: all of the tests should probably also run using the remote proxy app
 // since otherwise we're not actually testing the concurrency of the mempool here!
 func TestMempoolRemoteAppConcurrency(t *testing.T) {

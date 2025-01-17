@@ -3,8 +3,8 @@ package mock
 import (
 	"context"
 
-	"github.com/xufeisofly/hotstuff-core/light/provider"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/light/provider"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 type deadMock struct {

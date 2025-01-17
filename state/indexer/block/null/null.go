@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/xufeisofly/hotstuff-core/libs/pubsub/query"
-	"github.com/xufeisofly/hotstuff-core/state/indexer"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	"github.com/xufeisofly/hotstuff/state/indexer"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 var _ indexer.BlockIndexer = (*BlockerIndexer)(nil)

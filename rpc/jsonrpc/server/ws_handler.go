@@ -12,9 +12,9 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 // WebSocket handler
@@ -449,7 +449,7 @@ func (wsc *wsConnection) writeRoutine() {
 
 // All writes to the websocket must (re)set the write deadline.
 // If some writes don't set it while others do, they may timeout incorrectly
-// (https://github.com/xufeisofly/hotstuff-core/issues/553)
+// (https://github.com/xufeisofly/hotstuff/issues/553)
 func (wsc *wsConnection) writeMessageWithDeadline(msgType int, msg []byte) error {
 	if err := wsc.baseConn.SetWriteDeadline(time.Now().Add(wsc.writeWait)); err != nil {
 		return err

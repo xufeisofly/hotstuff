@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	tmbytes "github.com/xufeisofly/hotstuff-core/libs/bytes"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 const (

@@ -12,9 +12,9 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	types "github.com/xufeisofly/hotstuff-core/rpc/jsonrpc/types"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	types "github.com/xufeisofly/hotstuff/rpc/jsonrpc/types"
 )
 
 var wsCallTimeout = 5 * time.Second

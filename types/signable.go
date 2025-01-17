@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	tmmath "github.com/xufeisofly/hotstuff-core/libs/math"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	tmmath "github.com/xufeisofly/hotstuff/libs/math"
 )
 
 var (

@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
 )
 
 // Wait waits for a number of blocks to be produced, and for all nodes to catch

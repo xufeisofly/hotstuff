@@ -7,10 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
+	"github.com/xufeisofly/hotstuff/crypto"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
 func TestVoteSet_AddVote_Good(t *testing.T) {

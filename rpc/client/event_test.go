@@ -10,11 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	"github.com/xufeisofly/hotstuff-core/rpc/client"
-	ctypes "github.com/xufeisofly/hotstuff-core/rpc/core/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	"github.com/xufeisofly/hotstuff/rpc/client"
+	ctypes "github.com/xufeisofly/hotstuff/rpc/core/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 var waitForEventTimeout = 8 * time.Second

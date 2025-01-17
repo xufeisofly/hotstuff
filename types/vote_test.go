@@ -8,11 +8,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/crypto"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/crypto/tmhash"
-	"github.com/xufeisofly/hotstuff-core/libs/protoio"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/crypto/tmhash"
+	"github.com/xufeisofly/hotstuff/libs/protoio"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 func examplePrevote() *Vote {

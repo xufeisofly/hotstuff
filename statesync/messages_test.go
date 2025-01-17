@@ -7,9 +7,9 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff-core/p2p"
-	ssproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/statesync"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/p2p"
+	ssproto "github.com/xufeisofly/hotstuff/proto/hotstuff/statesync"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 func TestValidateMsg(t *testing.T) {

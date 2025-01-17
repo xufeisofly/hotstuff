@@ -10,9 +10,9 @@ else
 VERSION := $(shell git describe)
 endif
 
-LD_FLAGS = -X github.com/xufeisofly/hotstuff-core/version.TMCoreSemVer=$(VERSION)
+LD_FLAGS = -X github.com/xufeisofly/hotstuff/version.TMCoreSemVer=$(VERSION)
 BUILD_FLAGS = -mod=readonly -ldflags "$(LD_FLAGS)"
-HTTPS_GIT := https://github.com/xufeisofly/hotstuff-core.git
+HTTPS_GIT := https://github.com/xufeisofly/hotstuff.git
 CGO_ENABLED ?= 0
 
 # handle nostrip

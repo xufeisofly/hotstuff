@@ -3,7 +3,7 @@ package json_test
 import (
 	"time"
 
-	"github.com/xufeisofly/hotstuff-core/libs/json"
+	"github.com/xufeisofly/hotstuff/libs/json"
 )
 
 // Register Car, an instance of the Vehicle interface.

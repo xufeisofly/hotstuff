@@ -3,9 +3,9 @@ package txindex
 import (
 	"context"
 
-	"github.com/xufeisofly/hotstuff-core/libs/service"
-	"github.com/xufeisofly/hotstuff-core/state/indexer"
-	"github.com/xufeisofly/hotstuff-core/types"
+	"github.com/xufeisofly/hotstuff/libs/service"
+	"github.com/xufeisofly/hotstuff/state/indexer"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // XXX/TODO: These types should be moved to the indexer package.

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	"github.com/xufeisofly/hotstuff-core/libs/log"
-	tmnet "github.com/xufeisofly/hotstuff-core/libs/net"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	"github.com/xufeisofly/hotstuff/libs/log"
+	tmnet "github.com/xufeisofly/hotstuff/libs/net"
 )
 
 // IsConnTimeout returns a boolean indicating whether the error is known to

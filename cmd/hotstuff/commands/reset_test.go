@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/privval"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/privval"
 )
 
 func Test_ResetAll(t *testing.T) {

@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	e2e "github.com/xufeisofly/hotstuff-core/test/e2e/pkg"
+	e2e "github.com/xufeisofly/hotstuff/test/e2e/pkg"
 )
 
 // Test runs test cases under tests/

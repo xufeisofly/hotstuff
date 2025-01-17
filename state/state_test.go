@@ -13,15 +13,15 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/xufeisofly/hotstuff-core/abci/types"
-	cfg "github.com/xufeisofly/hotstuff-core/config"
-	"github.com/xufeisofly/hotstuff-core/crypto/ed25519"
-	cryptoenc "github.com/xufeisofly/hotstuff-core/crypto/encoding"
-	tmrand "github.com/xufeisofly/hotstuff-core/libs/rand"
-	tmstate "github.com/xufeisofly/hotstuff-core/proto/hotstuff/state"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	sm "github.com/xufeisofly/hotstuff-core/state"
-	"github.com/xufeisofly/hotstuff-core/types"
+	abci "github.com/xufeisofly/hotstuff/abci/types"
+	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/crypto/ed25519"
+	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
+	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
+	tmstate "github.com/xufeisofly/hotstuff/proto/hotstuff/state"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // setupTestCase does setup common to all test cases.
@@ -441,7 +441,7 @@ func testProposerFreq(t *testing.T, caseNum int, valSet *types.ValidatorSet) {
 }
 
 // TestProposerPriorityDoesNotGetResetToZero assert that we preserve accum when calling updateState
-// see https://github.com/xufeisofly/hotstuff-core/issues/2718
+// see https://github.com/xufeisofly/hotstuff/issues/2718
 func TestProposerPriorityDoesNotGetResetToZero(t *testing.T) {
 	tearDown, _, state := setupTestCase(t)
 	defer tearDown(t)
@@ -773,7 +773,7 @@ func TestLargeGenesisValidator(t *testing.T) {
 	// add more validators with same voting power as the 2nd
 	// let the genesis validator "unbond",
 	// see how long it takes until the effect wears off and both begin to alternate
-	// see: https://github.com/xufeisofly/hotstuff-core/issues/2960
+	// see: https://github.com/xufeisofly/hotstuff/issues/2960
 	firstAddedValPubKey := ed25519.GenPrivKey().PubKey()
 	firstAddedValVotingPower := int64(10)
 	fvp, err := cryptoenc.PubKeyToProto(firstAddedValPubKey)

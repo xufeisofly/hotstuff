@@ -7,10 +7,10 @@ import (
 	"github.com/gogo/protobuf/proto"
 	dbm "github.com/tendermint/tm-db"
 
-	tmsync "github.com/xufeisofly/hotstuff-core/libs/sync"
-	tmstore "github.com/xufeisofly/hotstuff-core/proto/hotstuff/store"
-	tmproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/types"
-	"github.com/xufeisofly/hotstuff-core/types"
+	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
+	tmstore "github.com/xufeisofly/hotstuff/proto/hotstuff/store"
+	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 /*
@@ -37,7 +37,7 @@ type BlockStore struct {
 	// fine-grained concurrency control for its data, and thus this mutex does not apply to
 	// database contents. The only reason for keeping these fields in the struct is that the data
 	// can't efficiently be queried from the database since the key encoding we use is not
-	// lexicographically ordered (see https://github.com/xufeisofly/hotstuff-core/issues/4567).
+	// lexicographically ordered (see https://github.com/xufeisofly/hotstuff/issues/4567).
 	mtx    tmsync.RWMutex
 	base   int64
 	height int64

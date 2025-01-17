@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/tendermint/tendermint/abci/example/code"
-	"github.com/tendermint/tendermint/abci/types"
+	"github.com/xufeisofly/hotstuff-core/abci/example/code"
+	"github.com/xufeisofly/hotstuff-core/abci/types"
 )
 
 var abciType string

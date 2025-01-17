@@ -13,17 +13,17 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	cfg "github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/mempool/mock"
-	"github.com/tendermint/tendermint/p2p"
-	bcproto "github.com/tendermint/tendermint/proto/tendermint/blockchain"
-	"github.com/tendermint/tendermint/proxy"
-	sm "github.com/tendermint/tendermint/state"
-	"github.com/tendermint/tendermint/store"
-	"github.com/tendermint/tendermint/types"
-	tmtime "github.com/tendermint/tendermint/types/time"
+	abci "github.com/xufeisofly/hotstuff-core/abci/types"
+	cfg "github.com/xufeisofly/hotstuff-core/config"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff-core/mempool/mock"
+	"github.com/xufeisofly/hotstuff-core/p2p"
+	bcproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/blockchain"
+	"github.com/xufeisofly/hotstuff-core/proxy"
+	sm "github.com/xufeisofly/hotstuff-core/state"
+	"github.com/xufeisofly/hotstuff-core/store"
+	"github.com/xufeisofly/hotstuff-core/types"
+	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
 )
 
 var config *cfg.Config

@@ -6,9 +6,9 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	"github.com/tendermint/tendermint/p2p"
-	bcproto "github.com/tendermint/tendermint/proto/tendermint/blockchain"
-	"github.com/tendermint/tendermint/types"
+	"github.com/xufeisofly/hotstuff-core/p2p"
+	bcproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/blockchain"
+	"github.com/xufeisofly/hotstuff-core/types"
 )
 
 const (

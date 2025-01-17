@@ -14,20 +14,20 @@ import (
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/behaviour"
-	cfg "github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/libs/service"
-	"github.com/tendermint/tendermint/mempool/mock"
-	"github.com/tendermint/tendermint/p2p"
-	"github.com/tendermint/tendermint/p2p/conn"
-	bcproto "github.com/tendermint/tendermint/proto/tendermint/blockchain"
-	"github.com/tendermint/tendermint/proxy"
-	sm "github.com/tendermint/tendermint/state"
-	"github.com/tendermint/tendermint/store"
-	"github.com/tendermint/tendermint/types"
-	tmtime "github.com/tendermint/tendermint/types/time"
+	abci "github.com/xufeisofly/hotstuff-core/abci/types"
+	"github.com/xufeisofly/hotstuff-core/behaviour"
+	cfg "github.com/xufeisofly/hotstuff-core/config"
+	"github.com/xufeisofly/hotstuff-core/libs/log"
+	"github.com/xufeisofly/hotstuff-core/libs/service"
+	"github.com/xufeisofly/hotstuff-core/mempool/mock"
+	"github.com/xufeisofly/hotstuff-core/p2p"
+	"github.com/xufeisofly/hotstuff-core/p2p/conn"
+	bcproto "github.com/xufeisofly/hotstuff-core/proto/hotstuff/blockchain"
+	"github.com/xufeisofly/hotstuff-core/proxy"
+	sm "github.com/xufeisofly/hotstuff-core/state"
+	"github.com/xufeisofly/hotstuff-core/store"
+	"github.com/xufeisofly/hotstuff-core/types"
+	tmtime "github.com/xufeisofly/hotstuff-core/types/time"
 )
 
 type mockPeer struct {
@@ -160,7 +160,7 @@ func newTestReactor(p testReactorParams) *BlockchainReactor {
 }
 
 // This test is left here and not deleted to retain the termination cases for
-// future improvement in [#4482](https://github.com/tendermint/tendermint/issues/4482).
+// future improvement in [#4482](https://github.com/xufeisofly/hotstuff-core/issues/4482).
 // func TestReactorTerminationScenarios(t *testing.T) {
 
 // 	config := cfg.ResetTestRoot("blockchain_reactor_v2_test")

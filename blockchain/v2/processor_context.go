@@ -3,8 +3,8 @@ package v2
 import (
 	"fmt"
 
-	"github.com/tendermint/tendermint/state"
-	"github.com/tendermint/tendermint/types"
+	"github.com/xufeisofly/hotstuff-core/state"
+	"github.com/xufeisofly/hotstuff-core/types"
 )
 
 type processorContext interface {

@@ -1,7 +1,7 @@
 //go:build gofuzz
 // +build gofuzz
 
-package consensus
+package consensus_old
 
 import (
 	"bytes"

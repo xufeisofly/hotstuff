@@ -1,4 +1,4 @@
-package consensus
+package consensus_old
 
 import (
 	"bytes"
@@ -22,7 +22,7 @@ import (
 	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
 	abci "github.com/xufeisofly/hotstuff/abci/types"
 	cfg "github.com/xufeisofly/hotstuff/config"
-	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	cstypes "github.com/xufeisofly/hotstuff/consensus_old/types"
 	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	tmos "github.com/xufeisofly/hotstuff/libs/os"

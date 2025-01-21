@@ -1,4 +1,4 @@
-package consensus
+package consensus_old
 
 import (
 	"github.com/go-kit/kit/metrics"

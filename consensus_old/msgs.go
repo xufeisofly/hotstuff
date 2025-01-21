@@ -1,11 +1,11 @@
-package consensus
+package consensus_old
 
 import (
 	"errors"
 	"fmt"
 
 	"github.com/gogo/protobuf/proto"
-	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	cstypes "github.com/xufeisofly/hotstuff/consensus_old/types"
 	"github.com/xufeisofly/hotstuff/libs/bits"
 	tmmath "github.com/xufeisofly/hotstuff/libs/math"
 	"github.com/xufeisofly/hotstuff/p2p"

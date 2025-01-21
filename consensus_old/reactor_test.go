@@ -1,4 +1,4 @@
-package consensus
+package consensus_old
 
 import (
 	"context"
@@ -22,7 +22,7 @@ import (
 	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
 	abci "github.com/xufeisofly/hotstuff/abci/types"
 	cfg "github.com/xufeisofly/hotstuff/config"
-	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	cstypes "github.com/xufeisofly/hotstuff/consensus_old/types"
 	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
 	"github.com/xufeisofly/hotstuff/crypto/tmhash"
 	"github.com/xufeisofly/hotstuff/libs/bits"

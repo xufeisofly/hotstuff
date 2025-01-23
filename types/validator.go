@@ -191,3 +191,38 @@ func RandValidator(randPower bool, minPower int64) (*Validator, PrivValidator) {
 	val := NewValidator(pubKey, votePower)
 	return val, privVal
 }
+
+type AddressSet map[string]struct{}
+
+func NewAddressSet() AddressSet {
+	return make(AddressSet)
+}
+
+func (addrSet AddressSet) Add(addr Address) {
+	addrSet[string(addr)] = struct{}{}
+}
+
+func (addrSet AddressSet) Len() int {
+	return len(addrSet)
+}
+
+func (addrSet AddressSet) Contains(addr Address) bool {
+	_, ok := addrSet[string(addr)]
+	return ok
+}
+
+// RangeWhile calls f for each addr in the set until f returns false.
+func (addrSet AddressSet) RangeWhile(f func(Address) bool) {
+	for addrStr := range addrSet {
+		if !f(Address(addrStr)) {
+			return
+		}
+	}
+}
+
+func (addrSet AddressSet) ForEach(f func(Address)) {
+	addrSet.RangeWhile(func(addr Address) bool {
+		f(addr)
+		return true
+	})
+}

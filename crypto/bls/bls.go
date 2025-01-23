@@ -215,7 +215,7 @@ func firstParticipant(participants types.AddressSet) types.Address {
 }
 
 // BatchVerify verifies the given quorum signature against the batch of messages.
-func (bls *bls12Base) BatchVerify(signature types.QuorumSignature, batch map[string][]byte) bool {
+func (bls *bls12Base) BatchVerify(signature types.QuorumSignature, batch map[types.AddressStr][]byte) bool {
 	s, ok := signature.(*AggregateSignature)
 	if !ok {
 		panic(fmt.Sprintf("cannot verify incompatible signature type %T (expected %T)", signature, s))

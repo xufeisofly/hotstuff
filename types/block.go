@@ -317,6 +317,11 @@ func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
 
 //-----------------------------------------------------------------------------
 
+// View is a crucial hotstuff concept, different with tendermint height, the views of
+// committed blocks might not be sequencial, it's more like a combination of Height and Round
+// in tendermint
+type View = uint64
+
 // Header defines the structure of a Tendermint block header.
 // NOTE: changes to the Header should be duplicated in:
 // - header.Hash()

@@ -19,6 +19,7 @@ import (
 	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/types"
 	"github.com/xufeisofly/hotstuff/version"
 )
 
@@ -353,6 +354,8 @@ type Header struct {
 	// consensus info
 	EvidenceHash    tmbytes.HexBytes `json:"evidence_hash"`    // evidence included in the block
 	ProposerAddress Address          `json:"proposer_address"` // original proposer of the block
+
+	View types.View // hotstuff View
 }
 
 // Populate the Header with state-derived data.

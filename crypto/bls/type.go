@@ -26,3 +26,7 @@ func (agg *AggregateSignature) ToBytes() []byte {
 func (agg *AggregateSignature) Participants() types.AddressSet {
 	return agg.participants
 }
+
+func (agg *AggregateSignature) IsValid() bool {
+	return agg != nil && len(agg.participants) > 0
+}

@@ -177,7 +177,7 @@ func (bls *bls12Base) Verify(signature types.QuorumSignature, message []byte) bo
 	n := s.Participants().Len()
 
 	if n == 1 {
-		addr := firstParticipant(s.Participants())
+		addr := s.Participants().First()
 		pk, ok := bls.pubKeyFn(addr)
 		if !ok {
 			return false
@@ -199,19 +199,6 @@ func (bls *bls12Base) Verify(signature types.QuorumSignature, message []byte) bo
 		return false
 	}
 	return bls.fastAggregateVerify(pks, message, &s.point)
-}
-
-func firstParticipant(participants types.AddressSet) types.Address {
-	if len(participants) == 0 {
-		return types.Address{}
-	}
-
-	var ret types.Address
-	participants.RangeWhile(func(addr types.Address) bool {
-		ret = addr
-		return false
-	})
-	return ret
 }
 
 // BatchVerify verifies the given quorum signature against the batch of messages.

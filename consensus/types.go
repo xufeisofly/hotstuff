@@ -9,6 +9,7 @@ import (
 )
 
 type Hash = []byte
+type HashStr = string
 
 // SyncInfo holds the highest known QC or TC.
 // Generally, if highQC.View > highTC.View, there is no need to include highTC in the SyncInfo.
@@ -44,37 +45,6 @@ func (si SyncInfo) WithAggQC(aggQC AggregateQC) SyncInfo {
 	si.aggQC = new(AggregateQC)
 	*si.aggQC = aggQC
 	return si
-}
-
-// PartialCert is a signed block hash.
-type PartialCert struct {
-	signer    types.Address
-	signature types.QuorumSignature
-	blockHash Hash
-}
-
-func NewPartialCert(signature types.QuorumSignature, blockHash Hash) PartialCert {
-	if signature.Participants().Len() != 1 {
-		panic("partial cert signature signer count != 1")
-	}
-	var signer types.Address
-	signature.Participants().RangeWhile(func(addr types.Address) bool {
-		signer = addr
-		return false
-	})
-	return PartialCert{signer, signature, blockHash}
-}
-
-func (pc PartialCert) Signer() types.Address {
-	return pc.signer
-}
-
-func (pc PartialCert) Signature() types.QuorumSignature {
-	return pc.signature
-}
-
-func (pc PartialCert) BlockHash() Hash {
-	return pc.blockHash
 }
 
 // QuorumCert(QC) is certificate for Block created by a quorum of partial certificates.

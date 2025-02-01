@@ -3,6 +3,7 @@ package consensus
 import "github.com/xufeisofly/hotstuff/types"
 
 type epochInfo struct {
+	height     uint64
 	validators *types.ValidatorSet
 
 	totalVotingPower  int64
@@ -16,6 +17,10 @@ func NewEpochInfo(validators *types.ValidatorSet) *epochInfo {
 		totalVotingPower:  int64(total),
 		quorumVotingPower: int64(total*2/3 + 1),
 	}
+}
+
+func (e *epochInfo) Height() uint64 {
+	return e.height
 }
 
 func (e *epochInfo) Validators() *types.ValidatorSet {

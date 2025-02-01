@@ -226,3 +226,16 @@ func (addrSet AddressSet) ForEach(f func(Address)) {
 		return true
 	})
 }
+
+func (addrSet AddressSet) First() Address {
+	if len(addrSet) == 0 {
+		return Address{}
+	}
+
+	var ret Address
+	addrSet.RangeWhile(func(addr Address) bool {
+		ret = addr
+		return false
+	})
+	return ret
+}

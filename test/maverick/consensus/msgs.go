@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	tmcon "github.com/xufeisofly/hotstuff/consensus"
-	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	cstypes "github.com/xufeisofly/hotstuff/consensus_old/types"
 	tmmath "github.com/xufeisofly/hotstuff/libs/math"
 	"github.com/xufeisofly/hotstuff/p2p"
 	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"

@@ -23,9 +23,9 @@ type Crypto interface {
 		partSig types.QuorumSignature,
 	) (aggSig types.QuorumSignature, ok bool)
 
-	VerifyQuorumCert(qc QuorumCert) bool
-	VerifyTimeoutCert(tc TimeoutCert) bool
-	VerifyAggregateQC(aggQC AggregateQC) (highQC QuorumCert, ok bool)
+	VerifyQuorumCert(qc types.QuorumCert) bool
+	VerifyTimeoutCert(tc types.TimeoutCert) bool
+	VerifyAggregateQC(aggQC types.AggregateQC) (highQC types.QuorumCert, ok bool)
 }
 
 type crypto struct {
@@ -112,25 +112,25 @@ func (c *crypto) CollectPartialSignature(
 	return aggSig, true
 }
 
-func (c *crypto) VerifyQuorumCert(qc QuorumCert) bool {
+func (c *crypto) VerifyQuorumCert(qc types.QuorumCert) bool {
 	if qc.Signature().Participants().Len() < int(c.epochInfo.QuorumVotingPower()) {
 		return false
 	}
 	return c.Verify(qc.Signature(), qc.BlockHash())
 }
 
-func (c *crypto) VerifyTimeoutCert(tc TimeoutCert) bool {
+func (c *crypto) VerifyTimeoutCert(tc types.TimeoutCert) bool {
 	return false
 }
 
-func (c *crypto) VerifyAggregateQC(aggQC AggregateQC) (highQC QuorumCert, ok bool) {
-	return QuorumCert{}, false
+func (c *crypto) VerifyAggregateQC(aggQC types.AggregateQC) (highQC types.QuorumCert, ok bool) {
+	return types.QuorumCert{}, false
 }
 
 // partial signature collection for one view
 type sigCollect struct {
 	view     types.View
-	collects map[HashStr]*sigCollectItem
+	collects map[types.HashStr]*sigCollectItem
 	handled  bool
 }
 
@@ -143,11 +143,11 @@ func (sc *sigCollect) setHandled(handled bool) {
 }
 
 func (sc *sigCollect) addItem(item *sigCollectItem) {
-	sc.collects[HashStr(item.msgHash)] = item
+	sc.collects[item.msgHash.String()] = item
 }
 
-func (sc *sigCollect) getItem(msgHash Hash) *sigCollectItem {
-	item, ok := sc.collects[HashStr(msgHash)]
+func (sc *sigCollect) getItem(msgHash types.Hash) *sigCollectItem {
+	item, ok := sc.collects[msgHash.String()]
 	if ok {
 		return item
 	}
@@ -159,12 +159,12 @@ func (sc *sigCollect) getItem(msgHash Hash) *sigCollectItem {
 
 // partial sigatures collection for one msg hash in a view
 type sigCollectItem struct {
-	msgHash  Hash
+	msgHash  types.Hash
 	partSigs map[types.AddressStr]types.QuorumSignature
 	aggSig   types.QuorumSignature
 }
 
-func newSigCollectItem(msgHash Hash) *sigCollectItem {
+func newSigCollectItem(msgHash types.Hash) *sigCollectItem {
 	return &sigCollectItem{
 		msgHash:  msgHash,
 		partSigs: make(map[types.AddressStr]types.QuorumSignature),
@@ -190,7 +190,7 @@ func (scItem *sigCollectItem) setAggSig(aggSig types.QuorumSignature) {
 var sigCollectPool = sync.Pool{
 	New: func() interface{} {
 		return &sigCollect{
-			collects: make(map[HashStr]*sigCollectItem),
+			collects: make(map[types.HashStr]*sigCollectItem),
 			handled:  false,
 			view:     0,
 		}
@@ -202,7 +202,7 @@ func getSigCollect() *sigCollect {
 }
 
 func putSigCollect(sc *sigCollect) {
-	sc.collects = make(map[HashStr]*sigCollectItem)
+	sc.collects = make(map[types.HashStr]*sigCollectItem)
 	sc.handled = false
 	sc.view = 0
 	sigCollectPool.Put(sc)

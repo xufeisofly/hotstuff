@@ -1,6 +1,9 @@
 package consensus
 
 import (
+	"bytes"
+
+	"github.com/xufeisofly/hotstuff/libs/log"
 	sm "github.com/xufeisofly/hotstuff/state"
 	"github.com/xufeisofly/hotstuff/types"
 )
@@ -21,13 +24,13 @@ type BlockChain interface {
 	// Store a block(committed) to database
 	Store2Db(block *types.Block) error
 	// Get a block by block hash
-	Get(blockHash Hash) *types.Block
+	Get(blockHash types.Hash) *types.Block
 	// If has block
-	Has(blockhash Hash) bool
+	Has(blockhash types.Hash) bool
 	// If block and target share the same branch
 	Extends(block, target *types.Block) bool
 	// Prune from the latest prune view to target block
-	PruneTo(targetHash Hash, forkedBlocks []*types.Block) error
+	PruneTo(targetHash types.Hash, forkedBlocks []*types.Block) error
 
 	// Get all blocks
 	GetAll() []*types.Block
@@ -36,7 +39,7 @@ type BlockChain interface {
 	// Get all blocks ordered by view
 	GetOrderedAll() []*types.Block
 	// Get all children blocks of a block
-	GetRecursiveChildren(blockHash Hash) []*types.Block
+	GetRecursiveChildren(blockHash types.Hash) []*types.Block
 
 	// Get max view from the chain
 	GetMaxView() types.View
@@ -50,9 +53,9 @@ type BlockChain interface {
 	SetLatestLockedBlock(block *types.Block)
 
 	// Get QC of a block
-	GetQuorumCertOf(block *types.Block) *QuorumCert
+	GetQuorumCertOf(block *types.Block) *types.QuorumCert
 	// Set QC for a block
-	SetQuorumCertFor(block *types.Block, qc *QuorumCert)
+	SetQuorumCertFor(blockHash types.Hash, qc *types.QuorumCert)
 
 	// Is the chain valid
 	IsValid() bool
@@ -70,49 +73,105 @@ type wrappedBlock struct {
 	block    *types.Block
 	status   BlockStatus
 	children []*types.Block
-	qc       *QuorumCert
+	qc       *types.QuorumCert
 }
 
 type blockChain struct {
 	startBlock *types.Block // the starting block of the chain
 	pruneView  types.View   // latest view that has been pruned
 
-	blocksAtView  map[types.View]*types.Block // mapping from view to block
-	wrappedBlocks map[HashStr]*wrappedBlock   // mapping from block hash to wrapped block
+	blocksAtView  map[types.View]*types.Block     // mapping from view to block
+	wrappedBlocks map[types.HashStr]*wrappedBlock // mapping from block hash to wrapped block
 
 	latestCommittedBlock *types.Block
 	latestLockedBlock    *types.Block
 
 	blockStore sm.BlockStore
+
+	logger log.Logger
 }
 
 var _ BlockChain = (*blockChain)(nil)
 
-func NewBlockChain(blockStore sm.BlockStore) BlockChain {
+func newBlockChain(blockStore sm.BlockStore, l log.Logger) BlockChain {
 	return &blockChain{
 		startBlock:           nil,
 		pruneView:            types.ViewBeforeGenesis,
 		blocksAtView:         make(map[types.View]*types.Block),
-		wrappedBlocks:        make(map[HashStr]*wrappedBlock),
+		wrappedBlocks:        make(map[types.HashStr]*wrappedBlock),
 		latestCommittedBlock: nil,
 		latestLockedBlock:    nil,
 		blockStore:           blockStore,
+		logger:               l,
 	}
 }
 
 func (bc *blockChain) Store(block *types.Block) error {
+	if block.View <= bc.pruneView {
+		return nil
+	}
+
+	if bc.Has(block.Hash()) {
+		bc.logger.Debug("block already stored",
+			"hash", block.Hash(),
+			"view", block.View,
+		)
+		return nil
+	}
+
+	// no block before
+	if bc.startBlock == nil {
+		bc.startBlock = block
+		bc.addWrappedBlock(wrap(block))
+		bc.blocksAtView[block.View] = block
+		bc.pruneView = block.View
+		return nil
+	}
+
+	// parent of start block can be stored
+	if bytes.Equal(bc.startBlock.LastBlockID.Hash, block.Hash()) {
+		bc.addWrappedBlock(wrap(block))
+		bc.blocksAtView[block.View] = block
+		bc.addChild(bc.startBlock)
+		bc.SetQuorumCertFor(bc.startBlock.QuorumCert.BlockHash(), bc.startBlock.QuorumCert)
+		bc.startBlock = block
+		return nil
+	}
+
+	// parent block must exsit
+	if bc.ParentRef(block) == nil {
+		bc.logger.Error("lack of parent block",
+			"hash", block.Hash(),
+			"view", block.View,
+		)
+		return ErrNotFoundParentBlock{View: block.View, Hash: block.Hash()}
+	}
+
+	// qc referenced block must exist
+	if block.QuorumCert != nil && bc.QuorumCertRef(block) == nil {
+		bc.logger.Error("lack of qc ref block",
+			"hash", block.Hash(),
+			"view", block.View,
+		)
+		return ErrNotFoundQcRefBlock{View: block.View, Hash: block.Hash()}
+	}
+
+	bc.addWrappedBlock(wrap(block))
+	bc.blocksAtView[block.View] = block
+	bc.addChild(block)
+
 	return nil
 }
 
 func (bc *blockChain) Store2Db(block *types.Block) error { return nil }
 
-func (bc *blockChain) Get(blockHash Hash) *types.Block { return nil }
+func (bc *blockChain) Get(blockHash types.Hash) *types.Block { return nil }
 
-func (bc *blockChain) Has(blockhash Hash) bool { return false }
+func (bc *blockChain) Has(blockhash types.Hash) bool { return false }
 
 func (bc *blockChain) Extends(block, target *types.Block) bool { return false }
 
-func (bc *blockChain) PruneTo(targetHash Hash, forkedBlocks []*types.Block) error { return nil }
+func (bc *blockChain) PruneTo(targetHash types.Hash, forkedBlocks []*types.Block) error { return nil }
 
 func (bc *blockChain) GetAll() []*types.Block { return nil }
 
@@ -120,7 +179,7 @@ func (bc *blockChain) GetAllVerified() []*types.Block { return nil }
 
 func (bc *blockChain) GetOrderedAll() []*types.Block { return nil }
 
-func (bc *blockChain) GetRecursiveChildren(blockHash Hash) []*types.Block { return nil }
+func (bc *blockChain) GetRecursiveChildren(blockHash types.Hash) []*types.Block { return nil }
 
 func (bc *blockChain) GetMaxView() types.View { return 0 }
 
@@ -132,9 +191,9 @@ func (bc *blockChain) SetLatestCommittedBlock(block *types.Block) {}
 
 func (bc *blockChain) SetLatestLockedBlock(block *types.Block) {}
 
-func (bc *blockChain) GetQuorumCertOf(block *types.Block) *QuorumCert { return nil }
+func (bc *blockChain) GetQuorumCertOf(block *types.Block) *types.QuorumCert { return nil }
 
-func (bc *blockChain) SetQuorumCertFor(block *types.Block, qc *QuorumCert) {}
+func (bc *blockChain) SetQuorumCertFor(blockHash types.Hash, qc *types.QuorumCert) {}
 
 func (bc *blockChain) IsValid() bool { return false }
 
@@ -145,3 +204,53 @@ func (bc *blockChain) String() string { return "" }
 func (bc *blockChain) QuorumCertRef(block *types.Block) *types.Block { return nil }
 
 func (bc *blockChain) ParentRef(block *types.Block) *types.Block { return nil }
+
+func wrap(block *types.Block) *wrappedBlock {
+	return &wrappedBlock{
+		block: block,
+	}
+}
+
+func (bc *blockChain) addWrappedBlock(wb *wrappedBlock) {
+	if wb.block.Hash() == nil {
+		panic("wb block hash is nil")
+	}
+
+	v, ok := bc.wrappedBlocks[wb.block.Hash().String()]
+	if ok && v != nil {
+		bc.logger.Debug("block exsits",
+			"view", wb.block.View,
+			"parent hash", wb.block.LastBlockID.Hash,
+			"tx size", len(wb.block.Data.Txs),
+		)
+		return
+	}
+
+	if ok {
+		wb.children = v.children
+	}
+
+	bc.wrappedBlocks[wb.block.Hash().String()] = wb
+
+	bc.logger.Debug("success add block",
+		"view", wb.block.View,
+		"parent hash", wb.block.LastBlockID.Hash,
+		"tx size", len(wb.block.Data.Txs),
+	)
+}
+
+func (bc *blockChain) addChild(b *types.Block) {
+	if bc.latestCommittedBlock != nil && b.View <= bc.latestCommittedBlock.View {
+		return
+	}
+
+	parentBlockHashStr := b.LastBlockID.Hash.String()
+	_, ok := bc.wrappedBlocks[parentBlockHashStr]
+	if !ok {
+		bc.wrappedBlocks[parentBlockHashStr] = wrap(nil)
+		bc.logger.Debug("add nil parent block", "view", b.View)
+	}
+
+	bc.wrappedBlocks[parentBlockHashStr].children = append(
+		bc.wrappedBlocks[parentBlockHashStr].children, b)
+}

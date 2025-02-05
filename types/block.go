@@ -19,7 +19,6 @@ import (
 	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff/types"
 	"github.com/xufeisofly/hotstuff/version"
 )
 
@@ -328,6 +327,9 @@ const (
 	ViewBeforeGenesis = GenesisView - 1
 )
 
+type Hash = tmbytes.HexBytes
+type HashStr = string
+
 // Header defines the structure of a Tendermint block header.
 // NOTE: changes to the Header should be duplicated in:
 // - header.Hash()
@@ -360,7 +362,8 @@ type Header struct {
 	EvidenceHash    tmbytes.HexBytes `json:"evidence_hash"`    // evidence included in the block
 	ProposerAddress Address          `json:"proposer_address"` // original proposer of the block
 
-	View types.View // hotstuff View
+	View       View        // hotstuff View
+	QuorumCert *QuorumCert // hotstuff QC
 }
 
 // Populate the Header with state-derived data.

@@ -328,7 +328,6 @@ const (
 )
 
 type Hash = tmbytes.HexBytes
-type HashStr = string
 
 // Header defines the structure of a Tendermint block header.
 // NOTE: changes to the Header should be duplicated in:

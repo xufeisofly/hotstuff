@@ -80,8 +80,8 @@ type blockChain struct {
 	startBlock *types.Block // the starting block of the chain
 	pruneView  types.View   // latest view that has been pruned
 
-	blocksAtView  map[types.View]*types.Block     // mapping from view to block
-	wrappedBlocks map[types.HashStr]*wrappedBlock // mapping from block hash to wrapped block
+	blocksAtView  map[types.View]*types.Block // mapping from view to block
+	wrappedBlocks map[string]*wrappedBlock    // mapping from block hash to wrapped block
 
 	latestCommittedBlock *types.Block
 	latestLockedBlock    *types.Block
@@ -98,7 +98,7 @@ func newBlockChain(blockStore sm.BlockStore, l log.Logger) BlockChain {
 		startBlock:           nil,
 		pruneView:            types.ViewBeforeGenesis,
 		blocksAtView:         make(map[types.View]*types.Block),
-		wrappedBlocks:        make(map[types.HashStr]*wrappedBlock),
+		wrappedBlocks:        make(map[string]*wrappedBlock),
 		latestCommittedBlock: nil,
 		latestLockedBlock:    nil,
 		blockStore:           blockStore,
@@ -165,7 +165,13 @@ func (bc *blockChain) Store(block *types.Block) error {
 
 func (bc *blockChain) Store2Db(block *types.Block) error { return nil }
 
-func (bc *blockChain) Get(blockHash types.Hash) *types.Block { return nil }
+func (bc *blockChain) Get(blockHash types.Hash) *types.Block {
+	v, ok := bc.wrappedBlocks[blockHash.String()]
+	if ok && v != nil {
+		return v.block
+	}
+	return nil
+}
 
 func (bc *blockChain) Has(blockhash types.Hash) bool { return false }
 

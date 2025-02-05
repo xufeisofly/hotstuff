@@ -130,7 +130,7 @@ func (c *crypto) VerifyAggregateQC(aggQC types.AggregateQC) (highQC types.Quorum
 // partial signature collection for one view
 type sigCollect struct {
 	view     types.View
-	collects map[types.HashStr]*sigCollectItem
+	collects map[string]*sigCollectItem
 	handled  bool
 }
 
@@ -190,7 +190,7 @@ func (scItem *sigCollectItem) setAggSig(aggSig types.QuorumSignature) {
 var sigCollectPool = sync.Pool{
 	New: func() interface{} {
 		return &sigCollect{
-			collects: make(map[types.HashStr]*sigCollectItem),
+			collects: make(map[string]*sigCollectItem),
 			handled:  false,
 			view:     0,
 		}
@@ -202,7 +202,7 @@ func getSigCollect() *sigCollect {
 }
 
 func putSigCollect(sc *sigCollect) {
-	sc.collects = make(map[types.HashStr]*sigCollectItem)
+	sc.collects = make(map[string]*sigCollectItem)
 	sc.handled = false
 	sc.view = 0
 	sigCollectPool.Put(sc)

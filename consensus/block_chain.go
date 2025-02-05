@@ -27,6 +27,10 @@ type BlockChain interface {
 
 	// Get all blocks
 	GetAll() []*types.Block
+	// Get all verified blocks
+	GetAllVerified() []*types.Block
+	// Get all blocks ordered by view
+	GetOrderedAll() []*types.Block
 
 	// Get max view from the chain
 	GetMaxView() types.View

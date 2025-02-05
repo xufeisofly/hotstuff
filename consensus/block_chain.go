@@ -86,8 +86,62 @@ type blockChain struct {
 	blockStore sm.BlockStore
 }
 
+var _ BlockChain = (*blockChain)(nil)
+
 func NewBlockChain(blockStore sm.BlockStore) BlockChain {
 	return &blockChain{
-		blockStore: blockStore,
+		startBlock:           nil,
+		pruneView:            types.ViewBeforeGenesis,
+		blocksAtView:         make(map[types.View]*types.Block),
+		wrappedBlocks:        make(map[HashStr]*wrappedBlock),
+		latestCommittedBlock: nil,
+		latestLockedBlock:    nil,
+		blockStore:           blockStore,
 	}
 }
+
+func (bc *blockChain) Store(block *types.Block) error {
+	return nil
+}
+
+func (bc *blockChain) Store2Db(block *types.Block) error { return nil }
+
+func (bc *blockChain) Get(blockHash Hash) *types.Block { return nil }
+
+func (bc *blockChain) Has(blockhash Hash) bool { return false }
+
+func (bc *blockChain) Extends(block, target *types.Block) bool { return false }
+
+func (bc *blockChain) PruneTo(targetHash Hash, forkedBlocks []*types.Block) error { return nil }
+
+func (bc *blockChain) GetAll() []*types.Block { return nil }
+
+func (bc *blockChain) GetAllVerified() []*types.Block { return nil }
+
+func (bc *blockChain) GetOrderedAll() []*types.Block { return nil }
+
+func (bc *blockChain) GetRecursiveChildren(blockHash Hash) []*types.Block { return nil }
+
+func (bc *blockChain) GetMaxView() types.View { return 0 }
+
+func (bc *blockChain) LatestCommittedBlock() *types.Block { return nil }
+
+func (bc *blockChain) LatestLockedBlock() *types.Block { return nil }
+
+func (bc *blockChain) SetLatestCommittedBlock(block *types.Block) {}
+
+func (bc *blockChain) SetLatestLockedBlock(block *types.Block) {}
+
+func (bc *blockChain) GetQuorumCertOf(block *types.Block) *QuorumCert { return nil }
+
+func (bc *blockChain) SetQuorumCertFor(block *types.Block, qc *QuorumCert) {}
+
+func (bc *blockChain) IsValid() bool { return false }
+
+func (bc *blockChain) Size() uint32 { return 0 }
+
+func (bc *blockChain) String() string { return "" }
+
+func (bc *blockChain) QuorumCertRef(block *types.Block) *types.Block { return nil }
+
+func (bc *blockChain) ParentRef(block *types.Block) *types.Block { return nil }

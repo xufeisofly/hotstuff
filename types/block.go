@@ -323,6 +323,11 @@ func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
 // in tendermint
 type View = uint64
 
+const (
+	GenesisView       = View(1)
+	ViewBeforeGenesis = GenesisView - 1
+)
+
 // Header defines the structure of a Tendermint block header.
 // NOTE: changes to the Header should be duplicated in:
 // - header.Hash()

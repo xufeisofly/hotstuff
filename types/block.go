@@ -489,6 +489,10 @@ func (h *Header) Hash() tmbytes.HexBytes {
 	})
 }
 
+func (h *Header) ParentHash() tmbytes.HexBytes {
+	return h.LastBlockID.Hash
+}
+
 // StringIndented returns an indented string representation of the header.
 func (h *Header) StringIndented(indent string) string {
 	if h == nil {

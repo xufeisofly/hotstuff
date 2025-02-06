@@ -129,7 +129,7 @@ func (bc *blockChain) Store(block *types.Block) error {
 	}
 
 	// parent of start block can be stored
-	if bytes.Equal(bc.startBlock.LastBlockID.Hash, block.Hash()) {
+	if bytes.Equal(bc.startBlock.ParentHash(), block.Hash()) {
 		bc.addWrappedBlock(wrap(block))
 		bc.blocksAtView[block.View] = block
 		bc.addChild(bc.startBlock)
@@ -166,18 +166,68 @@ func (bc *blockChain) Store(block *types.Block) error {
 func (bc *blockChain) Store2Db(block *types.Block) error { return nil }
 
 func (bc *blockChain) Get(blockHash types.Hash) *types.Block {
-	v, ok := bc.wrappedBlocks[blockHash.String()]
+	v, ok := bc.wrappedBlocks[string(blockHash)]
 	if ok && v != nil {
 		return v.block
 	}
 	return nil
 }
 
-func (bc *blockChain) Has(blockhash types.Hash) bool { return false }
+func (bc *blockChain) Has(blockHash types.Hash) bool {
+	v, ok := bc.wrappedBlocks[string(blockHash)]
+	return ok && v != nil
+}
 
-func (bc *blockChain) Extends(block, target *types.Block) bool { return false }
+func (bc *blockChain) Extends(block, target *types.Block) bool {
+	cur := block
+	for cur != nil && cur.View > target.View {
+		parent := bc.ParentRef(cur)
+		if parent == nil {
+			break
+		}
+		cur = parent
+	}
+	return bytes.Equal(cur.Hash(), target.Hash())
+}
 
-func (bc *blockChain) PruneTo(targetHash types.Hash, forkedBlocks []*types.Block) error { return nil }
+func (bc *blockChain) PruneTo(targetHash types.Hash) (forkedBlocks []*types.Block, err error) {
+	forkedBlocks = make([]*types.Block, 0)
+	cur := bc.Get(targetHash)
+	if cur == nil {
+		return forkedBlocks, ErrNotFoundBlock{Hash: targetHash}
+	}
+
+	targetBlock := cur
+	targetView := cur.View
+	// target view has already been pruned to
+	if bc.pruneView >= targetView {
+		return forkedBlocks, nil
+	}
+
+	// get all block hashes in the same branch of target block
+	canonicalHashes := make(map[string]struct{})
+	canonicalHashes[string(cur.Hash())] = struct{}{}
+	for cur.View > bc.pruneView {
+		cur = bc.ParentRef(cur)
+		if cur != nil {
+			canonicalHashes[string(cur.Hash())] = struct{}{}
+			continue
+		}
+		return forkedBlocks, ErrNotFoundBlock{Hash: cur.Hash()}
+	}
+
+	startBlock, ok := bc.blocksAtView[bc.pruneView]
+	if startBlock == nil || !ok {
+		return forkedBlocks, ErrNotFoundBlock{View: bc.pruneView}
+	}
+
+	// prune all branch from start to target except canonical branch
+	bc.pruneToTarget(startBlock.Hash(), targetHash, canonicalHashes, &forkedBlocks)
+	bc.pruneView = targetView
+	bc.startBlock = targetBlock
+
+	return forkedBlocks, nil
+}
 
 func (bc *blockChain) GetAll() []*types.Block { return nil }
 
@@ -226,7 +276,7 @@ func (bc *blockChain) addWrappedBlock(wb *wrappedBlock) {
 	if ok && v != nil {
 		bc.logger.Debug("block exsits",
 			"view", wb.block.View,
-			"parent hash", wb.block.LastBlockID.Hash,
+			"parent hash", wb.block.ParentHash(),
 			"tx size", len(wb.block.Data.Txs),
 		)
 		return
@@ -240,7 +290,7 @@ func (bc *blockChain) addWrappedBlock(wb *wrappedBlock) {
 
 	bc.logger.Debug("success add block",
 		"view", wb.block.View,
-		"parent hash", wb.block.LastBlockID.Hash,
+		"parent hash", wb.block.ParentHash(),
 		"tx size", len(wb.block.Data.Txs),
 	)
 }
@@ -250,7 +300,7 @@ func (bc *blockChain) addChild(b *types.Block) {
 		return
 	}
 
-	parentBlockHashStr := b.LastBlockID.Hash.String()
+	parentBlockHashStr := b.ParentHash().String()
 	_, ok := bc.wrappedBlocks[parentBlockHashStr]
 	if !ok {
 		bc.wrappedBlocks[parentBlockHashStr] = wrap(nil)
@@ -259,4 +309,58 @@ func (bc *blockChain) addChild(b *types.Block) {
 
 	bc.wrappedBlocks[parentBlockHashStr].children = append(
 		bc.wrappedBlocks[parentBlockHashStr].children, b)
+}
+
+func (bc *blockChain) pruneToTarget(
+	startHash types.Hash,
+	targetHash types.Hash,
+	canonicalHashes map[string]struct{},
+	forkedBlocks *[]*types.Block,
+) {
+	if bytes.Equal(startHash, targetHash) {
+		return
+	}
+
+	children := bc.getChildren(startHash)
+	if len(children) == 0 {
+		return
+	}
+
+	for _, child := range children {
+		// delete the block not in the branch of hashes
+		if _, ok := canonicalHashes[string(child.Hash())]; !ok {
+			bc.deleteBlock(child)
+			*forkedBlocks = append(*forkedBlocks, child)
+		}
+		bc.pruneToTarget(child.Hash(), targetHash, canonicalHashes, forkedBlocks)
+	}
+}
+
+func (bc *blockChain) getChildren(blockHash types.Hash) []*types.Block {
+	v, ok := bc.wrappedBlocks[string(blockHash)]
+	if !ok {
+		return []*types.Block{}
+	}
+	return v.children
+}
+
+func (bc *blockChain) deleteBlock(block *types.Block) error {
+	blockHash := block.Hash()
+	wrappedParent := bc.wrappedBlocks[string(block.ParentHash())]
+	if wrappedParent != nil {
+		// delete the block from parent children array
+		for i, child := range wrappedParent.children {
+			if bytes.Equal(child.Hash(), blockHash) {
+				wrappedParent.children = append(wrappedParent.children[:i], wrappedParent.children[i+1:]...)
+			}
+		}
+	}
+
+	blockAtView := bc.blocksAtView[block.View]
+	if bytes.Equal(blockAtView.Hash(), blockHash) {
+		delete(bc.blocksAtView, block.View)
+	}
+
+	delete(bc.wrappedBlocks, string(blockHash))
+	return nil
 }

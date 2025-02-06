@@ -30,7 +30,7 @@ type BlockChain interface {
 	// If block and target share the same branch
 	Extends(block, target *types.Block) bool
 	// Prune from the latest prune view to target block
-	PruneTo(targetHash types.Hash, forkedBlocks []*types.Block) error
+	PruneTo(targetHash types.Hash) (forkedBlocks []*types.Block, err error)
 
 	// Get all blocks
 	GetAll() []*types.Block

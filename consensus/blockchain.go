@@ -21,7 +21,7 @@ const (
 	BlockStatus_Committed                    // block has been committed
 )
 
-type BlockChain interface {
+type Blockchain interface {
 	// Store a block to the chain
 	Store(block *types.Block) error
 	// Store a block(committed) to database
@@ -91,7 +91,7 @@ func (wb *wrappedBlock) setSelfQC(qc *types.QuorumCert) {
 	wb.selfQC = qc
 }
 
-type blockChain struct {
+type blockchain struct {
 	startBlock *types.Block // the starting block of the chain
 	pruneView  types.View   // latest view that has been pruned
 
@@ -106,10 +106,10 @@ type blockChain struct {
 	logger log.Logger
 }
 
-var _ BlockChain = (*blockChain)(nil)
+var _ Blockchain = (*blockchain)(nil)
 
-func newBlockChain(blockStore sm.BlockStore, l log.Logger) BlockChain {
-	return &blockChain{
+func newBlockchain(blockStore sm.BlockStore, l log.Logger) Blockchain {
+	return &blockchain{
 		startBlock:           nil,
 		pruneView:            types.ViewBeforeGenesis,
 		blocksAtView:         make(map[types.View]*types.Block),
@@ -121,7 +121,7 @@ func newBlockChain(blockStore sm.BlockStore, l log.Logger) BlockChain {
 	}
 }
 
-func (bc *blockChain) Store(block *types.Block) error {
+func (bc *blockchain) Store(block *types.Block) error {
 	if block.View <= bc.pruneView {
 		return nil
 	}
@@ -178,9 +178,12 @@ func (bc *blockChain) Store(block *types.Block) error {
 	return nil
 }
 
-func (bc *blockChain) Store2Db(block *types.Block) error { return nil }
+func (bc *blockchain) Store2Db(block *types.Block) error {
+	// TODO blockStore.SaveBlock need to be modified
+	return nil
+}
 
-func (bc *blockChain) Get(blockHash types.Hash) *types.Block {
+func (bc *blockchain) Get(blockHash types.Hash) *types.Block {
 	v, ok := bc.wrappedBlocks[string(blockHash)]
 	if ok && v != nil {
 		return v.block
@@ -188,12 +191,12 @@ func (bc *blockChain) Get(blockHash types.Hash) *types.Block {
 	return nil
 }
 
-func (bc *blockChain) Has(blockHash types.Hash) bool {
+func (bc *blockchain) Has(blockHash types.Hash) bool {
 	v, ok := bc.wrappedBlocks[string(blockHash)]
 	return ok && v != nil
 }
 
-func (bc *blockChain) Extends(block, target *types.Block) bool {
+func (bc *blockchain) Extends(block, target *types.Block) bool {
 	cur := block
 	for cur != nil && cur.View > target.View {
 		parent := bc.ParentRef(cur)
@@ -205,7 +208,7 @@ func (bc *blockChain) Extends(block, target *types.Block) bool {
 	return bytes.Equal(cur.Hash(), target.Hash())
 }
 
-func (bc *blockChain) PruneTo(targetHash types.Hash) (forkedBlocks []*types.Block, err error) {
+func (bc *blockchain) PruneTo(targetHash types.Hash) (forkedBlocks []*types.Block, err error) {
 	forkedBlocks = make([]*types.Block, 0)
 	cur := bc.Get(targetHash)
 	if cur == nil {
@@ -244,7 +247,7 @@ func (bc *blockChain) PruneTo(targetHash types.Hash) (forkedBlocks []*types.Bloc
 	return forkedBlocks, nil
 }
 
-func (bc *blockChain) GetAll() []*types.Block {
+func (bc *blockchain) GetAll() []*types.Block {
 	var all []*types.Block
 	for _, wrapped := range bc.wrappedBlocks {
 		all = append(all, wrapped.block)
@@ -252,7 +255,7 @@ func (bc *blockChain) GetAll() []*types.Block {
 	return all
 }
 
-func (bc *blockChain) GetAllVerified() []*types.Block {
+func (bc *blockchain) GetAllVerified() []*types.Block {
 	var all []*types.Block
 	for _, wrapped := range bc.wrappedBlocks {
 		if wrapped.block.QuorumCert != nil {
@@ -262,7 +265,7 @@ func (bc *blockChain) GetAllVerified() []*types.Block {
 	return all
 }
 
-func (bc *blockChain) GetOrderedAll() []*types.Block {
+func (bc *blockchain) GetOrderedAll() []*types.Block {
 	blocks := bc.GetAll()
 	sort.Slice(blocks, func(i, j int) bool {
 		return blocks[i].View < blocks[j].View
@@ -271,7 +274,7 @@ func (bc *blockChain) GetOrderedAll() []*types.Block {
 }
 
 // GetRecursiveChildren gets all children of a block hash recursively
-func (bc *blockChain) GetRecursiveChildren(blockHash types.Hash) []*types.Block {
+func (bc *blockchain) GetRecursiveChildren(blockHash types.Hash) []*types.Block {
 	var all []*types.Block
 
 	levelChildren := bc.getChildren(blockHash)
@@ -287,7 +290,7 @@ func (bc *blockChain) GetRecursiveChildren(blockHash types.Hash) []*types.Block 
 	return all
 }
 
-func (bc *blockChain) GetMaxView() types.View {
+func (bc *blockchain) GetMaxView() types.View {
 	var maxView types.View = 0
 	for view, _ := range bc.blocksAtView {
 		if view > maxView {
@@ -297,15 +300,15 @@ func (bc *blockChain) GetMaxView() types.View {
 	return maxView
 }
 
-func (bc *blockChain) LatestCommittedBlock() *types.Block {
+func (bc *blockchain) LatestCommittedBlock() *types.Block {
 	return bc.latestCommittedBlock
 }
 
-func (bc *blockChain) LatestLockedBlock() *types.Block {
+func (bc *blockchain) LatestLockedBlock() *types.Block {
 	return bc.latestLockedBlock
 }
 
-func (bc *blockChain) SetLatestCommittedBlock(block *types.Block) {
+func (bc *blockchain) SetLatestCommittedBlock(block *types.Block) {
 	// omit old block
 	if bc.latestCommittedBlock != nil && bc.latestCommittedBlock.View >= block.View {
 		return
@@ -321,7 +324,7 @@ func (bc *blockChain) SetLatestCommittedBlock(block *types.Block) {
 	}
 }
 
-func (bc *blockChain) SetLatestLockedBlock(block *types.Block) {
+func (bc *blockchain) SetLatestLockedBlock(block *types.Block) {
 	if wrapped, ok := bc.wrappedBlocks[string(block.Hash())]; ok {
 		if wrapped.status != BlockStatus_Committed {
 			bc.latestLockedBlock = block
@@ -330,20 +333,20 @@ func (bc *blockChain) SetLatestLockedBlock(block *types.Block) {
 	}
 }
 
-func (bc *blockChain) GetQuorumCertOf(blockHash types.Hash) *types.QuorumCert {
+func (bc *blockchain) GetQuorumCertOf(blockHash types.Hash) *types.QuorumCert {
 	if wrapped, ok := bc.wrappedBlocks[string(blockHash)]; ok {
 		return wrapped.selfQC
 	}
 	return nil
 }
 
-func (bc *blockChain) SetQuorumCertFor(blockHash types.Hash, qc *types.QuorumCert) {
+func (bc *blockchain) SetQuorumCertFor(blockHash types.Hash, qc *types.QuorumCert) {
 	if wrapped, ok := bc.wrappedBlocks[string(blockHash)]; ok {
 		wrapped.setSelfQC(qc)
 	}
 }
 
-func (bc *blockChain) IsValid() bool {
+func (bc *blockchain) IsValid() bool {
 	if bc.Size() == 0 {
 		return false
 	}
@@ -362,11 +365,11 @@ func (bc *blockChain) IsValid() bool {
 	return num == 1
 }
 
-func (bc *blockChain) Size() int {
+func (bc *blockchain) Size() int {
 	return len(bc.wrappedBlocks)
 }
 
-func (bc *blockChain) String() string {
+func (bc *blockchain) String() string {
 	blocks := bc.GetOrderedAll()
 
 	var ret string
@@ -376,14 +379,14 @@ func (bc *blockChain) String() string {
 	return ret
 }
 
-func (bc *blockChain) QuorumCertRef(block *types.Block) *types.Block {
+func (bc *blockchain) QuorumCertRef(block *types.Block) *types.Block {
 	if block == nil || block.QuorumCert == nil {
 		return nil
 	}
 	return bc.Get(block.QuorumCert.BlockHash())
 }
 
-func (bc *blockChain) ParentRef(block *types.Block) *types.Block {
+func (bc *blockchain) ParentRef(block *types.Block) *types.Block {
 	if block == nil {
 		return nil
 	}
@@ -396,7 +399,7 @@ func wrap(block *types.Block) *wrappedBlock {
 	}
 }
 
-func (bc *blockChain) addWrappedBlock(wb *wrappedBlock) {
+func (bc *blockchain) addWrappedBlock(wb *wrappedBlock) {
 	if wb.block.Hash() == nil {
 		panic("wb block hash is nil")
 	}
@@ -424,7 +427,7 @@ func (bc *blockChain) addWrappedBlock(wb *wrappedBlock) {
 	)
 }
 
-func (bc *blockChain) addChild(b *types.Block) {
+func (bc *blockchain) addChild(b *types.Block) {
 	if bc.latestCommittedBlock != nil && b.View <= bc.latestCommittedBlock.View {
 		return
 	}
@@ -439,7 +442,7 @@ func (bc *blockChain) addChild(b *types.Block) {
 	bc.wrappedBlocks[parentBlockHashStr].addChild(b)
 }
 
-func (bc *blockChain) pruneToTarget(
+func (bc *blockchain) pruneToTarget(
 	startHash types.Hash,
 	targetHash types.Hash,
 	canonicalHashes map[string]struct{},
@@ -464,7 +467,7 @@ func (bc *blockChain) pruneToTarget(
 	}
 }
 
-func (bc *blockChain) getChildren(blockHash types.Hash) []*types.Block {
+func (bc *blockchain) getChildren(blockHash types.Hash) []*types.Block {
 	v, ok := bc.wrappedBlocks[string(blockHash)]
 	if !ok {
 		return []*types.Block{}
@@ -472,7 +475,7 @@ func (bc *blockChain) getChildren(blockHash types.Hash) []*types.Block {
 	return v.children
 }
 
-func (bc *blockChain) deleteBlock(block *types.Block) error {
+func (bc *blockchain) deleteBlock(block *types.Block) error {
 	blockHash := block.Hash()
 	wrappedParent := bc.wrappedBlocks[string(block.ParentHash())]
 	if wrappedParent != nil {

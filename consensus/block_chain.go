@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"sort"
+	"strconv"
 
 	"github.com/xufeisofly/hotstuff/libs/log"
 	sm "github.com/xufeisofly/hotstuff/state"
@@ -55,14 +56,14 @@ type BlockChain interface {
 	SetLatestLockedBlock(block *types.Block)
 
 	// Get QC of a block
-	GetQuorumCertOf(block *types.Block) *types.QuorumCert
+	GetQuorumCertOf(blockHash types.Hash) *types.QuorumCert
 	// Set QC for a block
 	SetQuorumCertFor(blockHash types.Hash, qc *types.QuorumCert)
 
 	// Is the chain valid
 	IsValid() bool
 	// Number of blocks in chain
-	Size() uint32
+	Size() int
 	String() string
 
 	// Get a block referenced by qc
@@ -75,10 +76,19 @@ type wrappedBlock struct {
 	block    *types.Block
 	status   BlockStatus
 	children []*types.Block
+	selfQC   *types.QuorumCert
+}
+
+func (wb *wrappedBlock) addChild(block *types.Block) {
+	wb.children = append(wb.children, block)
 }
 
 func (wb *wrappedBlock) setStatus(s BlockStatus) {
 	wb.status = s
+}
+
+func (wb *wrappedBlock) setSelfQC(qc *types.QuorumCert) {
+	wb.selfQC = qc
 }
 
 type blockChain struct {
@@ -320,19 +330,65 @@ func (bc *blockChain) SetLatestLockedBlock(block *types.Block) {
 	}
 }
 
-func (bc *blockChain) GetQuorumCertOf(block *types.Block) *types.QuorumCert { return nil }
+func (bc *blockChain) GetQuorumCertOf(blockHash types.Hash) *types.QuorumCert {
+	if wrapped, ok := bc.wrappedBlocks[string(blockHash)]; ok {
+		return wrapped.selfQC
+	}
+	return nil
+}
 
-func (bc *blockChain) SetQuorumCertFor(blockHash types.Hash, qc *types.QuorumCert) {}
+func (bc *blockChain) SetQuorumCertFor(blockHash types.Hash, qc *types.QuorumCert) {
+	if wrapped, ok := bc.wrappedBlocks[string(blockHash)]; ok {
+		wrapped.setSelfQC(qc)
+	}
+}
 
-func (bc *blockChain) IsValid() bool { return false }
+func (bc *blockChain) IsValid() bool {
+	if bc.Size() == 0 {
+		return false
+	}
+	// a valid chain has only one node which is the start node
+	// that don't has a parent
+	num := 0
+	for _, wrapped := range bc.wrappedBlocks {
+		if wrapped.block == nil {
+			continue
+		}
+		parent := bc.ParentRef(wrapped.block)
+		if parent == nil {
+			num++
+		}
+	}
+	return num == 1
+}
 
-func (bc *blockChain) Size() uint32 { return 0 }
+func (bc *blockChain) Size() int {
+	return len(bc.wrappedBlocks)
+}
 
-func (bc *blockChain) String() string { return "" }
+func (bc *blockChain) String() string {
+	blocks := bc.GetOrderedAll()
 
-func (bc *blockChain) QuorumCertRef(block *types.Block) *types.Block { return nil }
+	var ret string
+	for _, block := range blocks {
+		ret += "," + strconv.Itoa(int(block.View))
+	}
+	return ret
+}
 
-func (bc *blockChain) ParentRef(block *types.Block) *types.Block { return nil }
+func (bc *blockChain) QuorumCertRef(block *types.Block) *types.Block {
+	if block == nil || block.QuorumCert == nil {
+		return nil
+	}
+	return bc.Get(block.QuorumCert.BlockHash())
+}
+
+func (bc *blockChain) ParentRef(block *types.Block) *types.Block {
+	if block == nil {
+		return nil
+	}
+	return bc.Get(block.ParentHash())
+}
 
 func wrap(block *types.Block) *wrappedBlock {
 	return &wrappedBlock{
@@ -380,8 +436,7 @@ func (bc *blockChain) addChild(b *types.Block) {
 		bc.logger.Debug("add nil parent block", "view", b.View)
 	}
 
-	bc.wrappedBlocks[parentBlockHashStr].children = append(
-		bc.wrappedBlocks[parentBlockHashStr].children, b)
+	bc.wrappedBlocks[parentBlockHashStr].addChild(b)
 }
 
 func (bc *blockChain) pruneToTarget(

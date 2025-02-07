@@ -2,6 +2,8 @@ package consensus
 
 import (
 	"bytes"
+	"fmt"
+	"sort"
 
 	"github.com/xufeisofly/hotstuff/libs/log"
 	sm "github.com/xufeisofly/hotstuff/state"
@@ -73,7 +75,10 @@ type wrappedBlock struct {
 	block    *types.Block
 	status   BlockStatus
 	children []*types.Block
-	qc       *types.QuorumCert
+}
+
+func (wb *wrappedBlock) setStatus(s BlockStatus) {
+	wb.status = s
 }
 
 type blockChain struct {
@@ -229,23 +234,91 @@ func (bc *blockChain) PruneTo(targetHash types.Hash) (forkedBlocks []*types.Bloc
 	return forkedBlocks, nil
 }
 
-func (bc *blockChain) GetAll() []*types.Block { return nil }
+func (bc *blockChain) GetAll() []*types.Block {
+	var all []*types.Block
+	for _, wrapped := range bc.wrappedBlocks {
+		all = append(all, wrapped.block)
+	}
+	return all
+}
 
-func (bc *blockChain) GetAllVerified() []*types.Block { return nil }
+func (bc *blockChain) GetAllVerified() []*types.Block {
+	var all []*types.Block
+	for _, wrapped := range bc.wrappedBlocks {
+		if wrapped.block.QuorumCert != nil {
+			all = append(all, wrapped.block)
+		}
+	}
+	return all
+}
 
-func (bc *blockChain) GetOrderedAll() []*types.Block { return nil }
+func (bc *blockChain) GetOrderedAll() []*types.Block {
+	blocks := bc.GetAll()
+	sort.Slice(blocks, func(i, j int) bool {
+		return blocks[i].View < blocks[j].View
+	})
+	return blocks
+}
 
-func (bc *blockChain) GetRecursiveChildren(blockHash types.Hash) []*types.Block { return nil }
+// GetRecursiveChildren gets all children of a block hash recursively
+func (bc *blockChain) GetRecursiveChildren(blockHash types.Hash) []*types.Block {
+	var all []*types.Block
 
-func (bc *blockChain) GetMaxView() types.View { return 0 }
+	levelChildren := bc.getChildren(blockHash)
+	if len(levelChildren) == 0 {
+		return []*types.Block{}
+	}
 
-func (bc *blockChain) LatestCommittedBlock() *types.Block { return nil }
+	for _, levelChild := range levelChildren {
+		all = append(all, levelChild)
+		all = append(all, bc.GetRecursiveChildren(levelChild.Hash())...)
+	}
 
-func (bc *blockChain) LatestLockedBlock() *types.Block { return nil }
+	return all
+}
 
-func (bc *blockChain) SetLatestCommittedBlock(block *types.Block) {}
+func (bc *blockChain) GetMaxView() types.View {
+	var maxView types.View = 0
+	for view, _ := range bc.blocksAtView {
+		if view > maxView {
+			maxView = view
+		}
+	}
+	return maxView
+}
 
-func (bc *blockChain) SetLatestLockedBlock(block *types.Block) {}
+func (bc *blockChain) LatestCommittedBlock() *types.Block {
+	return bc.latestCommittedBlock
+}
+
+func (bc *blockChain) LatestLockedBlock() *types.Block {
+	return bc.latestLockedBlock
+}
+
+func (bc *blockChain) SetLatestCommittedBlock(block *types.Block) {
+	// omit old block
+	if bc.latestCommittedBlock != nil && bc.latestCommittedBlock.View >= block.View {
+		return
+	}
+
+	if block.SelfCommitQuorumCert == nil {
+		panic(fmt.Sprintf("block must have a CommitQC, view: %d", block.View))
+	}
+
+	bc.latestCommittedBlock = block
+	if wrapped, ok := bc.wrappedBlocks[string(block.Hash())]; ok {
+		wrapped.setStatus(BlockStatus_Committed)
+	}
+}
+
+func (bc *blockChain) SetLatestLockedBlock(block *types.Block) {
+	if wrapped, ok := bc.wrappedBlocks[string(block.Hash())]; ok {
+		if wrapped.status != BlockStatus_Committed {
+			bc.latestLockedBlock = block
+			wrapped.setStatus(BlockStatus_Locked)
+		}
+	}
+}
 
 func (bc *blockChain) GetQuorumCertOf(block *types.Block) *types.QuorumCert { return nil }
 

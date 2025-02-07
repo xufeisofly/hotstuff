@@ -361,8 +361,10 @@ type Header struct {
 	EvidenceHash    tmbytes.HexBytes `json:"evidence_hash"`    // evidence included in the block
 	ProposerAddress Address          `json:"proposer_address"` // original proposer of the block
 
-	View       View        // hotstuff View
-	QuorumCert *QuorumCert // hotstuff QC
+	// hotstuff
+	View                 View        // hotstuff View
+	QuorumCert           *QuorumCert // hotstuff QC for a previous block
+	SelfCommitQuorumCert *QuorumCert // hotstuff CommitQC for self
 }
 
 // Populate the Header with state-derived data.

@@ -110,6 +110,25 @@ func (blockExec *BlockExecutor) CreateProposalBlock(
 	return state.MakeBlock(height, txs, commit, evidence, proposerAddr)
 }
 
+func (blockExec *BlockExecutor) HsCreateProposalBlock(
+	view types.View,
+	state State, lastQC *types.QuorumCert,
+	proposerAddr []byte,
+) (*types.Block, *types.PartSet) {
+
+	maxBytes := state.ConsensusParams.Block.MaxBytes
+	maxGas := state.ConsensusParams.Block.MaxGas
+
+	evidence, evSize := blockExec.evpool.PendingEvidence(state.ConsensusParams.Evidence.MaxBytes)
+
+	// Fetch a limited amount of valid txs
+	maxDataBytes := types.MaxDataBytes(maxBytes, evSize, state.Validators.Size())
+
+	txs := blockExec.mempool.ReapMaxBytesMaxGas(maxDataBytes, maxGas)
+
+	return state.HsMakeBlock(view, txs, lastQC, evidence, proposerAddr)
+}
+
 // ValidateBlock validates the given block against the given state.
 // If the block is invalid, it returns an error.
 // Validation does not mutate state, but does require historical information from the stateDB,

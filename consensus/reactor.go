@@ -1,9 +1,14 @@
 package consensus
 
 import (
+	"errors"
 	"fmt"
+	"sync"
 
 	"github.com/gogo/protobuf/proto"
+	tmevents "github.com/xufeisofly/hotstuff/libs/events"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	"github.com/xufeisofly/hotstuff/libs/log"
 	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 	"github.com/xufeisofly/hotstuff/p2p"
 	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"
@@ -11,10 +16,22 @@ import (
 	"github.com/xufeisofly/hotstuff/types"
 )
 
+const (
+	StateChannel       = byte(0x20)
+	DataChannel        = byte(0x21)
+	VoteChannel        = byte(0x22)
+	VoteSetBitsChannel = byte(0x23)
+
+	maxMsgSize = 1048576 // 1MB; NOTE/TODO: keep in sync with types.PartSet sizes.
+
+	blocksToContributeToBecomeGoodPeer = 10000
+	votesToContributeToBecomeGoodPeer  = 10000
+)
+
 type Reactor struct {
 	p2p.BaseReactor
 
-	conS *State
+	cons *Consensus
 
 	mtx      tmsync.RWMutex
 	waitSync bool
@@ -25,9 +42,9 @@ type Reactor struct {
 
 type ReactorOption func(*Reactor)
 
-func NewReactor(consensusState *State, waitSync bool, options ...ReactorOption) *Reactor {
+func NewReactor(consensus *Consensus, waitSync bool, options ...ReactorOption) *Reactor {
 	conR := &Reactor{
-		conS:     consensusState,
+		cons:     consensus,
 		waitSync: waitSync,
 		Metrics:  NopMetrics(),
 	}
@@ -45,9 +62,10 @@ func (conR *Reactor) OnStart() error {
 
 	// TODO Start stats goroutine
 	// TODO subscribe broadcast events
+	conR.subscribeToBroadcastEvents()
 
 	if !conR.WaitSync() {
-		err := conR.conS.Start()
+		err := conR.cons.Start()
 		if err != nil {
 			return err
 		}
@@ -58,11 +76,11 @@ func (conR *Reactor) OnStart() error {
 
 func (conR *Reactor) OnStop() {
 	// TODO unsubscribe broadcast events
-	if err := conR.conS.Stop(); err != nil {
+	if err := conR.cons.Stop(); err != nil {
 		conR.Logger.Error("Error stopping consensus state", "err", err)
 	}
 	if !conR.WaitSync() {
-		conR.conS.Wait()
+		conR.cons.Wait()
 	}
 }
 
@@ -123,16 +141,33 @@ func (conR *Reactor) Receive(chID byte, peer p2p.Peer, msgBytes []byte) {
 	})
 }
 
-func (conR *Reactor) SetEventBus(b *types.EventBus) {
-	conR.eventBus = b
-	conR.conS.SetEventBus(b)
-}
-
 // WaitSync returns whether the consensus reactor is waiting for state/fast sync.
 func (conR *Reactor) WaitSync() bool {
 	conR.mtx.RLock()
 	defer conR.mtx.RUnlock()
 	return conR.waitSync
+}
+
+// subscribeToBroadcastEvents subscribes for new round steps and votes
+// using internal pubsub defined on state to broadcast
+// them to peers upon receiving.
+func (conR *Reactor) subscribeToBroadcastEvents() {
+	const subscriber = "consensus-reactor"
+	if err := conR.cons.evsw.AddListenerForEvent(subscriber, types.EventPropose,
+		func(data tmevents.EventData) {
+			conR.broadcastProposalMessage(data.(*ProposalMessage))
+		}); err != nil {
+		conR.Logger.Error("Error adding listener for events", "err", err)
+	}
+}
+
+func (conR *Reactor) unsubscribeFromBroadcastEvents() {
+	const subscriber = "consensus-reactor"
+	conR.cons.evsw.RemoveListener(subscriber)
+}
+
+func (conR *Reactor) broadcastProposalMessage(proposalMsg *ProposalMessage) {
+
 }
 
 func (conR *Reactor) String() string {
@@ -142,7 +177,7 @@ func (conR *Reactor) String() string {
 // StringIndented returns an indented string representation of the Reactor
 func (conR *Reactor) StringIndented(indent string) string {
 	s := "ConsensusReactor{\n"
-	s += indent + "  " + conR.conS.StringIndented(indent+"  ") + "\n"
+	s += indent + "  " + conR.cons.StringIndented(indent+"  ") + "\n"
 	for _, peer := range conR.Switch.Peers().List() {
 		ps, ok := peer.Get(types.PeerStateKey).(*PeerState)
 		if !ok {
@@ -160,3 +195,142 @@ func ReactorMetrics(metrics *Metrics) ReactorOption {
 }
 
 //-----------------------------------------------------------------------------
+
+var (
+	ErrPeerStateHeightRegression = errors.New("error peer state height regression")
+	ErrPeerStateInvalidStartTime = errors.New("error peer state invalid startTime")
+)
+
+// PeerState contains the known state of a peer, including its connection and
+// threadsafe access to its PeerRoundState.
+// NOTE: THIS GETS DUMPED WITH rpc/core/consensus.go.
+// Be mindful of what you Expose.
+type PeerState struct {
+	peer   p2p.Peer
+	logger log.Logger
+
+	mtx sync.Mutex // NOTE: Modify below using setters, never directly.
+
+	highQC    *types.QuorumCert
+	highTC    *types.TimeoutCert
+	curView   types.View
+	epochInfo *epochInfo
+
+	Stats *peerStateStats `json:"stats"` // Exposed.
+}
+
+// peerStateStats holds internal statistics for a peer.
+type peerStateStats struct {
+	Votes      int `json:"votes"`
+	BlockParts int `json:"block_parts"`
+}
+
+func (pss peerStateStats) String() string {
+	return fmt.Sprintf("peerStateStats{votes: %d, blockParts: %d}",
+		pss.Votes, pss.BlockParts)
+}
+
+// NewPeerState returns a new PeerState for the given Peer
+func NewPeerState(peer p2p.Peer) *PeerState {
+	return &PeerState{
+		peer:   peer,
+		logger: log.NewNopLogger(),
+		Stats:  &peerStateStats{},
+	}
+}
+
+// SetLogger allows to set a logger on the peer state. Returns the peer state
+// itself.
+func (ps *PeerState) SetLogger(logger log.Logger) *PeerState {
+	ps.logger = logger
+	return ps
+}
+
+func (ps *PeerState) HighQC() *types.QuorumCert {
+	return ps.highQC
+}
+
+func (ps *PeerState) HighTC() *types.TimeoutCert {
+	return ps.highTC
+}
+
+func (ps *PeerState) CurView() types.View {
+	return ps.curView
+}
+
+func (ps *PeerState) CurEpochView() types.View {
+	return ps.epochInfo.EpochView()
+}
+
+// ToJSON returns a json of PeerState.
+func (ps *PeerState) ToJSON() ([]byte, error) {
+	ps.mtx.Lock()
+	defer ps.mtx.Unlock()
+
+	return tmjson.Marshal(ps)
+}
+
+func (ps *PeerState) String() string {
+	return ps.StringIndented("")
+}
+
+// StringIndented returns a string representation of the PeerState
+func (ps *PeerState) StringIndented(indent string) string {
+	ps.mtx.Lock()
+	defer ps.mtx.Unlock()
+	return fmt.Sprintf(`PeerState{
+%s  Key        %v
+%s  Stats      %v
+%s}`,
+		indent, ps.peer.ID(),
+		indent, ps.Stats,
+		indent)
+}
+
+//-----------------------------------------------------------------------------
+// Messages
+
+// Message is a message that can be sent and received on the Reactor
+type Message interface {
+	ValidateBasic() error
+}
+
+func init() {
+	tmjson.RegisterType(&ProposalMessage{}, "tendermint/Proposal")
+	// tmjson.RegisterType(&BlockPartMessage{}, "tendermint/BlockPart")
+	tmjson.RegisterType(&VoteMessage{}, "tendermint/Vote")
+}
+
+//-------------------------------------
+
+// ProposalMessage is sent when a new block is proposed.
+type ProposalMessage struct {
+	Proposal *types.HsProposal
+}
+
+// ValidateBasic performs basic validation.
+func (m *ProposalMessage) ValidateBasic() error {
+	return m.Proposal.ValidateBasic()
+}
+
+// String returns a string representation.
+func (m *ProposalMessage) String() string {
+	return fmt.Sprintf("[Proposal %v]", m.Proposal)
+}
+
+//-------------------------------------
+
+// VoteMessage is sent when voting for a proposal (or lack thereof).
+type VoteMessage struct {
+	Vote *types.Vote
+}
+
+// ValidateBasic performs basic validation.
+func (m *VoteMessage) ValidateBasic() error {
+	return m.Vote.ValidateBasic()
+}
+
+// String returns a string representation.
+func (m *VoteMessage) String() string {
+	return fmt.Sprintf("[Vote %v]", m.Vote)
+}

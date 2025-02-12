@@ -37,3 +37,15 @@ func (si SyncInfo) WithAggQC(aggQC types.AggregateQC) SyncInfo {
 	*si.aggQC = aggQC
 	return si
 }
+
+func (si SyncInfo) QC() *types.QuorumCert {
+	return si.qc
+}
+
+func (si SyncInfo) TC() *types.TimeoutCert {
+	return si.tc
+}
+
+func (si SyncInfo) AggQC() *types.AggregateQC {
+	return si.aggQC
+}

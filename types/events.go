@@ -35,7 +35,13 @@ const (
 	EventTimeoutWait      = "TimeoutWait"
 	EventUnlock           = "Unlock"
 	EventValidBlock       = "ValidBlock"
-	EventVote             = "Vote"
+	// EventVote             = "Vote"
+
+	// Hotstuff
+	EventPropose     = "Propose"
+	EventVote        = "Vote"
+	EventNewView     = "NewView"
+	EventViewTimeout = "ViewTimeout"
 )
 
 // ENCODING / DECODING

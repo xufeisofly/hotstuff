@@ -79,6 +79,23 @@ message Header {
   // consensus info
   bytes evidence_hash    = 13;  // evidence included in the block
   bytes proposer_address = 14;  // original proposer of the block
+
+    // hotstuff
+    int64 view = 15;
+    QuorumCert quorum_cert = 16;
+    HsCommit self_commit = 17;
+    bytes results_hash = 18;
+}
+
+message QuorumCert {
+    bytes signature = 1;
+    int64 view = 2;
+    BlockID block_id = 3 [(gogoproto.nullable) = false, (gogoproto.customname) = "BlockID"];
+}
+
+message TimeoutCert {
+    bytes signature = 1;
+    int64 view = 2;
 }
 
 // Data contains the set of transactions included in the block
@@ -110,6 +127,10 @@ message Commit {
   int32              round      = 2;
   BlockID            block_id   = 3 [(gogoproto.nullable) = false, (gogoproto.customname) = "BlockID"];
   repeated CommitSig signatures = 4 [(gogoproto.nullable) = false];
+}
+
+message HsCommit {
+    QuorumCert commit_qc = 1 [(gogoproto.nullable) = false];
 }
 
 // CommitSig is a part of the Vote included in a Commit.

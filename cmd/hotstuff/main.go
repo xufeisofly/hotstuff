@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
+	_ "github.com/bufbuild/buf/cmd/buf"
 	cmd "github.com/xufeisofly/hotstuff/cmd/hotstuff/commands"
 	"github.com/xufeisofly/hotstuff/cmd/hotstuff/commands/debug"
 	cfg "github.com/xufeisofly/hotstuff/config"

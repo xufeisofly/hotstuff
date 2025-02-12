@@ -51,8 +51,10 @@ type State struct {
 	// immutable
 	ChainID       string
 	InitialHeight int64 // should be 1, not 0, when starting from height 1
+	InitialView   types.View
 
 	// LastBlockHeight=0 at genesis (ie. block(H=0) does not exist)
+	// unsuitable for hotstuff
 	LastBlockHeight int64
 	LastBlockID     types.BlockID
 	LastBlockTime   time.Time
@@ -74,6 +76,7 @@ type State struct {
 	LastHeightConsensusParamsChanged int64
 
 	// Merkle root of the results from executing prev block
+	// not work for hotstuff
 	LastResultsHash []byte
 
 	// the latest AppHash we've received from calling abci.Commit()
@@ -259,6 +262,28 @@ func (state State) MakeBlock(
 	)
 
 	return block, block.MakePartSet(types.BlockPartSizeBytes)
+}
+
+func (state State) HsMakeBlock(
+	view types.View,
+	txs []types.Tx,
+	lastQC *types.QuorumCert,
+	evidence []types.Evidence,
+	proposerAddress []byte,
+) (*types.Block, *types.PartSet) {
+	// Build base block with block data.
+	block := types.HsMakeBlock(view, txs, lastQC, evidence)
+
+	// Fill rest of header with state data.
+	block.Header.HsPopulate(
+		state.Version.Consensus, state.ChainID,
+		time.Now(), lastQC.BlockID(),
+		state.Validators.Hash(), state.NextValidators.Hash(),
+		types.HashConsensusParams(state.ConsensusParams), state.AppHash,
+		proposerAddress,
+	)
+
+	return block, nil
 }
 
 // MedianTime computes a median time for a given Commit (based on Timestamp field of votes messages) and the

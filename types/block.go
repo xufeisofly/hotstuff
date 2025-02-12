@@ -19,6 +19,7 @@ import (
 	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
+	"github.com/xufeisofly/hotstuff/types"
 	"github.com/xufeisofly/hotstuff/version"
 )
 
@@ -320,7 +321,7 @@ func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
 // View is a crucial hotstuff concept, different with tendermint height, the views of
 // committed blocks might not be sequencial, it's more like a combination of Height and Round
 // in tendermint
-type View = uint64
+type View = int64
 
 const (
 	GenesisView       = View(1)
@@ -336,35 +337,37 @@ type Hash = tmbytes.HexBytes
 // - https://github.com/xufeisofly/hotstuff/blob/v0.34.x/spec/blockchain/blockchain.md
 type Header struct {
 	// basic block info
-	Version tmversion.Consensus `json:"version"`
-	ChainID string              `json:"chain_id"`
+	Version tmversion.Consensus `json:"version"`  // hs
+	ChainID string              `json:"chain_id"` // hs
 	Height  int64               `json:"height"`
-	Time    time.Time           `json:"time"`
+	Time    time.Time           `json:"time"` // hs
 
 	// prev block info
-	LastBlockID BlockID `json:"last_block_id"`
+	LastBlockID BlockID          `json:"last_block_id"` // hs
+	DataHash    tmbytes.HexBytes `json:"data_hash"`     // transactions
 
-	// hashes of block data
-	LastCommitHash tmbytes.HexBytes `json:"last_commit_hash"` // commit from validators from the last block
-	DataHash       tmbytes.HexBytes `json:"data_hash"`        // transactions
+	View       View        // View
+	QuorumCert *QuorumCert // QC for a previous block
+	SelfCommit *HsCommit   // Commit for self
+	// root hash of all results from the txs from this block
+	ResultsHash tmbytes.HexBytes `json:"results_hash"`
 
 	// hashes from the app output from the prev block
 	ValidatorsHash     tmbytes.HexBytes `json:"validators_hash"`      // validators for the current block
 	NextValidatorsHash tmbytes.HexBytes `json:"next_validators_hash"` // validators for the next block
 	ConsensusHash      tmbytes.HexBytes `json:"consensus_hash"`       // consensus params for current block
 	AppHash            tmbytes.HexBytes `json:"app_hash"`             // state after txs from the previous block
-	// root hash of all results from the txs from the previous block
-	// see `deterministicResponseDeliverTx` to understand which parts of a tx is hashed into here
-	LastResultsHash tmbytes.HexBytes `json:"last_results_hash"`
 
 	// consensus info
 	EvidenceHash    tmbytes.HexBytes `json:"evidence_hash"`    // evidence included in the block
 	ProposerAddress Address          `json:"proposer_address"` // original proposer of the block
 
-	// hotstuff
-	View                 View        // hotstuff View
-	QuorumCert           *QuorumCert // hotstuff QC for a previous block
-	SelfCommitQuorumCert *QuorumCert // hotstuff CommitQC for self
+	// ---- not hotstuff ----
+	// hashes of block data
+	LastCommitHash tmbytes.HexBytes `json:"last_commit_hash"` // commit from validators from the last block
+	// root hash of all results from the txs from the previous block
+	// see `deterministicResponseDeliverTx` to understand which parts of a tx is hashed into here
+	LastResultsHash tmbytes.HexBytes `json:"last_results_hash"`
 }
 
 // Populate the Header with state-derived data.
@@ -385,6 +388,24 @@ func (h *Header) Populate(
 	h.ConsensusHash = consensusHash
 	h.AppHash = appHash
 	h.LastResultsHash = lastResultsHash
+	h.ProposerAddress = proposerAddress
+}
+
+func (h *Header) HsPopulate(
+	version tmversion.Consensus, chainID string,
+	timestamp time.Time, lastBlockID BlockID,
+	valHash, nextValHash []byte,
+	consensusHash, appHash []byte,
+	proposerAddress Address,
+) {
+	h.Version = version
+	h.ChainID = chainID
+	h.Time = timestamp
+	h.LastBlockID = lastBlockID
+	h.ValidatorsHash = valHash
+	h.NextValidatorsHash = nextValHash
+	h.ConsensusHash = consensusHash
+	h.AppHash = appHash
 	h.ProposerAddress = proposerAddress
 }
 
@@ -479,13 +500,12 @@ func (h *Header) Hash() tmbytes.HexBytes {
 		cdcEncode(h.Height),
 		pbt,
 		bzbi,
-		cdcEncode(h.LastCommitHash),
 		cdcEncode(h.DataHash),
 		cdcEncode(h.ValidatorsHash),
 		cdcEncode(h.NextValidatorsHash),
 		cdcEncode(h.ConsensusHash),
 		cdcEncode(h.AppHash),
-		cdcEncode(h.LastResultsHash),
+		cdcEncode(h.ResultsHash),
 		cdcEncode(h.EvidenceHash),
 		cdcEncode(h.ProposerAddress),
 	})
@@ -770,6 +790,10 @@ type Commit struct {
 	// unmarshaling.
 	hash     tmbytes.HexBytes
 	bitArray *bits.BitArray
+}
+
+type HsCommit struct {
+	CommitQC *types.QuorumCert
 }
 
 // NewCommit returns a new Commit.

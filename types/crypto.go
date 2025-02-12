@@ -17,11 +17,11 @@ type QuorumSignature interface {
 type QuorumCert struct {
 	signature QuorumSignature
 	view      View
-	blockHash Hash
+	blockID   BlockID
 }
 
-func NewQuorumCert(signature QuorumSignature, view View, blockHash Hash) QuorumCert {
-	return QuorumCert{signature, view, blockHash}
+func NewQuorumCert(signature QuorumSignature, view View, blockID BlockID) QuorumCert {
+	return QuorumCert{signature, view, blockID}
 }
 
 func (qc QuorumCert) Signature() QuorumSignature {
@@ -32,8 +32,8 @@ func (qc QuorumCert) View() View {
 	return qc.view
 }
 
-func (qc QuorumCert) BlockHash() Hash {
-	return qc.blockHash
+func (qc QuorumCert) BlockID() BlockID {
+	return qc.blockID
 }
 
 func (qc QuorumCert) String() string {
@@ -41,7 +41,7 @@ func (qc QuorumCert) String() string {
 	if qc.signature != nil {
 		_ = writeParticipants(&sb, qc.Signature().Participants())
 	}
-	return fmt.Sprintf("QC{ hash: %.6s, Addrs: [ %s] }", qc.blockHash, &sb)
+	return fmt.Sprintf("QC{ hash: %.6s, Addrs: [ %s] }", qc.blockID.Hash, &sb)
 }
 
 // AggregateQC is a set of QCs extracted from timeout messages

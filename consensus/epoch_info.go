@@ -1,10 +1,15 @@
 package consensus
 
-import "github.com/xufeisofly/hotstuff/types"
+import (
+	tmcrypto "github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/types"
+)
 
 type epochInfo struct {
-	height     uint64
+	view       types.View
 	validators *types.ValidatorSet
+
+	privValidatorPubKey tmcrypto.PubKey
 
 	totalVotingPower  int64
 	quorumVotingPower int64
@@ -19,12 +24,16 @@ func NewEpochInfo(validators *types.ValidatorSet) *epochInfo {
 	}
 }
 
-func (e *epochInfo) Height() uint64 {
-	return e.height
+func (e *epochInfo) EpochView() types.View {
+	return e.view
 }
 
 func (e *epochInfo) Validators() *types.ValidatorSet {
 	return e.validators
+}
+
+func (e *epochInfo) LocalAddress() tmcrypto.Address {
+	return e.privValidatorPubKey.Address()
 }
 
 func (e *epochInfo) TotalVotingPower() int64 {

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
+	typesproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 	tmtime "github.com/xufeisofly/hotstuff/types/time"
 )
 
@@ -39,8 +40,18 @@ func (p *HsProposal) String() string {
 		CanonicalTime(p.Timestamp))
 }
 
-func (p *HsProposal) ToProto() interface{} {
-	return nil
+func (p *HsProposal) ToProto() *typesproto.HsProposal {
+	blockProto, err := p.Block.ToProto()
+	if err != nil {
+		return nil
+	}
+	return &typesproto.HsProposal{
+		EpochView:   p.EpochView,
+		Block:       blockProto,
+		TimeoutCert: p.TimeoutCert.ToProto(),
+		Time:        p.Timestamp,
+		Signature:   p.Signature,
+	}
 }
 
 func HsProposalFromProto(pp interface{}) (*HsProposal, error) {

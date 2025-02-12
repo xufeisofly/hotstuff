@@ -167,7 +167,13 @@ func (conR *Reactor) unsubscribeFromBroadcastEvents() {
 }
 
 func (conR *Reactor) broadcastProposalMessage(proposalMsg *ProposalMessage) {
-
+	proMsg := &tmcons.ProposalMessage{
+		Proposal: *proposalMsg.Proposal.ToProto(),
+	}
+	conR.Switch.BroadcastEnvelope(p2p.Envelope{
+		ChannelID: DataChannel,
+		Message:   proMsg,
+	})
 }
 
 func (conR *Reactor) String() string {

@@ -6,6 +6,11 @@ option go_package = "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus";
 import "gogoproto/gogo.proto";
 import "hotstuff/types/types.proto";
 import "hotstuff/libs/bits/types.proto";
+import "hotstuff/types/proposal.proto";
+
+message ProposalMessage {
+    hotstuff.types.HsProposal proposal = 1 [(gogoproto.nullable) = false];
+}
 
 // NewRoundStep is sent for every step taken in the ConsensusState.
 // For every height/round/step transition

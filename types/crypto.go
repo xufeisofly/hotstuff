@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
+	typesproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
 type QuorumSignature interface {
@@ -105,6 +107,13 @@ func (tc TimeoutCert) Signature() QuorumSignature {
 
 func (tc TimeoutCert) View() View {
 	return tc.view
+}
+
+func (tc TimeoutCert) ToProto() *typesproto.TimeoutCert {
+	return &typesproto.TimeoutCert{
+		Signature: tc.signature.ToBytes(),
+		View:      tc.view,
+	}
 }
 
 func (tc TimeoutCert) String() string {

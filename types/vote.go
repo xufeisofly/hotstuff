@@ -245,3 +245,49 @@ func VoteFromProto(pv *tmproto.Vote) (*Vote, error) {
 
 	return vote, vote.ValidateBasic()
 }
+
+// HsVote message for hotstuff
+type HsVote struct {
+	View             View            `json:"view"`
+	BlockID          BlockID         `json:"block_id"`
+	ValidatorAddress Address         `json:"validator_address"`
+	EpochView        View            `json:"epoch_view"`
+	Timestamp        time.Time       `json:"timestamp"`
+	Signature        QuorumSignature `json:"signature"`
+}
+
+func (vote *HsVote) String() string {
+	if vote == nil {
+		return nilVoteStr
+	}
+
+	return fmt.Sprintf("Vote{%X %v/%v %X %X @ %s}",
+		tmbytes.Fingerprint(vote.ValidatorAddress),
+		vote.EpochView,
+		vote.View,
+		tmbytes.Fingerprint(vote.BlockID.Hash),
+		tmbytes.Fingerprint(vote.Signature.ToBytes()),
+		CanonicalTime(vote.Timestamp),
+	)
+}
+
+func (vote *HsVote) Copy() *HsVote {
+	voteCopy := *vote
+	return &voteCopy
+}
+
+func (vote *HsVote) ValidateBasic() error {
+
+}
+
+func (vote *HsVote) ToProto() *tmproto.HsVote {
+
+}
+
+func HsVoteFromProto(pv *tmproto.HsVote) (*HsVote, error) {
+
+}
+
+func HsVoteSignBytes(chainID string, vote *tmproto.HsVote) []byte {
+
+}

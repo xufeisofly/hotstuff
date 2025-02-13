@@ -1,0 +1,30 @@
+syntax = "proto3";
+package hotstuff.types;
+
+option go_package = "github.com/xufeisofly/hotstuff/proto/hotstuff/types";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "hotstuff/types/types.proto";
+import "hotstuff/types/block.proto";
+
+message HsProposal {
+    int64 epoch_view = 1;
+    hotstuff.types.Block block = 2;
+    hotstuff.types.TimeoutCert timeout_cert = 3;
+    google.protobuf.Timestamp time = 4
+        [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    bytes signature = 5;
+}
+
+message HsVote {
+    int64 view = 1;
+    hotstuff.types.BlockID block_id = 2
+        [(gogoproto.nullable) = false, (gogoproto.customname) = "BlockID"];
+    bytes validator_address = 3;
+    int64 epoch_view = 4;
+    google.protobuf.Timestamp time = 5
+        [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+    bytes signature = 6;
+}
+

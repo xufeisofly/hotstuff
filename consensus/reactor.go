@@ -159,6 +159,13 @@ func (conR *Reactor) subscribeToBroadcastEvents() {
 		}); err != nil {
 		conR.Logger.Error("Error adding listener for events", "err", err)
 	}
+
+	if err := conR.cons.evsw.AddListenerForEvent(subscriber, types.EventVote,
+		func(data tmevents.EventData) {
+			conR.sendVoteMessage(data.(*VoteMessage))
+		}); err != nil {
+		conR.Logger.Error("Error adding listener for events", "err", err)
+	}
 }
 
 func (conR *Reactor) unsubscribeFromBroadcastEvents() {
@@ -167,6 +174,8 @@ func (conR *Reactor) unsubscribeFromBroadcastEvents() {
 }
 
 func (conR *Reactor) broadcastProposalMessage(proposalMsg *ProposalMessage) {
+	// TODO actual block data should not use broadcast but gossip
+	// otherwise it will spend too much bandwidth
 	proMsg := &tmcons.ProposalMessage{
 		Proposal: *proposalMsg.Proposal.ToProto(),
 	}
@@ -174,6 +183,16 @@ func (conR *Reactor) broadcastProposalMessage(proposalMsg *ProposalMessage) {
 		ChannelID: DataChannel,
 		Message:   proMsg,
 	})
+}
+
+func (conR *Reactor) sendVoteMessage(voteMsg *VoteMessage) {
+	// TODO get the next proposer
+	nextProposer := conR.Switch.Peers().List()[0]
+	logger := conR.Logger.With("peer", nextProposer)
+
+	p2p.SendEnvelopeShim(nextProposer, p2p.Envelope{
+		ChannelID: DataChannel,
+	}, logger)
 }
 
 func (conR *Reactor) String() string {

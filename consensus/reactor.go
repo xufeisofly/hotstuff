@@ -117,11 +117,41 @@ func (conR *Reactor) RemovePeer(peer p2p.Peer, reason interface{}) {
 }
 
 func (conR *Reactor) ReceiveEnvelope(e p2p.Envelope) {
-	// TODO Apply by e.ChannelID and msg.Type
-	// distribute msg to different funcs
+	if !conR.IsRunning() {
+		conR.Logger.Debug("Receive", "src", e.Src, "chId", e.ChannelID)
+		return
+	}
+	m := e.Message
+	if wm, ok := m.(p2p.Wrapper); ok {
+		m = wm.Wrap()
+	}
+	msg, err := MsgFromProto(m.(*tmcons.Message))
+	if err != nil {
+		conR.Logger.Error("Error decoding message", "src", e.Src, "chId", e.ChannelID, "err", err)
+		conR.Switch.StopPeerForError(e.Src, err)
+		return
+	}
 
-	// TODO put sig to cs.{channels}, use the state receive routine to handle msgs
-	// like this: cs.peerMsgQueue <- msgInfo{msg, e.Src.ID()}
+	if err = msg.ValidateBasic(); err != nil {
+		conR.Logger.Error("Peer sent us invalid msg", "peer", e.Src, "msg", e.Message, "err", err)
+		conR.Switch.StopPeerForError(e.Src, err)
+		return
+	}
+
+	conR.Logger.Debug("Receive", "src", e.Src, "chId", e.ChannelID, "msg", msg)
+
+	switch e.ChannelID {
+	case DataChannel:
+		if conR.WaitSync() {
+			conR.Logger.Info("Ignoring message received during sync", "msg", msg)
+			return
+		}
+		switch msg := msg.(type) {
+		case *ProposalMessage:
+			//...
+			conR.cons.msgQueue <- msgInfo{msg, e.Src.ID()}
+		}
+	}
 }
 
 func (conR *Reactor) Receive(chID byte, peer p2p.Peer, msgBytes []byte) {

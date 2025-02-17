@@ -59,7 +59,7 @@ type Consensus struct {
 	// to avoid extra requests to HSM
 
 	// state changes may be triggered by: msgs from peers,
-	// peerMsgQueue chan msgInfo
+	msgQueue chan msgInfo
 	// msgs from ourself, or by timeouts
 	// internalMsgQueue chan msgInfo
 	// timeoutTicker    TimeoutTicker

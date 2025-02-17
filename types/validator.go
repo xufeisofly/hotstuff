@@ -239,3 +239,24 @@ func (addrSet AddressSet) First() Address {
 	})
 	return ret
 }
+
+func (addrSet AddressSet) ToBytes() []byte {
+	var result []byte
+	for address := range addrSet {
+		// Assuming UTF-8 encoding for the address string.
+		addressBytes := []byte(address)
+		result = append(result, addressBytes...)
+	}
+	return result
+}
+
+func AddressSetFromBytes(data []byte) (AddressSet, error) {
+	addressSet := make(AddressSet)
+	for len(data) > 0 {
+		addressLength := len(data)
+		address := string(data[:addressLength])
+		addressSet[address] = struct{}{}
+		data = data[addressLength:]
+	}
+	return addressSet, nil
+}

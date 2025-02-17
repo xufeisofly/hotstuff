@@ -42,7 +42,7 @@ type Consensus struct {
 	epochInfo *epochInfo
 
 	// pacemaker Pacemaker
-	// leaderRotation LeaderRotation
+	leaderElect LeaderElect
 
 	lastVoteView types.View
 

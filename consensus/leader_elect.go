@@ -17,6 +17,13 @@ type leaderElect struct {
 	epochInfo  *epochInfo
 }
 
+func NewLeaderElect(blockchain Blockchain, epochInfo *epochInfo) LeaderElect {
+	return &leaderElect{
+		blockchain: blockchain,
+		epochInfo:  epochInfo,
+	}
+}
+
 func (l *leaderElect) GetLeader() *types.Validator {
 	qc := QuorumCertBeforeGenesis()
 	committedBlock := l.blockchain.LatestCommittedBlock()

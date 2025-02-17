@@ -14,6 +14,10 @@ type AggregateSignature struct {
 	participants types.AddressSet
 }
 
+var EmptyAggregateSignature = AggregateSignature{
+	point: *bls12.NewG2().Zero(),
+}
+
 var _ types.QuorumSignature = (*AggregateSignature)(nil)
 
 // ToBytes returns a byte representation of the aggregate signature.

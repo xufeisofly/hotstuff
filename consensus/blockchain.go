@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	sm "github.com/xufeisofly/hotstuff/state"
 	"github.com/xufeisofly/hotstuff/types"
@@ -494,4 +495,20 @@ func (bc *blockchain) deleteBlock(block *types.Block) error {
 
 	delete(bc.wrappedBlocks, string(blockHash))
 	return nil
+}
+
+func QuorumCertBeforeGenesis() types.QuorumCert {
+	return types.NewQuorumCert(
+		&bls.EmptyAggregateSignature,
+		types.ViewBeforeGenesis,
+		types.BlockID{},
+	)
+}
+
+func QuorumCertOfGenesis(genesisBlockID types.BlockID) types.QuorumCert {
+	return types.NewQuorumCert(
+		&bls.EmptyAggregateSignature,
+		types.GenesisView,
+		genesisBlockID,
+	)
 }

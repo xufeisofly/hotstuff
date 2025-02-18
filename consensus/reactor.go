@@ -116,6 +116,12 @@ func (conR *Reactor) RemovePeer(peer p2p.Peer, reason interface{}) {
 	}
 }
 
+// getValidatorPeer get validator's peer for p2p messaging
+func (conR *Reactor) getValidatorPeer(v types.Validator) p2p.Peer {
+	peerID := p2p.PubKeyToID(v.PubKey)
+	return conR.Switch.Peers().Get(peerID)
+}
+
 func (conR *Reactor) ReceiveEnvelope(e p2p.Envelope) {
 	if !conR.IsRunning() {
 		conR.Logger.Debug("Receive", "src", e.Src, "chId", e.ChannelID)

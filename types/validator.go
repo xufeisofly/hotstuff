@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	ce "github.com/xufeisofly/hotstuff/crypto/encoding"
 	tmrand "github.com/xufeisofly/hotstuff/libs/rand"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
@@ -18,17 +19,18 @@ import (
 type Validator struct {
 	Address     Address       `json:"address"`
 	PubKey      crypto.PubKey `json:"pub_key"`
-	BlsPubKey   crypto.PubKey `json:"bls_pub_key"` // for hotstuff xufeisoflyishere
+	BlsPubKey   *bls.PubKey   `json:"bls_pub_key"` // for hotstuff xufeisoflyishere
 	VotingPower int64         `json:"voting_power"`
 
 	ProposerPriority int64 `json:"proposer_priority"`
 }
 
 // NewValidator returns a new validator with the given pubkey and voting power.
-func NewValidator(pubKey crypto.PubKey, blsPubKey crypto.PubKey,  int64) *Validator {
+func NewValidator(pubKey crypto.PubKey, blsPubKey *bls.PubKey, votingPower int64) *Validator {
 	return &Validator{
 		Address:          pubKey.Address(),
 		PubKey:           pubKey,
+		BlsPubKey:        blsPubKey,
 		VotingPower:      votingPower,
 		ProposerPriority: 0,
 	}
@@ -41,6 +43,9 @@ func (v *Validator) ValidateBasic() error {
 	}
 	if v.PubKey == nil {
 		return errors.New("validator does not have a public key")
+	}
+	if v.BlsPubKey == nil {
+		return errors.New("validator does not have bls public key")
 	}
 
 	if v.VotingPower < 0 {
@@ -189,75 +194,16 @@ func RandValidator(randPower bool, minPower int64) (*Validator, PrivValidator) {
 	if err != nil {
 		panic(fmt.Errorf("could not retrieve pubkey %w", err))
 	}
-	val := NewValidator(pubKey, votePower)
+	val := NewValidator(pubKey, nil, votePower)
 	return val, privVal
 }
 
-type AddressSet map[string]struct{}
+type AddressSet = crypto.AddressSet
 
 func NewAddressSet() AddressSet {
-	return make(AddressSet)
-}
-
-func (addrSet AddressSet) Add(addr Address) {
-	addrSet[string(addr)] = struct{}{}
-}
-
-func (addrSet AddressSet) Len() int {
-	return len(addrSet)
-}
-
-func (addrSet AddressSet) Contains(addr Address) bool {
-	_, ok := addrSet[string(addr)]
-	return ok
-}
-
-// RangeWhile calls f for each addr in the set until f returns false.
-func (addrSet AddressSet) RangeWhile(f func(Address) bool) {
-	for addrStr := range addrSet {
-		if !f(Address(addrStr)) {
-			return
-		}
-	}
-}
-
-func (addrSet AddressSet) ForEach(f func(Address)) {
-	addrSet.RangeWhile(func(addr Address) bool {
-		f(addr)
-		return true
-	})
-}
-
-func (addrSet AddressSet) First() Address {
-	if len(addrSet) == 0 {
-		return Address{}
-	}
-
-	var ret Address
-	addrSet.RangeWhile(func(addr Address) bool {
-		ret = addr
-		return false
-	})
-	return ret
-}
-
-func (addrSet AddressSet) ToBytes() []byte {
-	var result []byte
-	for address := range addrSet {
-		// Assuming UTF-8 encoding for the address string.
-		addressBytes := []byte(address)
-		result = append(result, addressBytes...)
-	}
-	return result
+	return crypto.NewAddressSet()
 }
 
 func AddressSetFromBytes(data []byte) (AddressSet, error) {
-	addressSet := make(AddressSet)
-	for len(data) > 0 {
-		addressLength := len(data)
-		address := string(data[:addressLength])
-		addressSet[address] = struct{}{}
-		data = data[addressLength:]
-	}
-	return addressSet, nil
+	return crypto.AddressSetFromBytes(data)
 }

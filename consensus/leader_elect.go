@@ -10,6 +10,8 @@ import (
 
 type LeaderElect interface {
 	GetLeader() *types.Validator
+	GetExpectedLeader() *types.Validator
+	SetExpectedLeader() *types.Validator
 }
 
 type leaderElect struct {

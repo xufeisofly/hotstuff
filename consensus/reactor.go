@@ -154,8 +154,7 @@ func (conR *Reactor) ReceiveEnvelope(e p2p.Envelope) {
 		}
 		switch msg := msg.(type) {
 		case *ProposalMessage:
-			//...
-			conR.cons.msgQueue <- msgInfo{msg, e.Src.ID()}
+			conR.cons.sendMsg(msgInfo{msg, e.Src.ID()})
 		}
 	}
 }

@@ -19,7 +19,7 @@ import (
 type Validator struct {
 	Address     Address       `json:"address"`
 	PubKey      crypto.PubKey `json:"pub_key"`
-	BlsPubKey   *bls.PubKey   `json:"bls_pub_key"` // for hotstuff xufeisoflyishere
+	BlsPubKey   *bls.PubKey   `json:"bls_pub_key"`
 	VotingPower int64         `json:"voting_power"`
 
 	ProposerPriority int64 `json:"proposer_priority"`

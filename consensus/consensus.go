@@ -1,6 +1,8 @@
 package consensus
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
 	"runtime/debug"
 
@@ -130,7 +132,63 @@ func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, erro
 	), nil
 }
 
-func (cs *Consensus) handleProposalMsg(msg *ProposalMessage, peerID p2p.ID) {
+func (cs *Consensus) handleProposalMsg(msg *ProposalMessage, peerID p2p.ID) error {
+	// xufeisoflyishere
+
+	// has vote
+	if cs.lastVoteView >= msg.Proposal.Block.View {
+		return errors.New("invalid proposal view")
+	}
+	// verify leader
+	if !cs.verifyLeader(msg.Proposal.Block.ProposerAddress) {
+		return errors.New("verify leader failed")
+	}
+	// verify tc
+	if msg.Proposal.TimeoutCert != nil {
+		if !cs.verifyTC(msg.Proposal.TimeoutCert) {
+			return errors.New("verify timeout cert failed")
+		}
+
+		// advance view
+		// xufeisoflyishere
+	}
+
+	// verify qc
+
+	// verify block
+
+	// tx accept
+
+	// chain store
+
+	// vote
+
+	return nil
+}
+
+func (cs *Consensus) verifyLeader(addr types.Address) bool {
+	leader := cs.leaderElect.GetLeader()
+	if leader == nil {
+		return false
+	}
+
+	if !bytes.Equal(addr, leader.Address) {
+		expectLeader := cs.leaderElect.GetExpectedLeader()
+		if expectLeader == nil || !bytes.Equal(addr, expectLeader.Address) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (cs *Consensus) verifyTC(tc *types.TimeoutCert) bool {
+	// an old timeout cert is treated as verified by default
+	if tc.View() <= cs.peerState.HighTC().View() {
+		return true
+	}
+
+	return cs.crypto.VerifyTimeoutCert(*tc)
 }
 
 func (cs *Consensus) handleVoteMsg(msg *VoteMessage, peerID p2p.ID) {

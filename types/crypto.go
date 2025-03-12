@@ -5,28 +5,22 @@ import (
 	"io"
 	"strings"
 
+	"github.com/xufeisofly/hotstuff/crypto"
 	typesproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
 
-type QuorumSignature interface {
-	ToBytes() []byte
-	// Participants returns the IDs of replicas who participated in the threshold signature.
-	Participants() AddressSet
-	IsValid() bool
-}
-
 // QuorumCert(QC) is certificate for Block created by a quorum of partial certificates.
 type QuorumCert struct {
-	signature QuorumSignature
+	signature crypto.QuorumSignature
 	view      View
 	blockID   BlockID
 }
 
-func NewQuorumCert(signature QuorumSignature, view View, blockID BlockID) QuorumCert {
+func NewQuorumCert(signature crypto.QuorumSignature, view View, blockID BlockID) QuorumCert {
 	return QuorumCert{signature, view, blockID}
 }
 
-func (qc QuorumCert) Signature() QuorumSignature {
+func (qc QuorumCert) Signature() crypto.QuorumSignature {
 	return qc.signature
 }
 
@@ -51,13 +45,13 @@ func (qc QuorumCert) String() string {
 // This is used by the Fast-HotStuff consensus protocol.
 type AggregateQC struct {
 	qcs       map[AddressStr]QuorumCert
-	signature QuorumSignature
+	signature crypto.QuorumSignature
 	view      View
 }
 
 func NewAggregateQC(
 	qcs map[AddressStr]QuorumCert,
-	signature QuorumSignature,
+	signature crypto.QuorumSignature,
 	view View,
 ) AggregateQC {
 	return AggregateQC{qcs, signature, view}
@@ -67,7 +61,7 @@ func (aggQC AggregateQC) QCs() map[AddressStr]QuorumCert {
 	return aggQC.qcs
 }
 
-func (aggQC AggregateQC) Signature() QuorumSignature {
+func (aggQC AggregateQC) Signature() crypto.QuorumSignature {
 	return aggQC.signature
 }
 
@@ -83,7 +77,7 @@ func (aggQC AggregateQC) String() string {
 	return fmt.Sprintf("AggQC{ view: %d, Addrs: [ %s] }", aggQC.view, &sb)
 }
 
-func writeParticipants(wr io.Writer, participants AddressSet) (err error) {
+func writeParticipants(wr io.Writer, participants crypto.AddressSet) (err error) {
 	participants.RangeWhile(func(addr Address) bool {
 		_, err = fmt.Fprintf(wr, "%s ", addr)
 		return err == nil
@@ -93,15 +87,15 @@ func writeParticipants(wr io.Writer, participants AddressSet) (err error) {
 
 // TimeoutCert (TC) is a certificate created by a quorum of timeout messsages.
 type TimeoutCert struct {
-	signature QuorumSignature
+	signature crypto.QuorumSignature
 	view      View
 }
 
-func NewTimeoutCert(signature QuorumSignature, view View) TimeoutCert {
+func NewTimeoutCert(signature crypto.QuorumSignature, view View) TimeoutCert {
 	return TimeoutCert{signature, view}
 }
 
-func (tc TimeoutCert) Signature() QuorumSignature {
+func (tc TimeoutCert) Signature() crypto.QuorumSignature {
 	return tc.signature
 }
 

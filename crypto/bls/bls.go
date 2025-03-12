@@ -9,7 +9,6 @@ import (
 	bls12 "github.com/kilic/bls12-381"
 	"github.com/xufeisofly/hotstuff/crypto"
 	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
-	"github.com/xufeisofly/hotstuff/types"
 )
 
 var (
@@ -81,7 +80,7 @@ type bls12Base struct {
 	pubKeyFn            GetPubKeyFn
 }
 
-type GetPubKeyFn func(types.Address) (crypto.PubKey, bool)
+type GetPubKeyFn func(crypto.Address) (crypto.PubKey, bool)
 
 func New(pubKeyFn GetPubKeyFn) *bls12Base {
 	b := &bls12Base{
@@ -115,12 +114,12 @@ func (bls *bls12Base) ProofOfPossession() ProofOfPossession {
 }
 
 // Sign creates a cryptographic signature of the given messsage.
-func (bls *bls12Base) Sign(message []byte) (types.QuorumSignature, error) {
+func (bls *bls12Base) Sign(message []byte) (crypto.QuorumSignature, error) {
 	p, err := bls.coreSign(message, domain)
 	if err != nil {
 		return nil, fmt.Errorf("bls12: coreSign failed: %w", err)
 	}
-	addrSet := types.NewAddressSet()
+	addrSet := crypto.NewAddressSet()
 	addrSet.Add(bls.privValidatorPubKey.Address())
 	return &AggregateSignature{point: *p}, nil
 }
@@ -138,17 +137,17 @@ func (bls *bls12Base) coreSign(message []byte, domainTag []byte) (*bls12.PointG2
 }
 
 // Combine combines multiple signatures into a single signature.
-func (bls *bls12Base) Combine(signatures ...types.QuorumSignature) (combined types.QuorumSignature, err error) {
+func (bls *bls12Base) Combine(signatures ...crypto.QuorumSignature) (combined crypto.QuorumSignature, err error) {
 	if len(signatures) < 2 {
 		return nil, fmt.Errorf("bls12: combine failed, len(signatures) < 2")
 	}
 
 	g2 := bls12.NewG2()
 	agg := bls12.PointG2{}
-	participants := types.NewAddressSet()
+	participants := crypto.NewAddressSet()
 	for _, sig1 := range signatures {
 		if sig2, ok := sig1.(*AggregateSignature); ok {
-			sig2.participants.RangeWhile(func(addr types.Address) bool {
+			sig2.participants.RangeWhile(func(addr crypto.Address) bool {
 				if participants.Contains(addr) {
 					err = fmt.Errorf("bls: combine failed, participants not contain addr: %s", string(addr))
 					return false
@@ -168,7 +167,7 @@ func (bls *bls12Base) Combine(signatures ...types.QuorumSignature) (combined typ
 }
 
 // Verify verifies the given quorum signature against the message.
-func (bls *bls12Base) Verify(signature types.QuorumSignature, message []byte) bool {
+func (bls *bls12Base) Verify(signature crypto.QuorumSignature, message []byte) bool {
 	s, ok := signature.(*AggregateSignature)
 	if !ok {
 		panic(fmt.Sprintf("cannot verify signature of incompatible type %T (expected %T)", signature, s))
@@ -187,7 +186,7 @@ func (bls *bls12Base) Verify(signature types.QuorumSignature, message []byte) bo
 
 	// else if l > 1:
 	pks := make([]*PubKey, 0, n)
-	s.Participants().RangeWhile(func(addr types.Address) bool {
+	s.Participants().RangeWhile(func(addr crypto.Address) bool {
 		pk, ok := bls.pubKeyFn(addr)
 		if ok {
 			pks = append(pks, pk.(*PubKey))
@@ -202,7 +201,7 @@ func (bls *bls12Base) Verify(signature types.QuorumSignature, message []byte) bo
 }
 
 // BatchVerify verifies the given quorum signature against the batch of messages.
-func (bls *bls12Base) BatchVerify(signature types.QuorumSignature, batch map[types.AddressStr][]byte) bool {
+func (bls *bls12Base) BatchVerify(signature crypto.QuorumSignature, batch map[crypto.AddressStr][]byte) bool {
 	s, ok := signature.(*AggregateSignature)
 	if !ok {
 		panic(fmt.Sprintf("cannot verify incompatible signature type %T (expected %T)", signature, s))
@@ -217,7 +216,7 @@ func (bls *bls12Base) BatchVerify(signature types.QuorumSignature, batch map[typ
 
 	for addrStr, msg := range batch {
 		msgs = append(msgs, msg)
-		pk, ok := bls.pubKeyFn(types.Address(addrStr))
+		pk, ok := bls.pubKeyFn(crypto.Address(addrStr))
 		if !ok {
 			return false
 		}

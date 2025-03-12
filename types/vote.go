@@ -45,7 +45,7 @@ func NewConflictingVoteError(vote1, vote2 *Vote) *ErrVoteConflictingVotes {
 
 // Address is hex bytes.
 type Address = crypto.Address
-type AddressStr = string
+type AddressStr = crypto.AddressStr
 
 // Vote represents a prevote, precommit, or commit vote from validators for
 // consensus.

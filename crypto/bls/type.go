@@ -4,21 +4,21 @@ import (
 	"fmt"
 
 	bls12 "github.com/kilic/bls12-381"
-	"github.com/xufeisofly/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/crypto"
 )
 
 // AggregateSignature is a bls12-381 aggregate signature. The participants field contains the IDs of the replicas that
 // participated in signature creation. This allows us to build an aggregated public key to verify the signature.
 type AggregateSignature struct {
 	point        bls12.PointG2
-	participants types.AddressSet
+	participants crypto.AddressSet
 }
 
 var EmptyAggregateSignature = AggregateSignature{
 	point: *bls12.NewG2().Zero(),
 }
 
-var _ types.QuorumSignature = (*AggregateSignature)(nil)
+var _ crypto.QuorumSignature = (*AggregateSignature)(nil)
 
 // ToBytes returns a byte representation of the aggregate signature.
 func (agg *AggregateSignature) ToBytes() []byte {
@@ -34,7 +34,7 @@ func (agg *AggregateSignature) ToBytes() []byte {
 }
 
 // Participants returns the IDs of replicas who participated in the threshold signature.
-func (agg *AggregateSignature) Participants() types.AddressSet {
+func (agg *AggregateSignature) Participants() crypto.AddressSet {
 	return agg.participants
 }
 
@@ -62,7 +62,7 @@ func AggregateSignatureFromBytes(data []byte) (*AggregateSignature, error) {
 
 	// Deserialize the participants from the remaining data
 	participantsBytes := data[pointSize:]
-	participants, err := types.AddressSetFromBytes(participantsBytes)
+	participants, err := crypto.AddressSetFromBytes(participantsBytes)
 	if err != nil {
 		return nil, fmt.Errorf("failed to deserialize participants: %w", err)
 	}

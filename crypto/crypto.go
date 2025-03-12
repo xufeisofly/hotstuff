@@ -14,6 +14,7 @@ const (
 // []byte leaves us the option to change the address length.
 // Use an alias so Unmarshal methods (with ptr receivers) are available too.
 type Address = bytes.HexBytes
+type AddressStr = string
 
 func AddressHash(bz []byte) Address {
 	return Address(tmhash.SumTruncated(bz))

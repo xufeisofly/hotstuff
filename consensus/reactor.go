@@ -35,7 +35,7 @@ type Reactor struct {
 
 	mtx      tmsync.RWMutex
 	waitSync bool
-	eventBus *types.EventBus
+	// eventBus *types.EventBus
 
 	Metrics *Metrics
 }
@@ -314,8 +314,24 @@ func (ps *PeerState) HighTC() *types.TimeoutCert {
 	return ps.highTC
 }
 
+func (ps *PeerState) UpdateHighQC(qc *types.QuorumCert) {
+	if ps.highQC.View() < qc.View() {
+		ps.highQC = qc
+	}
+}
+
+func (ps *PeerState) UpdateHighTC(tc *types.TimeoutCert) {
+	if ps.highTC.View() < tc.View() {
+		ps.highTC = tc
+	}
+}
+
 func (ps *PeerState) CurView() types.View {
 	return ps.curView
+}
+
+func (ps *PeerState) UpdateCurView(v types.View) {
+	ps.curView = v
 }
 
 func (ps *PeerState) CurEpochView() types.View {

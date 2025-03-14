@@ -7,6 +7,7 @@ import (
 	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
 	tmquery "github.com/xufeisofly/hotstuff/libs/pubsub/query"
+	"github.com/xufeisofly/hotstuff/types"
 )
 
 // Reserved event types (alphabetically sorted).
@@ -129,6 +130,10 @@ type EventDataString string
 
 type EventDataValidatorSetUpdates struct {
 	ValidatorUpdates []*Validator `json:"validator_updates"`
+}
+
+type EventDataViewTimeout struct {
+	View types.View `json:"view"`
 }
 
 // PUBSUB

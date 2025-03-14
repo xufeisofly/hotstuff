@@ -6,6 +6,12 @@ import (
 	"github.com/xufeisofly/hotstuff/types"
 )
 
+type ErrInvalidArgument struct{}
+
+func (err ErrInvalidArgument) Error() string {
+	return fmt.Sprintf("invalid argument")
+}
+
 type ErrExpiredView struct {
 	View types.View
 }

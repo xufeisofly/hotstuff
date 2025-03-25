@@ -120,11 +120,13 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 }
 
 func (p *pacemaker) OnStart() error {
-	// TODO start first oneshot timer
+	p.startTimer()
 	return nil
 }
 
-func (p *pacemaker) OnStop() {}
+func (p *pacemaker) OnStop() {
+	p.stopTimer()
+}
 
 func (p *pacemaker) OnLocalTimeout() error {
 	p.stopTimer()

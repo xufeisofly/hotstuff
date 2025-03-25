@@ -2,6 +2,7 @@ package types
 
 import (
 	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"strings"
@@ -322,6 +323,12 @@ func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
 // committed blocks might not be sequencial, it's more like a combination of Height and Round
 // in tendermint
 type View = int64
+
+func GetViewHash(v View) tmbytes.HexBytes {
+	var buf [8]byte
+	binary.BigEndian.PutUint64(buf[:], uint64(v))
+	return tmhash.Sum(buf[:])
+}
 
 const (
 	GenesisView       = View(1)

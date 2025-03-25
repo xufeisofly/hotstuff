@@ -107,7 +107,7 @@ func (cs *Consensus) OnStart() error {
 
 func (cs *Consensus) OnStop() {}
 
-func (cs *Consensus) propose(syncInfo *SyncInfo) error {
+func (cs *Consensus) Propose(syncInfo *SyncInfo) error {
 	proposal, err := cs.createProposal(syncInfo)
 	if err != nil {
 		return err
@@ -132,7 +132,7 @@ func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, erro
 	), nil
 }
 
-func (cs *Consensus) handleProposalMsg(msg *ProposalMessage, peerID p2p.ID) error {
+func (cs *Consensus) HandleProposalMessage(msg *ProposalMessage, peerID p2p.ID) error {
 	// xufeisoflyishere
 
 	// has vote
@@ -250,4 +250,8 @@ func (cs *Consensus) sendMsg(mi msgInfo) {
 		cs.Logger.Debug("internal msg queue is full; using a go-routine")
 		go func() { cs.msgQueue <- mi }()
 	}
+}
+
+func (cs *Consensus) StopVoting(view types.View) {
+	cs.lastVoteView = view
 }

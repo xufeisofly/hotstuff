@@ -3,15 +3,16 @@ package consensus
 import (
 	"sync"
 
+	tcrypto "github.com/xufeisofly/hotstuff/crypto"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	"github.com/xufeisofly/hotstuff/types"
 )
 
 type CryptoBase interface {
-	Sign(message []byte) (types.QuorumSignature, error)
-	Combine(signatures ...types.QuorumSignature) (types.QuorumSignature, error)
-	Verify(signature types.QuorumSignature, message []byte) bool
-	BatchVerify(signature types.QuorumSignature, batch map[types.AddressStr][]byte) bool
+	Sign(message []byte) (tcrypto.QuorumSignature, error)
+	Combine(signatures ...tcrypto.QuorumSignature) (tcrypto.QuorumSignature, error)
+	Verify(signature tcrypto.QuorumSignature, message []byte) bool
+	BatchVerify(signature tcrypto.QuorumSignature, batch map[types.AddressStr][]byte) bool
 }
 
 type Crypto interface {
@@ -20,8 +21,8 @@ type Crypto interface {
 	CollectPartialSignature(
 		view types.View,
 		msgHash []byte,
-		partSig types.QuorumSignature,
-	) (aggSig types.QuorumSignature, ok bool)
+		partSig tcrypto.QuorumSignature,
+	) (aggSig tcrypto.QuorumSignature, ok bool)
 
 	VerifyQuorumCert(qc types.QuorumCert) bool
 	VerifyTimeoutCert(tc types.TimeoutCert) bool
@@ -56,8 +57,8 @@ func (c *crypto) SetLogger(l log.Logger) {
 func (c *crypto) CollectPartialSignature(
 	view types.View,
 	msgHash []byte,
-	partSig types.QuorumSignature,
-) (aggSig types.QuorumSignature, ok bool) {
+	partSig tcrypto.QuorumSignature,
+) (aggSig tcrypto.QuorumSignature, ok bool) {
 	if ok := c.Verify(partSig, msgHash); !ok {
 		return nil, false
 	}
@@ -97,7 +98,7 @@ func (c *crypto) CollectPartialSignature(
 	}
 
 	// combine partial signatures to an aggregated signature
-	partSigs := make([]types.QuorumSignature, 0, len(item.partSigs))
+	partSigs := make([]tcrypto.QuorumSignature, 0, len(item.partSigs))
 	for _, partSig := range item.partSigs {
 		partSigs = append(partSigs, partSig)
 	}
@@ -160,19 +161,19 @@ func (sc *sigCollect) getItem(msgHash types.Hash) *sigCollectItem {
 // partial sigatures collection for one msg hash in a view
 type sigCollectItem struct {
 	msgHash  types.Hash
-	partSigs map[types.AddressStr]types.QuorumSignature
-	aggSig   types.QuorumSignature
+	partSigs map[types.AddressStr]tcrypto.QuorumSignature
+	aggSig   tcrypto.QuorumSignature
 }
 
 func newSigCollectItem(msgHash types.Hash) *sigCollectItem {
 	return &sigCollectItem{
 		msgHash:  msgHash,
-		partSigs: make(map[types.AddressStr]types.QuorumSignature),
+		partSigs: make(map[types.AddressStr]tcrypto.QuorumSignature),
 		aggSig:   nil,
 	}
 }
 
-func (scItem *sigCollectItem) addPartialSig(addr types.Address, partSig types.QuorumSignature) {
+func (scItem *sigCollectItem) addPartialSig(addr types.Address, partSig tcrypto.QuorumSignature) {
 	scItem.partSigs[types.AddressStr(addr)] = partSig
 }
 
@@ -182,7 +183,7 @@ func (scItem *sigCollectItem) validVotingPower() int64 {
 	return int64(len(scItem.partSigs))
 }
 
-func (scItem *sigCollectItem) setAggSig(aggSig types.QuorumSignature) {
+func (scItem *sigCollectItem) setAggSig(aggSig tcrypto.QuorumSignature) {
 	scItem.aggSig = aggSig
 }
 

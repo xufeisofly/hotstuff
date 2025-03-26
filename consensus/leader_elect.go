@@ -9,7 +9,7 @@ import (
 )
 
 type LeaderElect interface {
-	GetLeader() *types.Validator
+	GetLeader(types.View) *types.Validator
 	GetExpectedLeader() *types.Validator
 	SetExpectedLeader() *types.Validator
 }
@@ -26,7 +26,7 @@ func NewLeaderElect(blockchain Blockchain, epochInfo *epochInfo) LeaderElect {
 	}
 }
 
-func (l *leaderElect) GetLeader() *types.Validator {
+func (l *leaderElect) GetLeader(view types.View) *types.Validator {
 	qc := QuorumCertBeforeGenesis()
 	committedBlock := l.blockchain.LatestCommittedBlock()
 	if committedBlock != nil {

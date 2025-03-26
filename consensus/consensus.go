@@ -133,29 +133,37 @@ func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, erro
 }
 
 func (cs *Consensus) HandleProposalMessage(msg *ProposalMessage, peerID p2p.ID) error {
+	block := msg.Proposal.Block
+	if !cs.verifyQC(block.QuorumCert) {
+		return errors.New("verify quorum cert failed")
+	}
+
+	// verify leader
+	if !bytes.Equal(
+		block.ProposerAddress,
+		cs.leaderElect.GetLeader(block.View).Address) {
+		return errors.New("verify leader failed")
+	}
+
+	if !cs.checkVoteRule(block) {
+		return errors.New("check vote rule failed")
+	}
+
 	// xufeisoflyishere
+	cs.blockExec.ValidateBlock(cs.state, block)
+
+	// accept block
+	cs.blockchain.Store(block)
+
+	if b := cs.getBlockToCommit(block); b != nil {
+		// xufeisoflyishere
+		cs.commit(b)
+	}
 
 	// has vote
 	if cs.lastVoteView >= msg.Proposal.Block.View {
 		return errors.New("invalid proposal view")
 	}
-	// verify leader
-	if !cs.verifyLeader(msg.Proposal.Block.ProposerAddress) {
-		return errors.New("verify leader failed")
-	}
-	// verify tc
-	if msg.Proposal.TimeoutCert != nil {
-		if !cs.verifyTC(msg.Proposal.TimeoutCert) {
-			return errors.New("verify timeout cert failed")
-		}
-
-		// advance view
-		// xufeisoflyishere
-	}
-
-	// verify qc
-
-	// verify block
 
 	// tx accept
 
@@ -166,20 +174,54 @@ func (cs *Consensus) HandleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 	return nil
 }
 
-func (cs *Consensus) verifyLeader(addr types.Address) bool {
-	leader := cs.leaderElect.GetLeader()
-	if leader == nil {
-		return false
+func (cs *Consensus) checkVoteRule(block *types.Block) bool {
+	qcBlock := cs.blockchain.QuorumCertRef(block)
+	if qcBlock != nil && qcBlock.View > cs.blockchain.LatestLockedBlock().View {
+		return true
+	} else if cs.blockchain.Extends(block, cs.blockchain.LatestLockedBlock()) {
+		return true
+	}
+	return false
+}
+
+func (cs *Consensus) getBlockToCommit(block *types.Block) *types.Block {
+	block1 := cs.blockchain.QuorumCertRef(block)
+	if block1 == nil {
+		return nil
 	}
 
-	if !bytes.Equal(addr, leader.Address) {
-		expectLeader := cs.leaderElect.GetExpectedLeader()
-		if expectLeader == nil || !bytes.Equal(addr, expectLeader.Address) {
-			return false
-		}
+	block2 := cs.blockchain.QuorumCertRef(block1)
+	if block2 == nil {
+		return nil
 	}
 
-	return true
+	// update latest locked block
+	if block2.View > cs.blockchain.LatestLockedBlock().View {
+		cs.blockchain.SetLatestLockedBlock(block2)
+	}
+
+	block3 := cs.blockchain.QuorumCertRef(block2)
+	if block3 == nil {
+		return nil
+	}
+
+	if block2.HashesTo(block1.ParentHash()) && block3.HashesTo(block2.ParentHash()) {
+		return block3
+	}
+
+	return nil
+}
+
+func (cs *Consensus) commit(block *types.Block) {
+	return
+}
+
+func (cs *Consensus) verifyQC(qc *types.QuorumCert) bool {
+	if qc.View() <= cs.peerState.HighQC().View() {
+		return true
+	}
+
+	return cs.crypto.VerifyQuorumCert(*qc)
 }
 
 func (cs *Consensus) verifyTC(tc *types.TimeoutCert) bool {

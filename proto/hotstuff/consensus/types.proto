@@ -12,6 +12,10 @@ message ProposalMessage {
     hotstuff.types.HsProposal proposal = 1 [(gogoproto.nullable) = false];
 }
 
+message VoteMessage {
+    hotstuff.types.HsVote vote = 1 [(gogoproto.nullable) = false];
+}
+
 // NewRoundStep is sent for every step taken in the ConsensusState.
 // For every height/round/step transition
 message NewRoundStep {

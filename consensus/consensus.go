@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"runtime/debug"
+	"time"
 
 	cfg "github.com/xufeisofly/hotstuff/config"
 	tmevents "github.com/xufeisofly/hotstuff/libs/events"
@@ -35,7 +36,7 @@ type Consensus struct {
 	crypto Crypto
 
 	// store blocks and commits
-	blockchain Blockchain
+	blockchain Blockchain // 使用 Blockchain 作为存储，不要使用 tendermint 的 BlockStore，结构不同
 
 	// create and execute blocks
 	blockExec *sm.BlockExecutor
@@ -43,7 +44,7 @@ type Consensus struct {
 	// epoch info
 	epochInfo *epochInfo
 
-	// pacemaker Pacemaker
+	pacemaker   Pacemaker
 	leaderElect LeaderElect
 
 	lastVoteView types.View
@@ -149,7 +150,6 @@ func (cs *Consensus) HandleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 		return errors.New("check vote rule failed")
 	}
 
-	// xufeisoflyishere
 	cs.blockExec.ValidateBlock(cs.state, block)
 
 	// accept block
@@ -160,16 +160,33 @@ func (cs *Consensus) HandleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 		cs.commit(b)
 	}
 
+	cs.pacemaker.AdvanceView(NewSyncInfo().WithQC(*block.QuorumCert))
+
 	// has vote
-	if cs.lastVoteView >= msg.Proposal.Block.View {
-		return errors.New("invalid proposal view")
+	if cs.lastVoteView >= block.View {
+		cs.Logger.Info("block view too old", "view", block.View)
+		return fmt.Errorf("invalid proposal view: %v", block.View)
 	}
 
-	// tx accept
-
-	// chain store
-
 	// vote
+	sig, err := cs.crypto.Sign(block.Hash())
+	if err != nil {
+		cs.Logger.Error("failed to sign block", "view", block.View, "err", err)
+		return err
+	}
+
+	cs.StopVoting(block.View)
+
+	cs.evsw.FireEvent(types.EventVote, &VoteMessage{
+		Vote: &types.HsVote{
+			View:             block.View,
+			BlockID:          block.ID(),
+			ValidatorAddress: cs.epochInfo.LocalAddress(),
+			EpochView:        cs.epochInfo.EpochView(),
+			Timestamp:        time.Now(),
+			Signature:        sig,
+		},
+	})
 
 	return nil
 }
@@ -213,7 +230,37 @@ func (cs *Consensus) getBlockToCommit(block *types.Block) *types.Block {
 }
 
 func (cs *Consensus) commit(block *types.Block) {
+	err := cs.commitInner(block)
+	if err != nil {
+		cs.Logger.Error("failed to commit", "error", err)
+		return
+	}
+
+	forkedBlocks, err := cs.blockchain.PruneTo(block.Hash())
+	if err != nil {
+		cs.Logger.Error("prune failed", "blockHash", block.Hash(), "err", err)
+		return
+	}
+	// TODO return txs of forkedBlocks to mempool
+	cs.Logger.Debug("forkedBlocks", "blocks size", len(forkedBlocks))
 	return
+}
+
+func (cs *Consensus) commitInner(block *types.Block) error {
+	if cs.blockchain.LatestCommittedBlock().View >= block.View {
+		return nil
+	}
+	if parent := cs.blockchain.ParentRef(block); parent != nil {
+		err := cs.commitInner(parent)
+		if err != nil {
+			return err
+		}
+	} else {
+		return fmt.Errorf("failed to locate block: %s", block.ParentHash())
+	}
+	cs.Logger.Debug("committing block", "block", block)
+	_, _, err := cs.blockExec.ApplyBlock(cs.state.Copy(), block.ID(), block)
+	return err
 }
 
 func (cs *Consensus) verifyQC(qc *types.QuorumCert) bool {
@@ -277,7 +324,7 @@ func (cs *Consensus) handleMsg(mi msgInfo) {
 
 	switch msg := msg.(type) {
 	case *ProposalMessage:
-		cs.handleProposalMsg(msg, peerID)
+		cs.HandleProposalMessage(msg, peerID)
 	case *VoteMessage:
 		cs.handleVoteMsg(msg, peerID)
 	default:

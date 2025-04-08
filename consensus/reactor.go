@@ -62,7 +62,7 @@ func (conR *Reactor) OnStart() error {
 
 	// TODO Start stats goroutine
 	// TODO subscribe broadcast events
-	conR.subscribeToBroadcastEvents()
+	conR.subscribeEvents()
 
 	if !conR.WaitSync() {
 		err := conR.cons.Start()
@@ -186,7 +186,7 @@ func (conR *Reactor) WaitSync() bool {
 // subscribeToBroadcastEvents subscribes for new round steps and votes
 // using internal pubsub defined on state to broadcast
 // them to peers upon receiving.
-func (conR *Reactor) subscribeToBroadcastEvents() {
+func (conR *Reactor) subscribeEvents() {
 	const subscriber = "consensus-reactor"
 	if err := conR.cons.evsw.AddListenerForEvent(subscriber, types.EventPropose,
 		func(data tmevents.EventData) {
@@ -211,22 +211,24 @@ func (conR *Reactor) unsubscribeFromBroadcastEvents() {
 func (conR *Reactor) broadcastProposalMessage(proposalMsg *ProposalMessage) {
 	// TODO actual block data should not use broadcast but gossip
 	// otherwise it will spend too much bandwidth
-	proMsg := &tmcons.ProposalMessage{
-		Proposal: *proposalMsg.Proposal.ToProto(),
-	}
 	conR.Switch.BroadcastEnvelope(p2p.Envelope{
 		ChannelID: DataChannel,
-		Message:   proMsg,
+		Message: &tmcons.ProposalMessage{
+			Proposal: *proposalMsg.Proposal.ToProto(),
+		},
 	})
 }
 
 func (conR *Reactor) sendVoteMessage(voteMsg *VoteMessage) {
 	// TODO get the next proposer
-	nextProposer := conR.Switch.Peers().List()[0]
+	nextProposer := conR.getValidatorPeer(*conR.cons.leaderElect.GetLeader(voteMsg.Vote.View))
 	logger := conR.Logger.With("peer", nextProposer)
 
 	p2p.SendEnvelopeShim(nextProposer, p2p.Envelope{
 		ChannelID: DataChannel,
+		Message: &tmcons.VoteMessage{
+			Vote: *voteMsg.Vote.ToProto(),
+		},
 	}, logger)
 }
 
@@ -398,7 +400,7 @@ func (m *ProposalMessage) String() string {
 
 // VoteMessage is sent when voting for a proposal (or lack thereof).
 type VoteMessage struct {
-	Vote *types.Vote
+	Vote *types.HsVote
 }
 
 // ValidateBasic performs basic validation.

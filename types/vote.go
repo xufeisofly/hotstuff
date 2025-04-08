@@ -249,12 +249,12 @@ func VoteFromProto(pv *tmproto.Vote) (*Vote, error) {
 
 // HsVote message for hotstuff
 type HsVote struct {
-	View             View            `json:"view"`
-	BlockID          BlockID         `json:"block_id"`
-	ValidatorAddress Address         `json:"validator_address"`
-	EpochView        View            `json:"epoch_view"`
-	Timestamp        time.Time       `json:"timestamp"`
-	Signature        QuorumSignature `json:"signature"`
+	View             View                   `json:"view"`
+	BlockID          BlockID                `json:"block_id"`
+	ValidatorAddress Address                `json:"validator_address"`
+	EpochView        View                   `json:"epoch_view"`
+	Timestamp        time.Time              `json:"timestamp"`
+	Signature        crypto.QuorumSignature `json:"signature"`
 }
 
 func (vote *HsVote) String() string {
@@ -331,13 +331,18 @@ func HsVoteFromProto(pv *tmproto.HsVote) (*HsVote, error) {
 		return nil, err
 	}
 
+	sig, err := bls.AggregateSignatureFromBytes(pv.Signature)
+	if err != nil {
+		return nil, err
+	}
+
 	vote := &HsVote{
 		View:             pv.View,
 		BlockID:          *blockID,
 		EpochView:        pv.EpochView,
 		Timestamp:        pv.Time,
 		ValidatorAddress: pv.ValidatorAddress,
-		Signature:        bls.AggregateSignatureFromBytes(pv.Signature),
+		Signature:        sig,
 	}
 
 	return vote, vote.ValidateBasic()

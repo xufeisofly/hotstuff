@@ -133,7 +133,7 @@ func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, erro
 	), nil
 }
 
-func (cs *Consensus) HandleProposalMessage(msg *ProposalMessage, peerID p2p.ID) error {
+func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) error {
 	block := msg.Proposal.Block
 	if !cs.verifyQC(block.QuorumCert) {
 		return errors.New("verify quorum cert failed")
@@ -280,7 +280,7 @@ func (cs *Consensus) verifyTC(tc *types.TimeoutCert) bool {
 	return cs.crypto.VerifyTimeoutCert(*tc)
 }
 
-func (cs *Consensus) handleVoteMsg(msg *VoteMessage, peerID p2p.ID) {
+func (cs *Consensus) handleVoteMessage(msg *VoteMessage, peerID p2p.ID) {
 }
 
 func (cs *Consensus) receiveRoutine() {
@@ -308,7 +308,7 @@ func (cs *Consensus) receiveRoutine() {
 
 		select {
 		case mi = <-cs.msgQueue:
-			cs.handleMsg(mi)
+			cs.handleMessage(mi)
 		case <-cs.Quit():
 			onExit(cs)
 			return
@@ -316,7 +316,7 @@ func (cs *Consensus) receiveRoutine() {
 	}
 }
 
-func (cs *Consensus) handleMsg(mi msgInfo) {
+func (cs *Consensus) handleMessage(mi msgInfo) {
 	cs.mtx.Lock()
 	defer cs.mtx.Unlock()
 
@@ -324,9 +324,9 @@ func (cs *Consensus) handleMsg(mi msgInfo) {
 
 	switch msg := msg.(type) {
 	case *ProposalMessage:
-		cs.HandleProposalMessage(msg, peerID)
+		cs.handleProposalMessage(msg, peerID)
 	case *VoteMessage:
-		cs.handleVoteMsg(msg, peerID)
+		cs.handleVoteMessage(msg, peerID)
 	default:
 		cs.Logger.Error("unknown msg type", "type", fmt.Sprintf("%T", msg))
 	}

@@ -117,6 +117,14 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 	p.peerState.UpdateCurView(newView)
 	p.duration.ViewStarted()
 	p.startTimer()
+
+	if bytes.Equal(
+		p.leaderElect.GetLeader(newView).Address,
+		p.peerState.epochInfo.LocalAddress()) {
+		p.consensus.Propose(&si)
+	} else {
+		p.broadcastNewViewMessage(&NewViewMessage{si: &si})
+	}
 }
 
 func (p *pacemaker) OnStart() error {
@@ -186,14 +194,6 @@ func (p *pacemaker) HandleTimeoutMessage(timeoutMsg *TimeoutMessage) error {
 	tc := types.NewTimeoutCert(aggSig, curView)
 	si = si.WithTC(tc)
 	p.AdvanceView(si)
-
-	if bytes.Equal(
-		p.leaderElect.GetLeader(curView).Address,
-		p.peerState.epochInfo.LocalAddress()) {
-		p.consensus.Propose(&si)
-	} else {
-		p.broadcastNewViewMessage(&NewViewMessage{si: &si})
-	}
 	return nil
 }
 

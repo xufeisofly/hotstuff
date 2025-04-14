@@ -302,8 +302,7 @@ func (cs *Consensus) handleVoteMessage(msg *VoteMessage, peerID p2p.ID) {
 
 	qc := types.NewQuorumCert(aggSig, block.View, block.ID())
 	si := NewSyncInfo().WithQC(qc)
-	cs.pacemaker.AdvanceView(si)
-	cs.Propose(&si)
+	cs.evsw.FireEvent(types.EventNewView, &NewViewMessage{si: &si})
 }
 
 func (cs *Consensus) receiveRoutine() {

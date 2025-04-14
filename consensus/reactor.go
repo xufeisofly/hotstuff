@@ -201,6 +201,15 @@ func (conR *Reactor) subscribeEvents() {
 		}); err != nil {
 		conR.Logger.Error("Error adding listener for events", "err", err)
 	}
+
+	if err := conR.cons.evsw.AddListenerForEvent(subscriber, types.EventNewView,
+		func(data tmevents.EventData) {
+			conR.broadcastNewViewMessage(data.(*NewViewMessage))
+		}); err != nil {
+		conR.Logger.Error("Error adding listener for events", "err", err)
+	}
+
+	// TODO EventTimeout
 }
 
 func (conR *Reactor) unsubscribeFromBroadcastEvents() {
@@ -231,6 +240,15 @@ func (conR *Reactor) sendVoteMessage(voteMsg *VoteMessage) {
 			Vote: *voteMsg.Vote.ToProto(),
 		},
 	}, logger)
+}
+
+func (conR *Reactor) broadcastNewViewMessage(newViewMsg *NewViewMessage) {
+	conR.Switch.BroadcastEnvelope(p2p.Envelope{
+		ChannelID: DataChannel,
+		Message: &tmcons.NewViewMessage{
+			SyncInfo: newViewMsg.si.ToProto(), // xufeisoflyishere
+		},
+	})
 }
 
 func (conR *Reactor) String() string {

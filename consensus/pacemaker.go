@@ -5,7 +5,6 @@ import (
 	"time"
 
 	tcrypto "github.com/xufeisofly/hotstuff/crypto"
-	tmevents "github.com/xufeisofly/hotstuff/libs/events"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	"github.com/xufeisofly/hotstuff/libs/math"
 	"github.com/xufeisofly/hotstuff/libs/service"
@@ -51,7 +50,6 @@ type pacemaker struct {
 	leaderElect LeaderElect
 	duration    ViewDuration
 
-	evsw  tmevents.EventSwitch
 	timer oneShotTimer
 
 	lastTimeout *TimeoutMessage
@@ -123,7 +121,7 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 		p.peerState.epochInfo.LocalAddress()) {
 		p.consensus.Propose(&si)
 	} else {
-		p.broadcastNewViewMessage(&NewViewMessage{si: &si})
+		p.consensus.evsw.FireEvent(types.EventNewView, &NewViewMessage{si: &si})
 	}
 }
 
@@ -143,7 +141,8 @@ func (p *pacemaker) OnLocalTimeout() error {
 
 	view := p.peerState.CurView()
 	if p.lastTimeout != nil && p.lastTimeout.View == view {
-		return p.broadcastTimeoutMessage(p.lastTimeout)
+		p.consensus.evsw.FireEvent(types.EventViewTimeout, p.lastTimeout)
+		return nil
 	}
 
 	p.Logger.Debug("OnLocalTimeout", "view", view)
@@ -166,7 +165,7 @@ func (p *pacemaker) OnLocalTimeout() error {
 
 	p.lastTimeout = timeoutMsg
 	p.consensus.StopVoting(view)
-	p.broadcastTimeoutMessage(timeoutMsg)
+	p.consensus.evsw.FireEvent(types.EventViewTimeout, timeoutMsg)
 	p.HandleTimeoutMessage(timeoutMsg)
 
 	return nil
@@ -203,16 +202,6 @@ func (p *pacemaker) startTimer() {
 		// trigger OnLocalTimeout
 		p.OnLocalTimeout()
 	})}
-}
-
-func (p *pacemaker) broadcastTimeoutMessage(msg *TimeoutMessage) error {
-	p.evsw.FireEvent(types.EventViewTimeout, msg)
-	return nil
-}
-
-func (p *pacemaker) broadcastNewViewMessage(msg *NewViewMessage) error {
-	p.evsw.FireEvent(types.EventNewView, msg)
-	return nil
 }
 
 func (p *pacemaker) stopTimer() {

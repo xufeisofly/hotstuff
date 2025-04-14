@@ -28,3 +28,9 @@ message HsVote {
     bytes signature = 6;
 }
 
+message SyncInfo {
+    hotstuff.types.QuorumCert qc = 1;
+    hotstuff.types.TimeoutCert tc = 2;
+    hotstuff.types.AggregateQC agg_qc = 3;
+}
+

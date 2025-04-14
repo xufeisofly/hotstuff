@@ -153,7 +153,7 @@ func (conR *Reactor) ReceiveEnvelope(e p2p.Envelope) {
 			return
 		}
 		switch msg := msg.(type) {
-		case *ProposalMessage:
+		case *ProposalMessage, *VoteMessage:
 			conR.cons.sendMsg(msgInfo{msg, e.Src.ID()})
 		}
 	}
@@ -211,6 +211,7 @@ func (conR *Reactor) unsubscribeFromBroadcastEvents() {
 func (conR *Reactor) broadcastProposalMessage(proposalMsg *ProposalMessage) {
 	// TODO actual block data should not use broadcast but gossip
 	// otherwise it will spend too much bandwidth
+
 	conR.Switch.BroadcastEnvelope(p2p.Envelope{
 		ChannelID: DataChannel,
 		Message: &tmcons.ProposalMessage{

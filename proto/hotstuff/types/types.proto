@@ -98,6 +98,10 @@ message TimeoutCert {
     int64 view = 2;
 }
 
+message AggregateQC {
+    // TODO
+}
+
 // Data contains the set of transactions included in the block
 message Data {
   // Txs that will be applied by state @ block.Height+1.

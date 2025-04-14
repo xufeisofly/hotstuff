@@ -16,6 +16,20 @@ message VoteMessage {
     hotstuff.types.HsVote vote = 1 [(gogoproto.nullable) = false];
 }
 
+message TimeoutMessage {
+    bytes sender = 1;
+    int64 view = 2;
+    bytes view_hash = 3;
+    int64 epoch_view = 4;
+    hotstuff.types.QuorumCert high_qc = 5;
+    bytes view_signature = 6;
+    bytes high_qc_signature = 7;
+}
+
+message NewViewMessage {
+    hotstuff.types.SyncInfo sync_info = 1 [(gogoproto.nullable) = false];
+}
+
 // NewRoundStep is sent for every step taken in the ConsensusState.
 // For every height/round/step transition
 message NewRoundStep {

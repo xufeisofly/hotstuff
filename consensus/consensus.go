@@ -281,6 +281,29 @@ func (cs *Consensus) verifyTC(tc *types.TimeoutCert) bool {
 }
 
 func (cs *Consensus) handleVoteMessage(msg *VoteMessage, peerID p2p.ID) {
+	blockHash := msg.Vote.BlockID.Hash
+	block := cs.blockchain.Get(blockHash)
+	if block == nil {
+		// TODO synchronizing block from neighbor node
+		return
+	}
+
+	if block.View <= cs.peerState.HighQC().View() {
+		return
+	}
+
+	aggSig, ok := cs.crypto.CollectPartialSignature(
+		block.View,
+		blockHash,
+		msg.Vote.Signature)
+	if !ok || !aggSig.IsValid() {
+		return
+	}
+
+	qc := types.NewQuorumCert(aggSig, block.View, block.ID())
+	si := NewSyncInfo().WithQC(qc)
+	cs.pacemaker.AdvanceView(si)
+	cs.Propose(&si)
 }
 
 func (cs *Consensus) receiveRoutine() {

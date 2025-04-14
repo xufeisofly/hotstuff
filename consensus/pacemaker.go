@@ -188,7 +188,7 @@ func (p *pacemaker) HandleTimeoutMessage(timeoutMsg *TimeoutMessage) error {
 	p.AdvanceView(si)
 
 	if bytes.Equal(
-		p.leaderElect.GetLeader().Address,
+		p.leaderElect.GetLeader(curView).Address,
 		p.peerState.epochInfo.LocalAddress()) {
 		p.consensus.Propose(&si)
 	} else {

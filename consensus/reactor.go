@@ -246,7 +246,7 @@ func (conR *Reactor) broadcastNewViewMessage(newViewMsg *NewViewMessage) {
 	conR.Switch.BroadcastEnvelope(p2p.Envelope{
 		ChannelID: DataChannel,
 		Message: &tmcons.NewViewMessage{
-			SyncInfo: newViewMsg.si.ToProto(), // xufeisoflyishere
+			SyncInfo: *newViewMsg.si.ToProto(),
 		},
 	})
 }

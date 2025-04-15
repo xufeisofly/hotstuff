@@ -1,6 +1,9 @@
 package consensus
 
-import "github.com/xufeisofly/hotstuff/types"
+import (
+	typesproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
+	"github.com/xufeisofly/hotstuff/types"
+)
 
 // SyncInfo holds the highest known QC or TC.
 // Generally, if highQC.View > highTC.View, there is no need to include highTC in the SyncInfo.
@@ -48,4 +51,8 @@ func (si SyncInfo) TC() *types.TimeoutCert {
 
 func (si SyncInfo) AggQC() *types.AggregateQC {
 	return si.aggQC
+}
+
+func (si SyncInfo) ToProto() *typesproto.SyncInfo {
+	return nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/xufeisofly/hotstuff/libs/log"
 	"github.com/xufeisofly/hotstuff/libs/math"
 	"github.com/xufeisofly/hotstuff/libs/service"
+	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"
 	"github.com/xufeisofly/hotstuff/types"
 )
 
@@ -36,6 +37,18 @@ type TimeoutMessage struct {
 	ViewSignature tcrypto.QuorumSignature
 	// signature of high qc
 	HighQCSignature tcrypto.QuorumSignature
+}
+
+func (tmsg *TimeoutMessage) ToProto() *tmcons.TimeoutMessage {
+	return &tmcons.TimeoutMessage{
+		Sender:          tmsg.Sender,
+		View:            tmsg.View,
+		ViewHash:        tmsg.ViewHash,
+		EpochView:       tmsg.EpochView,
+		HighQc:          tmsg.HighQC.ToProto(),
+		ViewSignature:   tmsg.ViewSignature.ToBytes(),
+		HighQcSignature: tmsg.HighQCSignature.ToBytes(),
+	}
 }
 
 type NewViewMessage struct {

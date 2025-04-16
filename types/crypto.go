@@ -40,6 +40,15 @@ func (qc QuorumCert) String() string {
 	return fmt.Sprintf("QC{ hash: %.6s, Addrs: [ %s] }", qc.blockID.Hash, &sb)
 }
 
+func (qc QuorumCert) ToProto() *typesproto.QuorumCert {
+	id := qc.BlockID()
+	return &typesproto.QuorumCert{
+		Signature: qc.Signature().ToBytes(),
+		View:      qc.View(),
+		BlockID:   id.ToProto(),
+	}
+}
+
 // AggregateQC is a set of QCs extracted from timeout messages
 // and an aggregate signature of the timeout signatures.
 // This is used by the Fast-HotStuff consensus protocol.

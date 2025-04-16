@@ -209,7 +209,12 @@ func (conR *Reactor) subscribeEvents() {
 		conR.Logger.Error("Error adding listener for events", "err", err)
 	}
 
-	// TODO EventTimeout
+	if err := conR.cons.evsw.AddListenerForEvent(subscriber, types.EventViewTimeout,
+		func(data tmevents.EventData) {
+			conR.broadcastTimeoutMessage(data.(*TimeoutMessage))
+		}); err != nil {
+		conR.Logger.Error("Error adding listener for events", "err", err)
+	}
 }
 
 func (conR *Reactor) unsubscribeFromBroadcastEvents() {
@@ -248,6 +253,13 @@ func (conR *Reactor) broadcastNewViewMessage(newViewMsg *NewViewMessage) {
 		Message: &tmcons.NewViewMessage{
 			SyncInfo: *newViewMsg.si.ToProto(),
 		},
+	})
+}
+
+func (conR *Reactor) broadcastTimeoutMessage(timeoutMsg *TimeoutMessage) {
+	conR.Switch.BroadcastEnvelope(p2p.Envelope{
+		ChannelID: DataChannel,
+		Message:   timeoutMsg.ToProto(),
 	})
 }
 

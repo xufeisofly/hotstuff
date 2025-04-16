@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/gogo/protobuf/proto"
+	tcrypto "github.com/xufeisofly/hotstuff/crypto"
 	tmevents "github.com/xufeisofly/hotstuff/libs/events"
 	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 	"github.com/xufeisofly/hotstuff/libs/log"
@@ -153,7 +154,7 @@ func (conR *Reactor) ReceiveEnvelope(e p2p.Envelope) {
 			return
 		}
 		switch msg := msg.(type) {
-		case *ProposalMessage, *VoteMessage:
+		case *ProposalMessage, *VoteMessage, *NewViewMessage, *TimeoutMessage:
 			conR.cons.sendMsg(msgInfo{msg, e.Src.ID()})
 		}
 	}
@@ -405,9 +406,11 @@ type Message interface {
 }
 
 func init() {
-	tmjson.RegisterType(&ProposalMessage{}, "tendermint/Proposal")
+	tmjson.RegisterType(&ProposalMessage{}, "hotstuff/Proposal")
 	// tmjson.RegisterType(&BlockPartMessage{}, "tendermint/BlockPart")
-	tmjson.RegisterType(&VoteMessage{}, "tendermint/Vote")
+	tmjson.RegisterType(&VoteMessage{}, "hotstuff/Vote")
+	tmjson.RegisterType(&NewViewMessage{}, "hotstuff/NewView")
+	tmjson.RegisterType(&TimeoutMessage{}, "hotstuff/ViewTimeout")
 }
 
 //-------------------------------------
@@ -442,4 +445,40 @@ func (m *VoteMessage) ValidateBasic() error {
 // String returns a string representation.
 func (m *VoteMessage) String() string {
 	return fmt.Sprintf("[Vote %v]", m.Vote)
+}
+
+type TimeoutMessage struct {
+	Sender    types.Address
+	View      types.View
+	ViewHash  types.Hash
+	EpochView types.View
+	HighQC    *types.QuorumCert
+	// signature of view hash
+	ViewSignature tcrypto.QuorumSignature
+	// signature of high qc
+	HighQCSignature tcrypto.QuorumSignature
+}
+
+func (tmsg *TimeoutMessage) ValidateBasic() error {
+	return nil
+}
+
+func (tmsg *TimeoutMessage) ToProto() *tmcons.TimeoutMessage {
+	return &tmcons.TimeoutMessage{
+		Sender:          tmsg.Sender,
+		View:            tmsg.View,
+		ViewHash:        tmsg.ViewHash,
+		EpochView:       tmsg.EpochView,
+		HighQc:          tmsg.HighQC.ToProto(),
+		ViewSignature:   tmsg.ViewSignature.ToBytes(),
+		HighQcSignature: tmsg.HighQCSignature.ToBytes(),
+	}
+}
+
+type NewViewMessage struct {
+	si *SyncInfo
+}
+
+func (nvmsg *NewViewMessage) ValidateBasic() error {
+	return nil
 }

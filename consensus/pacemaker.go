@@ -4,11 +4,9 @@ import (
 	"bytes"
 	"time"
 
-	tcrypto "github.com/xufeisofly/hotstuff/crypto"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	"github.com/xufeisofly/hotstuff/libs/math"
 	"github.com/xufeisofly/hotstuff/libs/service"
-	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"
 	"github.com/xufeisofly/hotstuff/types"
 )
 
@@ -25,34 +23,6 @@ type oneShotTimer struct {
 
 func (t oneShotTimer) Stop() bool {
 	return t.timerDoNotUse.Stop()
-}
-
-type TimeoutMessage struct {
-	Sender    types.Address
-	View      types.View
-	ViewHash  types.Hash
-	EpochView types.View
-	HighQC    *types.QuorumCert
-	// signature of view hash
-	ViewSignature tcrypto.QuorumSignature
-	// signature of high qc
-	HighQCSignature tcrypto.QuorumSignature
-}
-
-func (tmsg *TimeoutMessage) ToProto() *tmcons.TimeoutMessage {
-	return &tmcons.TimeoutMessage{
-		Sender:          tmsg.Sender,
-		View:            tmsg.View,
-		ViewHash:        tmsg.ViewHash,
-		EpochView:       tmsg.EpochView,
-		HighQc:          tmsg.HighQC.ToProto(),
-		ViewSignature:   tmsg.ViewSignature.ToBytes(),
-		HighQcSignature: tmsg.HighQCSignature.ToBytes(),
-	}
-}
-
-type NewViewMessage struct {
-	si *SyncInfo
 }
 
 type pacemaker struct {

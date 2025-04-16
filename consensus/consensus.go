@@ -349,6 +349,10 @@ func (cs *Consensus) handleMessage(mi msgInfo) {
 		cs.handleProposalMessage(msg, peerID)
 	case *VoteMessage:
 		cs.handleVoteMessage(msg, peerID)
+	case *NewViewMessage:
+		cs.pacemaker.HandleNewViewMessage(msg)
+	case *TimeoutMessage:
+		cs.pacemaker.HandleTimeoutMessage(msg)
 	default:
 		cs.Logger.Error("unknown msg type", "type", fmt.Sprintf("%T", msg))
 	}

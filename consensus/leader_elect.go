@@ -1,28 +1,30 @@
 package consensus
 
 import (
-	"bytes"
-	"crypto/sha256"
-	"encoding/binary"
+	"math/rand"
+	"sort"
 
+	wr "github.com/mroth/weightedrand"
+	tcrypto "github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/libs/log"
 	"github.com/xufeisofly/hotstuff/types"
 )
 
 type LeaderElect interface {
 	GetLeader(types.View) *types.Validator
-	GetExpectedLeader() *types.Validator
-	SetExpectedLeader() *types.Validator
 }
 
 type leaderElect struct {
 	blockchain Blockchain
 	epochInfo  *epochInfo
+	logger     log.Logger
 }
 
-func NewLeaderElect(blockchain Blockchain, epochInfo *epochInfo) LeaderElect {
+func NewLeaderElect(blockchain Blockchain, epochInfo *epochInfo, l log.Logger) LeaderElect {
 	return &leaderElect{
 		blockchain: blockchain,
 		epochInfo:  epochInfo,
+		logger:     l,
 	}
 }
 
@@ -33,15 +35,29 @@ func (l *leaderElect) GetLeader(view types.View) *types.Validator {
 		qc = *committedBlock.SelfCommit.CommitQC
 	}
 
-	var buf bytes.Buffer
-	buf.Write(qc.Signature().ToBytes())
-	hash := sha256.Sum256(buf.Bytes())
+	voters := qc.Signature().Participants()
+	weights := make([]wr.Choice, 0, len(voters))
 
-	var result int
-	buf2 := bytes.NewReader(hash[:])
-	binary.Read(buf2, binary.BigEndian, &result)
+	voters.ForEach(func(addr tcrypto.Address) {
+		weights = append(weights, wr.Choice{
+			Item:   addr.String(),
+			Weight: 1,
+		})
+	})
 
-	leaderIdx := result % len(l.epochInfo.Validators().Validators)
-	_, val := l.epochInfo.Validators().GetByIndex(int32(leaderIdx))
+	sort.Slice(weights, func(i, j int) bool {
+		return weights[i].Item.(string)[0] > weights[j].Item.(string)[0]
+	})
+
+	chooser, err := wr.NewChooser(weights...)
+	if err != nil {
+		l.logger.Error("weightedrand failed", "err", err)
+	}
+
+	seed := int64(view)
+	rnd := rand.New(rand.NewSource(seed))
+
+	leaderAddrStr := chooser.PickSource(rnd).(string)
+	_, val := l.epochInfo.Validators().Copy().GetByAddress([]byte(leaderAddrStr))
 	return val
 }

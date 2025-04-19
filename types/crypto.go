@@ -49,6 +49,9 @@ func (qc QuorumCert) ToProto() *typesproto.QuorumCert {
 	}
 }
 
+var GenesisBlockID = BlockID{}
+var QuorumCertForGenesis = NewQuorumCert(nil, GenesisView, GenesisBlockID)
+
 // AggregateQC is a set of QCs extracted from timeout messages
 // and an aggregate signature of the timeout signatures.
 // This is used by the Fast-HotStuff consensus protocol.

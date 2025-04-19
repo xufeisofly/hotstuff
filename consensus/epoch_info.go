@@ -15,12 +15,18 @@ type epochInfo struct {
 	quorumVotingPower int64
 }
 
-func NewEpochInfo(validators *types.ValidatorSet) *epochInfo {
+func NewEpochInfo(
+	view types.View,
+	validators *types.ValidatorSet,
+	privPubKey tmcrypto.PubKey,
+) *epochInfo {
 	total := validators.Size()
 	return &epochInfo{
-		validators:        validators,
-		totalVotingPower:  int64(total),
-		quorumVotingPower: int64(total*2/3 + 1),
+		view:                view,
+		validators:          validators,
+		totalVotingPower:    int64(total),
+		quorumVotingPower:   int64(total*2/3 + 1),
+		privValidatorPubKey: privPubKey,
 	}
 }
 

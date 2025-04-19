@@ -62,7 +62,6 @@ func (conR *Reactor) OnStart() error {
 	conR.Logger.Info("Reactor ", "waitSync", conR.WaitSync())
 
 	// TODO Start stats goroutine
-	// TODO subscribe broadcast events
 	conR.subscribeEvents()
 
 	if !conR.WaitSync() {
@@ -76,7 +75,7 @@ func (conR *Reactor) OnStart() error {
 }
 
 func (conR *Reactor) OnStop() {
-	// TODO unsubscribe broadcast events
+	conR.unsubscribeEvents()
 	if err := conR.cons.Stop(); err != nil {
 		conR.Logger.Error("Error stopping consensus state", "err", err)
 	}
@@ -91,10 +90,22 @@ func (conR *Reactor) SwitchToConsensus(state sm.State, skipWAL bool) {
 }
 
 func (conR *Reactor) GetChannels() []*p2p.ChannelDescriptor {
-	return []*p2p.ChannelDescriptor{}
+	return []*p2p.ChannelDescriptor{
+		{
+			ID:                  DataChannel,
+			Priority:            10,
+			SendQueueCapacity:   100,
+			RecvBufferCapacity:  50 * 4096,
+			RecvMessageCapacity: maxMsgSize,
+			MessageType:         &tmcons.Message{},
+		},
+	}
 }
 
 func (conR *Reactor) InitPeer(peer p2p.Peer) p2p.Peer {
+	// xufeisoflyishere
+	peerState := NewPeerState(peer).SetLogger(conR.Logger)
+	peer.Set(types.PeerStateKey, peerState)
 	return peer
 }
 
@@ -218,7 +229,7 @@ func (conR *Reactor) subscribeEvents() {
 	}
 }
 
-func (conR *Reactor) unsubscribeFromBroadcastEvents() {
+func (conR *Reactor) unsubscribeEvents() {
 	const subscriber = "consensus-reactor"
 	conR.cons.evsw.RemoveListener(subscriber)
 }
@@ -305,10 +316,9 @@ type PeerState struct {
 
 	mtx sync.Mutex // NOTE: Modify below using setters, never directly.
 
-	highQC    *types.QuorumCert
-	highTC    *types.TimeoutCert
-	curView   types.View
-	epochInfo *epochInfo
+	highQC  *types.QuorumCert
+	highTC  *types.TimeoutCert
+	curView types.View
 
 	Stats *peerStateStats `json:"stats"` // Exposed.
 }
@@ -326,10 +336,14 @@ func (pss peerStateStats) String() string {
 
 // NewPeerState returns a new PeerState for the given Peer
 func NewPeerState(peer p2p.Peer) *PeerState {
+	genesisTC := types.NewTimeoutCert(nil, types.ViewBeforeGenesis)
 	return &PeerState{
-		peer:   peer,
-		logger: log.NewNopLogger(),
-		Stats:  &peerStateStats{},
+		peer:    peer,
+		logger:  log.NewNopLogger(),
+		highQC:  &types.QuorumCertForGenesis,
+		highTC:  &genesisTC,
+		curView: types.GenesisView,
+		Stats:   &peerStateStats{},
 	}
 }
 
@@ -366,10 +380,6 @@ func (ps *PeerState) CurView() types.View {
 
 func (ps *PeerState) UpdateCurView(v types.View) {
 	ps.curView = v
-}
-
-func (ps *PeerState) CurEpochView() types.View {
-	return ps.epochInfo.EpochView()
 }
 
 // ToJSON returns a json of PeerState.

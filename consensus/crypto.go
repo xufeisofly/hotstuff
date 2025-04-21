@@ -117,7 +117,7 @@ func (c *crypto) VerifyQuorumCert(qc types.QuorumCert) bool {
 	if qc.Signature().Participants().Len() < int(c.epochInfo.QuorumVotingPower()) {
 		return false
 	}
-	return c.Verify(qc.Signature(), qc.BlockHash())
+	return c.Verify(qc.Signature(), qc.BlockID().Hash)
 }
 
 func (c *crypto) VerifyTimeoutCert(tc types.TimeoutCert) bool {

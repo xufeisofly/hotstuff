@@ -41,9 +41,6 @@ type Consensus struct {
 	// create and execute blocks
 	blockExec *sm.BlockExecutor
 
-	// epoch info
-	epochInfo *epochInfo
-
 	pacemaker   Pacemaker
 	leaderElect LeaderElect
 
@@ -126,7 +123,7 @@ func (cs *Consensus) Propose(syncInfo *SyncInfo) error {
 }
 
 func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, error) {
-	proposerAddr := cs.epochInfo.LocalAddress()
+	proposerAddr := cs.peerState.LocalAddress()
 
 	block, _ := cs.blockExec.HsCreateProposalBlock(cs.peerState.CurView(), cs.state, cs.peerState.HighQC(), proposerAddr)
 
@@ -160,7 +157,6 @@ func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 	cs.blockchain.Store(block)
 
 	if b := cs.getBlockToCommit(block); b != nil {
-		// xufeisoflyishere
 		cs.commit(b)
 	}
 
@@ -185,8 +181,8 @@ func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 		Vote: &types.HsVote{
 			View:             block.View,
 			BlockID:          block.ID(),
-			ValidatorAddress: cs.epochInfo.LocalAddress(),
-			EpochView:        cs.epochInfo.EpochView(),
+			ValidatorAddress: cs.peerState.LocalAddress(),
+			EpochView:        cs.peerState.CurEpochView(),
 			Timestamp:        time.Now(),
 			Signature:        sig,
 		},

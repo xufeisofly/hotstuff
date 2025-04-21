@@ -7,6 +7,7 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	tcrypto "github.com/xufeisofly/hotstuff/crypto"
+	tmcrypto "github.com/xufeisofly/hotstuff/crypto"
 	tmevents "github.com/xufeisofly/hotstuff/libs/events"
 	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 	"github.com/xufeisofly/hotstuff/libs/log"
@@ -316,9 +317,11 @@ type PeerState struct {
 
 	mtx sync.Mutex // NOTE: Modify below using setters, never directly.
 
-	highQC  *types.QuorumCert
-	highTC  *types.TimeoutCert
-	curView types.View
+	highQC              *types.QuorumCert
+	highTC              *types.TimeoutCert
+	curView             types.View
+	privValidatorPubKey tmcrypto.PubKey
+	epochInfo           epochInfo
 
 	Stats *peerStateStats `json:"stats"` // Exposed.
 }
@@ -335,15 +338,16 @@ func (pss peerStateStats) String() string {
 }
 
 // NewPeerState returns a new PeerState for the given Peer
-func NewPeerState(peer p2p.Peer) *PeerState {
+func NewPeerState(peer p2p.Peer, privPubKey tmcrypto.PubKey) *PeerState {
 	genesisTC := types.NewTimeoutCert(nil, types.ViewBeforeGenesis)
 	return &PeerState{
-		peer:    peer,
-		logger:  log.NewNopLogger(),
-		highQC:  &types.QuorumCertForGenesis,
-		highTC:  &genesisTC,
-		curView: types.GenesisView,
-		Stats:   &peerStateStats{},
+		peer:                peer,
+		logger:              log.NewNopLogger(),
+		highQC:              &types.QuorumCertForGenesis,
+		highTC:              &genesisTC,
+		curView:             types.GenesisView,
+		privValidatorPubKey: privPubKey,
+		Stats:               &peerStateStats{},
 	}
 }
 
@@ -352,6 +356,15 @@ func NewPeerState(peer p2p.Peer) *PeerState {
 func (ps *PeerState) SetLogger(logger log.Logger) *PeerState {
 	ps.logger = logger
 	return ps
+}
+
+func (ps *PeerState) SetEpochInfo(epochInfo epochInfo) *PeerState {
+	ps.epochInfo = epochInfo
+	return ps
+}
+
+func (ps *PeerState) LocalAddress() tmcrypto.Address {
+	return ps.privValidatorPubKey.Address()
 }
 
 func (ps *PeerState) HighQC() *types.QuorumCert {
@@ -376,6 +389,10 @@ func (ps *PeerState) UpdateHighTC(tc *types.TimeoutCert) {
 
 func (ps *PeerState) CurView() types.View {
 	return ps.curView
+}
+
+func (ps *PeerState) CurEpochView() types.View {
+	return ps.epochInfo.EpochView()
 }
 
 func (ps *PeerState) UpdateCurView(v types.View) {

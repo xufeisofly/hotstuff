@@ -101,7 +101,7 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 
 	if bytes.Equal(
 		p.leaderElect.GetLeader(newView).Address,
-		p.peerState.epochInfo.LocalAddress()) {
+		p.peerState.LocalAddress()) {
 		p.consensus.Propose(&si)
 	} else {
 		p.consensus.evsw.FireEvent(types.EventNewView, &NewViewMessage{si: &si})
@@ -137,7 +137,7 @@ func (p *pacemaker) OnLocalTimeout() error {
 	}
 
 	timeoutMsg := &TimeoutMessage{
-		Sender:          p.peerState.epochInfo.LocalAddress(),
+		Sender:          p.peerState.LocalAddress(),
 		View:            view,
 		ViewHash:        viewHash,
 		EpochView:       p.peerState.CurEpochView(),

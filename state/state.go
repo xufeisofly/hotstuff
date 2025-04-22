@@ -54,8 +54,8 @@ type State struct {
 	InitialView   types.View
 
 	// LastBlockHeight=0 at genesis (ie. block(H=0) does not exist)
-	// unsuitable for hotstuff
-	LastBlockHeight int64
+	LastBlockHeight int64      // for tendermint
+	LastBlockView   types.View // for hotstuff
 	LastBlockID     types.BlockID
 	LastBlockTime   time.Time
 
@@ -65,10 +65,14 @@ type State struct {
 	// Note that if s.LastBlockHeight causes a valset change,
 	// we set s.LastHeightValidatorsChanged = s.LastBlockHeight + 1 + 1
 	// Extra +1 due to nextValSet delay.
+	// 对于 hotstuff 来说，LastValidators 用于验证上一个 View 生成的 block 的 QC
+	// Validators 用于当前 View 的 block 的 QC，他会预先在 NextValidators 中生成
+	// 如果 Validators 发生变化，会在 NextView 生效，本次 View 不受影响
 	NextValidators              *types.ValidatorSet
 	Validators                  *types.ValidatorSet
 	LastValidators              *types.ValidatorSet
-	LastHeightValidatorsChanged int64
+	LastHeightValidatorsChanged int64      // for tendermint
+	LastViewValidatorsChanged   types.View // for hotstuff
 
 	// Consensus parameters used for validating blocks.
 	// Changes returned by EndBlock and updated after Commit.

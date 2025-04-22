@@ -321,7 +321,6 @@ type PeerState struct {
 	highTC              *types.TimeoutCert
 	curView             types.View
 	privValidatorPubKey tmcrypto.PubKey
-	epochInfo           EpochInfo
 
 	Stats *peerStateStats `json:"stats"` // Exposed.
 }
@@ -358,11 +357,6 @@ func (ps *PeerState) SetLogger(logger log.Logger) *PeerState {
 	return ps
 }
 
-func (ps *PeerState) SetEpochInfo(epochInfo EpochInfo) *PeerState {
-	ps.epochInfo = epochInfo
-	return ps
-}
-
 func (ps *PeerState) LocalAddress() tmcrypto.Address {
 	return ps.privValidatorPubKey.Address()
 }
@@ -389,10 +383,6 @@ func (ps *PeerState) UpdateHighTC(tc *types.TimeoutCert) {
 
 func (ps *PeerState) CurView() types.View {
 	return ps.curView
-}
-
-func (ps *PeerState) CurEpochView() types.View {
-	return ps.epochInfo.EpochView()
 }
 
 func (ps *PeerState) UpdateCurView(v types.View) {

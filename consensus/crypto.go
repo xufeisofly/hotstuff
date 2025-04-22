@@ -5,6 +5,7 @@ import (
 
 	tcrypto "github.com/xufeisofly/hotstuff/crypto"
 	"github.com/xufeisofly/hotstuff/libs/log"
+	sm "github.com/xufeisofly/hotstuff/state"
 	"github.com/xufeisofly/hotstuff/types"
 )
 
@@ -32,8 +33,8 @@ type Crypto interface {
 type crypto struct {
 	CryptoBase
 
-	logger    log.Logger
-	epochInfo EpochInfo
+	logger log.Logger
+	state  sm.State
 	// partial signatures collection for one view
 	sigCollect *sigCollect
 }
@@ -44,10 +45,6 @@ func NewCrypto(cryptoBase CryptoBase) Crypto {
 	return &crypto{
 		CryptoBase: cryptoBase,
 	}
-}
-
-func (c *crypto) SetEpochInfo(e EpochInfo) {
-	c.epochInfo = e
 }
 
 func (c *crypto) SetLogger(l log.Logger) {
@@ -93,7 +90,8 @@ func (c *crypto) CollectPartialSignature(
 	item.addPartialSig(addr, partSig)
 
 	// return if valid voting power is not enough
-	if item.validVotingPower() < c.epochInfo.QuorumVotingPower() {
+
+	if item.validVotingPower() < c.state.HsValidators.QuorumVotingPower() {
 		return nil, false
 	}
 
@@ -114,7 +112,7 @@ func (c *crypto) CollectPartialSignature(
 }
 
 func (c *crypto) VerifyQuorumCert(qc types.QuorumCert) bool {
-	if qc.Signature().Participants().Len() < int(c.epochInfo.QuorumVotingPower()) {
+	if qc.Signature().Participants().Len() < int(c.state.HsValidators.QuorumVotingPower())) {
 		return false
 	}
 	return c.Verify(qc.Signature(), qc.BlockID().Hash)

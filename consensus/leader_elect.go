@@ -7,6 +7,7 @@ import (
 	wr "github.com/mroth/weightedrand"
 	tcrypto "github.com/xufeisofly/hotstuff/crypto"
 	"github.com/xufeisofly/hotstuff/libs/log"
+	sm "github.com/xufeisofly/hotstuff/state"
 	"github.com/xufeisofly/hotstuff/types"
 )
 
@@ -16,14 +17,14 @@ type LeaderElect interface {
 
 type leaderElect struct {
 	blockchain Blockchain
-	epochInfo  *EpochInfo
+	state      sm.State
 	logger     log.Logger
 }
 
-func NewLeaderElect(blockchain Blockchain, epochInfo *EpochInfo, l log.Logger) LeaderElect {
+func NewLeaderElect(blockchain Blockchain, state sm.State, l log.Logger) LeaderElect {
 	return &leaderElect{
 		blockchain: blockchain,
-		epochInfo:  epochInfo,
+		state:      state,
 		logger:     l,
 	}
 }
@@ -58,6 +59,6 @@ func (l *leaderElect) GetLeader(view types.View) *types.Validator {
 	rnd := rand.New(rand.NewSource(seed))
 
 	leaderAddrStr := chooser.PickSource(rnd).(string)
-	_, val := l.epochInfo.Validators().Copy().GetByAddress([]byte(leaderAddrStr))
+	_, val := l.state.HsValidators.GetByAddress([]byte(leaderAddrStr))
 	return val
 }

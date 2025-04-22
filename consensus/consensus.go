@@ -91,10 +91,6 @@ func (cs *Consensus) SetLogger(l log.Logger) {
 	cs.BaseService.Logger = l
 }
 
-func (cs *Consensus) OnEpochChange() {
-	// TODO update epoch info
-}
-
 func (cs *Consensus) StringIndented(indent string) string {
 	return ""
 }

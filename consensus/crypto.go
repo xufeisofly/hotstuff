@@ -33,7 +33,7 @@ type crypto struct {
 	CryptoBase
 
 	logger    log.Logger
-	epochInfo epochInfo
+	epochInfo EpochInfo
 	// partial signatures collection for one view
 	sigCollect *sigCollect
 }
@@ -46,7 +46,7 @@ func NewCrypto(cryptoBase CryptoBase) Crypto {
 	}
 }
 
-func (c *crypto) SetEpochInfo(e epochInfo) {
+func (c *crypto) SetEpochInfo(e EpochInfo) {
 	c.epochInfo = e
 }
 

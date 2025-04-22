@@ -321,7 +321,7 @@ type PeerState struct {
 	highTC              *types.TimeoutCert
 	curView             types.View
 	privValidatorPubKey tmcrypto.PubKey
-	epochInfo           epochInfo
+	epochInfo           EpochInfo
 
 	Stats *peerStateStats `json:"stats"` // Exposed.
 }
@@ -358,7 +358,7 @@ func (ps *PeerState) SetLogger(logger log.Logger) *PeerState {
 	return ps
 }
 
-func (ps *PeerState) SetEpochInfo(epochInfo epochInfo) *PeerState {
+func (ps *PeerState) SetEpochInfo(epochInfo EpochInfo) *PeerState {
 	ps.epochInfo = epochInfo
 	return ps
 }

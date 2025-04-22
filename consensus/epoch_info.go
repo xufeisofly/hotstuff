@@ -4,7 +4,7 @@ import (
 	"github.com/xufeisofly/hotstuff/types"
 )
 
-type epochInfo struct {
+type EpochInfo struct {
 	view       types.View
 	validators *types.ValidatorSet
 
@@ -15,9 +15,9 @@ type epochInfo struct {
 func NewEpochInfo(
 	view types.View,
 	validators *types.ValidatorSet,
-) *epochInfo {
+) *EpochInfo {
 	total := validators.Size()
-	return &epochInfo{
+	return &EpochInfo{
 		view:              view,
 		validators:        validators,
 		totalVotingPower:  int64(total),
@@ -25,18 +25,18 @@ func NewEpochInfo(
 	}
 }
 
-func (e *epochInfo) EpochView() types.View {
+func (e *EpochInfo) EpochView() types.View {
 	return e.view
 }
 
-func (e *epochInfo) Validators() *types.ValidatorSet {
+func (e *EpochInfo) Validators() *types.ValidatorSet {
 	return e.validators
 }
 
-func (e *epochInfo) TotalVotingPower() int64 {
+func (e *EpochInfo) TotalVotingPower() int64 {
 	return e.totalVotingPower
 }
 
-func (e *epochInfo) QuorumVotingPower() int64 {
+func (e *EpochInfo) QuorumVotingPower() int64 {
 	return e.quorumVotingPower
 }

@@ -16,11 +16,11 @@ type LeaderElect interface {
 
 type leaderElect struct {
 	blockchain Blockchain
-	epochInfo  *epochInfo
+	epochInfo  *EpochInfo
 	logger     log.Logger
 }
 
-func NewLeaderElect(blockchain Blockchain, epochInfo *epochInfo, l log.Logger) LeaderElect {
+func NewLeaderElect(blockchain Blockchain, epochInfo *EpochInfo, l log.Logger) LeaderElect {
 	return &leaderElect{
 		blockchain: blockchain,
 		epochInfo:  epochInfo,

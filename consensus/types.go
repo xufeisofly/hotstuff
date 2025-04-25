@@ -1,9 +1,18 @@
 package consensus
 
 import (
+	"fmt"
+
+	tcrypto "github.com/xufeisofly/hotstuff/crypto"
+	tmjson "github.com/xufeisofly/hotstuff/libs/json"
+	"github.com/xufeisofly/hotstuff/p2p"
+	tmcons "github.com/xufeisofly/hotstuff/proto/hotstuff/consensus"
 	typesproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 	"github.com/xufeisofly/hotstuff/types"
 )
+
+type ProposeFunc func(*SyncInfo) error
+type StopVotingFunc func(types.View)
 
 // SyncInfo holds the highest known QC or TC.
 // Generally, if highQC.View > highTC.View, there is no need to include highTC in the SyncInfo.
@@ -54,5 +63,96 @@ func (si SyncInfo) AggQC() *types.AggregateQC {
 }
 
 func (si SyncInfo) ToProto() *typesproto.SyncInfo {
+	return nil
+}
+
+//-----------------------------------------------------------------------------
+// Messages
+
+// Message is a message that can be sent and received on the Reactor
+type msgInfo struct {
+	Msg    Message `json:"msg"`
+	PeerID p2p.ID  `json:"peer_key"`
+}
+
+type Message interface {
+	ValidateBasic() error
+}
+
+func init() {
+	tmjson.RegisterType(&ProposalMessage{}, "hotstuff/Proposal")
+	// tmjson.RegisterType(&BlockPartMessage{}, "tendermint/BlockPart")
+	tmjson.RegisterType(&VoteMessage{}, "hotstuff/Vote")
+	tmjson.RegisterType(&NewViewMessage{}, "hotstuff/NewView")
+	tmjson.RegisterType(&TimeoutMessage{}, "hotstuff/ViewTimeout")
+}
+
+//-------------------------------------
+
+// ProposalMessage is sent when a new block is proposed.
+type ProposalMessage struct {
+	Proposal *types.HsProposal
+}
+
+// ValidateBasic performs basic validation.
+func (m *ProposalMessage) ValidateBasic() error {
+	return m.Proposal.ValidateBasic()
+}
+
+// String returns a string representation.
+func (m *ProposalMessage) String() string {
+	return fmt.Sprintf("[Proposal %v]", m.Proposal)
+}
+
+//-------------------------------------
+
+// VoteMessage is sent when voting for a proposal (or lack thereof).
+type VoteMessage struct {
+	Vote *types.HsVote
+}
+
+// ValidateBasic performs basic validation.
+func (m *VoteMessage) ValidateBasic() error {
+	return m.Vote.ValidateBasic()
+}
+
+// String returns a string representation.
+func (m *VoteMessage) String() string {
+	return fmt.Sprintf("[Vote %v]", m.Vote)
+}
+
+type TimeoutMessage struct {
+	Sender    types.Address
+	View      types.View
+	ViewHash  types.Hash
+	EpochView types.View
+	HighQC    *types.QuorumCert
+	// signature of view hash
+	ViewSignature tcrypto.QuorumSignature
+	// signature of high qc
+	HighQCSignature tcrypto.QuorumSignature
+}
+
+func (tmsg *TimeoutMessage) ValidateBasic() error {
+	return nil
+}
+
+func (tmsg *TimeoutMessage) ToProto() *tmcons.TimeoutMessage {
+	return &tmcons.TimeoutMessage{
+		Sender:          tmsg.Sender,
+		View:            tmsg.View,
+		ViewHash:        tmsg.ViewHash,
+		EpochView:       tmsg.EpochView,
+		HighQc:          tmsg.HighQC.ToProto(),
+		ViewSignature:   tmsg.ViewSignature.ToBytes(),
+		HighQcSignature: tmsg.HighQCSignature.ToBytes(),
+	}
+}
+
+type NewViewMessage struct {
+	si *SyncInfo
+}
+
+func (nvmsg *NewViewMessage) ValidateBasic() error {
 	return nil
 }

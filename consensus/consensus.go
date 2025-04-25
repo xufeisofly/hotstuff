@@ -18,11 +18,6 @@ import (
 	"github.com/xufeisofly/hotstuff/types"
 )
 
-type msgInfo struct {
-	Msg    Message `json:"msg"`
-	PeerID p2p.ID  `json:"peer_key"`
-}
-
 type txNotifier interface {
 	TxsAvailable() <-chan struct{}
 }
@@ -31,26 +26,21 @@ type Consensus struct {
 	service.BaseService
 
 	// config details
-	config              *cfg.ConsensusConfig
-	privValidator       types.PrivValidator
-	privValidatorPubKey tmcrypto.PubKey
+	config        *cfg.ConsensusConfig
+	privValidator types.PrivValidator
 
 	// crypto to encrypt and decrypt
-	crypto Crypto
+	crypto    Crypto
+	pacemaker Pacemaker
 
 	// store blocks and commits
 	blockchain Blockchain // 使用 Blockchain 作为存储，不要使用 tendermint 的 BlockStore，结构不同
 
 	// create and execute blocks
-	blockExec *sm.BlockExecutor
-
-	pacemaker   Pacemaker
+	blockExec   *sm.BlockExecutor
 	leaderElect LeaderElect
 
 	lastVoteView types.View
-	highQC       *types.QuorumCert
-	highTC       *types.TimeoutCert
-	curView      types.View
 
 	// notify us if txs sare available
 	txNotifier txNotifier
@@ -82,12 +72,7 @@ type Consensus struct {
 type ConsensusOption func(*Consensus)
 
 func NewConsensus(options ...ConsensusOption) *Consensus {
-	genesisTC := types.NewTimeoutCert(nil, types.ViewBeforeGenesis)
-	cs := &Consensus{
-		highQC:  &types.QuorumCertForGenesis,
-		highTC:  &genesisTC,
-		curView: types.GenesisView,
-	}
+	cs := &Consensus{}
 
 	for _, opt := range options {
 		opt(cs)
@@ -109,34 +94,11 @@ func (cs *Consensus) String() string {
 }
 
 func (cs *Consensus) OnStart() error {
+	go cs.receiveRoutine()
 	return nil
 }
 
 func (cs *Consensus) OnStop() {}
-
-func (cs *Consensus) HighQC() *types.QuorumCert {
-	return cs.highQC
-}
-
-func (cs *Consensus) HighTC() *types.TimeoutCert {
-	return cs.highTC
-}
-
-func (cs *Consensus) SetHighQC(qc *types.QuorumCert) {
-	cs.highQC = qc
-}
-
-func (cs *Consensus) SetHighTC(tc *types.TimeoutCert) {
-	cs.highTC = tc
-}
-
-func (cs *Consensus) CurView() types.View {
-	return cs.curView
-}
-
-func (cs *Consensus) SetCurView(v types.View) {
-	cs.curView = v
-}
 
 // GetValidators returns a copy of the current validators.
 func (cs *Consensus) GetValidators() (int64, []*types.Validator) {
@@ -167,12 +129,12 @@ func (cs *Consensus) updatePrivValidatorPubKey() error {
 	if err != nil {
 		return err
 	}
-	cs.privValidatorPubKey = pubKey
+	cs.pacemaker.SetPrivValidatorPubKey(pubKey)
 	return nil
 }
 
 func (cs *Consensus) LocalAddress() tmcrypto.Address {
-	return cs.privValidatorPubKey.Address()
+	return cs.pacemaker.LocalAddress()
 }
 
 func (cs *Consensus) Propose(syncInfo *SyncInfo) error {
@@ -191,7 +153,7 @@ func (cs *Consensus) Propose(syncInfo *SyncInfo) error {
 func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, error) {
 	proposerAddr := cs.LocalAddress()
 
-	block, _ := cs.blockExec.HsCreateProposalBlock(cs.CurView(), cs.state, cs.HighQC(), proposerAddr)
+	block, _ := cs.blockExec.HsCreateProposalBlock(cs.pacemaker.CurView(), cs.state, cs.pacemaker.HighQC(), proposerAddr)
 
 	return types.NewHsProposal(
 		types.View(1),
@@ -226,8 +188,7 @@ func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 		cs.commit(b)
 	}
 
-	si := NewSyncInfo().WithQC(*block.QuorumCert)
-	cs.evsw.FireEvent(types.EventNewView, &NewViewMessage{si: &si})
+	cs.pacemaker.AdvanceView(NewSyncInfo().WithQC(*block.QuorumCert))
 
 	// has vote
 	if cs.lastVoteView >= block.View {
@@ -331,7 +292,7 @@ func (cs *Consensus) commitInner(block *types.Block) error {
 }
 
 func (cs *Consensus) verifyQC(qc *types.QuorumCert) bool {
-	if qc.View() <= cs.HighQC().View() {
+	if qc.View() <= cs.pacemaker.HighQC().View() {
 		return true
 	}
 
@@ -340,7 +301,7 @@ func (cs *Consensus) verifyQC(qc *types.QuorumCert) bool {
 
 func (cs *Consensus) verifyTC(tc *types.TimeoutCert) bool {
 	// an old timeout cert is treated as verified by default
-	if tc.View() <= cs.HighTC().View() {
+	if tc.View() <= cs.pacemaker.HighTC().View() {
 		return true
 	}
 
@@ -355,7 +316,7 @@ func (cs *Consensus) handleVoteMessage(msg *VoteMessage, peerID p2p.ID) {
 		return
 	}
 
-	if block.View <= cs.HighQC().View() {
+	if block.View <= cs.pacemaker.HighQC().View() {
 		return
 	}
 
@@ -380,14 +341,6 @@ func (cs *Consensus) receiveRoutine() {
 	defer func() {
 		if r := recover(); r != nil {
 			cs.Logger.Error("CONSENSUS FAILURE!!!", "err", r, "stack", string(debug.Stack()))
-			// stop gracefully
-			//
-			// NOTE: We most probably shouldn't be running any further when there is
-			// some unexpected panic. Some unknown error happened, and so we don't
-			// know if that will result in the validator signing an invalid thing. It
-			// might be worthwhile to explore a mechanism for manual resuming via
-			// some console or secure RPC system, but for now, halting the chain upon
-			// unexpected consensus bugs sounds like the better option.
 			onExit(cs)
 		}
 	}()
@@ -416,16 +369,12 @@ func (cs *Consensus) handleMessage(mi msgInfo) {
 		cs.handleProposalMessage(msg, peerID)
 	case *VoteMessage:
 		cs.handleVoteMessage(msg, peerID)
-	case *NewViewMessage:
-		cs.pacemaker.HandleNewViewMessage(msg)
-	case *TimeoutMessage:
-		cs.pacemaker.HandleTimeoutMessage(msg)
 	default:
 		cs.Logger.Error("unknown msg type", "type", fmt.Sprintf("%T", msg))
 	}
 }
 
-func (cs *Consensus) sendMsg(mi msgInfo) {
+func (cs *Consensus) ReceiveMsg(mi msgInfo) {
 	select {
 	case cs.msgQueue <- mi:
 	default:

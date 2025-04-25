@@ -2,8 +2,12 @@ package consensus
 
 import (
 	"bytes"
+	"fmt"
+	"runtime/debug"
 	"time"
 
+	tmcrypto "github.com/xufeisofly/hotstuff/crypto"
+	tmevents "github.com/xufeisofly/hotstuff/libs/events"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	"github.com/xufeisofly/hotstuff/libs/math"
 	"github.com/xufeisofly/hotstuff/libs/service"
@@ -11,10 +15,18 @@ import (
 )
 
 type Pacemaker interface {
+	HighQC() *types.QuorumCert
+	HighTC() *types.TimeoutCert
+	CurView() types.View
+	LocalAddress() tmcrypto.Address
+
 	AdvanceView(SyncInfo)
-	OnLocalTimeout() error
-	HandleTimeoutMessage(*TimeoutMessage) error
-	HandleNewViewMessage(*NewViewMessage) error
+
+	ReceiveMsg(msgInfo)
+
+	SetPrivValidatorPubKey(tmcrypto.PubKey)
+	SetProposeFunc(ProposeFunc)
+	SetStopVotingFunc(StopVotingFunc)
 }
 
 type oneShotTimer struct {
@@ -28,14 +40,27 @@ func (t oneShotTimer) Stop() bool {
 type pacemaker struct {
 	service.BaseService
 
-	crypto      Crypto
+	msgQueue chan msgInfo
+	done     chan struct{}
+
+	highQC  *types.QuorumCert
+	highTC  *types.TimeoutCert
+	curView types.View
+
+	crypto              Crypto
+	privValidatorPubKey tmcrypto.PubKey
+
 	leaderElect LeaderElect
 	duration    ViewDuration
 
 	timer oneShotTimer
 
 	lastTimeout *TimeoutMessage
-	consensus   *Consensus
+
+	evsw tmevents.EventSwitch
+
+	proposeFunc    ProposeFunc
+	stopVotingFunc StopVotingFunc
 }
 
 func NewPacemaker(
@@ -43,7 +68,11 @@ func NewPacemaker(
 	leaderElect LeaderElect,
 	duration ViewDuration,
 ) Pacemaker {
+	genesisTC := types.NewTimeoutCert(nil, types.ViewBeforeGenesis)
 	return &pacemaker{
+		highQC:      &types.QuorumCertForGenesis,
+		highTC:      &genesisTC,
+		curView:     types.GenesisView,
 		crypto:      c,
 		leaderElect: leaderElect,
 		duration:    duration,
@@ -55,32 +84,40 @@ func (p *pacemaker) SetLogger(l log.Logger) {
 	p.BaseService.Logger = l
 }
 
+func (p *pacemaker) SetProposeFunc(fn ProposeFunc) {
+	p.proposeFunc = fn
+}
+
+func (p *pacemaker) SetStopVotingFunc(fn StopVotingFunc) {
+	p.stopVotingFunc = fn
+}
+
 func (p *pacemaker) HighQC() *types.QuorumCert {
-	return p.consensus.HighQC()
+	return p.highQC
 }
 
 func (p *pacemaker) HighTC() *types.TimeoutCert {
-	return p.consensus.HighTC()
-}
-
-func (p *pacemaker) UpdateHighQC(qc *types.QuorumCert) {
-	if p.HighQC().View() < qc.View() {
-		p.consensus.SetHighQC(qc)
-	}
-}
-
-func (p *pacemaker) UpdateHighTC(tc *types.TimeoutCert) {
-	if p.HighTC().View() < tc.View() {
-		p.consensus.SetHighTC(tc)
-	}
+	return p.highTC
 }
 
 func (p *pacemaker) CurView() types.View {
-	return p.consensus.CurView()
+	return p.curView
 }
 
-func (p *pacemaker) UpdateCurView(v types.View) {
-	p.consensus.SetCurView(v)
+func (p *pacemaker) updateHighQC(qc *types.QuorumCert) {
+	if p.highQC.View() < qc.View() {
+		p.highQC = qc
+	}
+}
+
+func (p *pacemaker) updateHighTC(tc *types.TimeoutCert) {
+	if p.highTC.View() < tc.View() {
+		p.highTC = tc
+	}
+}
+
+func (p *pacemaker) updateCurView(v types.View) {
+	p.curView = v
 }
 
 func (p *pacemaker) AdvanceView(si SyncInfo) {
@@ -90,12 +127,12 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 
 	timeout := false
 	if si.QC() != nil {
-		p.UpdateHighQC(si.QC())
+		p.updateHighQC(si.QC())
 	}
 
 	if si.TC() != nil {
 		timeout = true
-		p.UpdateHighTC(si.TC())
+		p.updateHighTC(si.TC())
 	}
 
 	if si.AggQC() != nil {
@@ -106,11 +143,11 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 			return
 		}
 
-		p.UpdateHighQC(&highQC)
+		p.updateHighQC(&highQC)
 	}
 
-	newView := math.MaxInt64(p.HighQC().View(), p.HighTC().View()) + 1
-	if newView <= p.CurView() {
+	newView := math.MaxInt64(p.highQC.View(), p.highTC.View()) + 1
+	if newView <= p.curView {
 		return
 	}
 
@@ -119,20 +156,21 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 		p.duration.ViewSucceeded()
 	}
 
-	p.UpdateCurView(newView)
+	p.updateCurView(newView)
 	p.duration.ViewStarted()
 	p.startTimer()
 
 	if bytes.Equal(
 		p.leaderElect.GetLeader(newView).Address,
-		p.peerState.LocalAddress()) {
-		p.consensus.Propose(&si)
+		p.LocalAddress()) {
+		p.proposeFunc(&si)
 	} else {
-		p.consensus.evsw.FireEvent(types.EventNewView, &NewViewMessage{si: &si})
+		p.evsw.FireEvent(types.EventNewView, &NewViewMessage{si: &si})
 	}
 }
 
 func (p *pacemaker) OnStart() error {
+	go p.receiveRoutine()
 	p.startTimer()
 	return nil
 }
@@ -141,14 +179,39 @@ func (p *pacemaker) OnStop() {
 	p.stopTimer()
 }
 
-func (p *pacemaker) OnLocalTimeout() error {
+func (p *pacemaker) receiveRoutine() {
+	onExit := func(p *pacemaker) {
+		close(p.done)
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			p.Logger.Error("PACEMAKER FAILURE!!!", "err", r, "stack", string(debug.Stack()))
+			onExit(p)
+		}
+	}()
+
+	for {
+		var mi msgInfo
+
+		select {
+		case mi = <-p.msgQueue:
+			p.handleMessage(mi)
+		case <-p.Quit():
+			onExit(p)
+			return
+		}
+	}
+}
+
+func (p *pacemaker) onLocalTimeout() error {
 	p.stopTimer()
 	p.duration.ViewTimeout()
 	defer p.startTimer()
 
-	view := p.CurView()
+	view := p.curView
 	if p.lastTimeout != nil && p.lastTimeout.View == view {
-		p.consensus.evsw.FireEvent(types.EventViewTimeout, p.lastTimeout)
+		p.evsw.FireEvent(types.EventViewTimeout, p.lastTimeout)
 		return nil
 	}
 
@@ -161,30 +224,60 @@ func (p *pacemaker) OnLocalTimeout() error {
 	}
 
 	timeoutMsg := &TimeoutMessage{
-		Sender:          p.peerState.LocalAddress(),
+		Sender:          p.LocalAddress(),
 		View:            view,
 		ViewHash:        viewHash,
 		EpochView:       types.View(1),
-		HighQC:          p.HighQC(),
+		HighQC:          p.highQC,
 		ViewSignature:   sig,
 		HighQCSignature: nil, // TODO highqc signature
 	}
 
 	p.lastTimeout = timeoutMsg
-	p.consensus.StopVoting(view)
-	p.consensus.evsw.FireEvent(types.EventViewTimeout, timeoutMsg)
-	p.HandleTimeoutMessage(timeoutMsg)
+	p.stopVotingFunc(view)
+	p.evsw.FireEvent(types.EventViewTimeout, timeoutMsg)
+	p.handleTimeoutMessage(timeoutMsg)
 
 	return nil
 }
 
-func (p *pacemaker) HandleNewViewMessage(newViewMsg *NewViewMessage) error {
+func (p *pacemaker) ReceiveMsg(mi msgInfo) {
+	select {
+	case p.msgQueue <- mi:
+	default:
+		p.Logger.Debug("internal msg queue is full; using a go-routine")
+		go func() { p.msgQueue <- mi }()
+	}
+}
+
+func (p *pacemaker) SetPrivValidatorPubKey(pk tmcrypto.PubKey) {
+	p.privValidatorPubKey = pk
+}
+
+func (p *pacemaker) LocalAddress() tmcrypto.Address {
+	return p.privValidatorPubKey.Address()
+}
+
+func (p *pacemaker) handleMessage(mi msgInfo) {
+	msg, _ := mi.Msg, mi.PeerID
+
+	switch msg := msg.(type) {
+	case *NewViewMessage:
+		p.handleNewViewMessage(msg)
+	case *TimeoutMessage:
+		p.handleTimeoutMessage(msg)
+	default:
+		p.Logger.Error("unknown msg type", "type", fmt.Sprintf("%T", msg))
+	}
+}
+
+func (p *pacemaker) handleNewViewMessage(newViewMsg *NewViewMessage) error {
 	p.AdvanceView(*newViewMsg.si)
 	return nil
 }
 
-func (p *pacemaker) HandleTimeoutMessage(timeoutMsg *TimeoutMessage) error {
-	curView := p.CurView()
+func (p *pacemaker) handleTimeoutMessage(timeoutMsg *TimeoutMessage) error {
+	curView := p.curView
 
 	si := NewSyncInfo().WithQC(*timeoutMsg.HighQC)
 	p.AdvanceView(si)
@@ -207,7 +300,7 @@ func (p *pacemaker) startTimer() {
 	p.timer = oneShotTimer{time.AfterFunc(p.duration.GetDuration(), func() {
 		// fire timeout event after duration
 		// trigger OnLocalTimeout
-		p.OnLocalTimeout()
+		p.onLocalTimeout()
 	})}
 }
 

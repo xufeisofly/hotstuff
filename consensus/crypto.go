@@ -112,7 +112,7 @@ func (c *crypto) CollectPartialSignature(
 }
 
 func (c *crypto) VerifyQuorumCert(qc types.QuorumCert) bool {
-	if qc.Signature().Participants().Len() < int(c.state.HsValidators.QuorumVotingPower())) {
+	if qc.Signature().Participants().Len() < int(c.state.HsValidators.QuorumVotingPower()) {
 		return false
 	}
 	return c.Verify(qc.Signature(), qc.BlockID().Hash)

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	cfg "github.com/xufeisofly/hotstuff/config"
+	tmcrypto "github.com/xufeisofly/hotstuff/crypto"
 	tmevents "github.com/xufeisofly/hotstuff/libs/events"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	"github.com/xufeisofly/hotstuff/libs/service"
@@ -30,8 +31,9 @@ type Consensus struct {
 	service.BaseService
 
 	// config details
-	config        *cfg.ConsensusConfig
-	privValidator types.PrivValidator
+	config              *cfg.ConsensusConfig
+	privValidator       types.PrivValidator
+	privValidatorPubKey tmcrypto.PubKey
 
 	// crypto to encrypt and decrypt
 	crypto Crypto
@@ -46,14 +48,15 @@ type Consensus struct {
 	leaderElect LeaderElect
 
 	lastVoteView types.View
+	highQC       *types.QuorumCert
+	highTC       *types.TimeoutCert
+	curView      types.View
 
 	// notify us if txs sare available
 	txNotifier txNotifier
 
 	// internal state
 	mtx tmsync.RWMutex
-
-	peerState *PeerState
 
 	state sm.State // State until view-1.
 	// privValidator pubkey, memoized for the duration of one block
@@ -79,7 +82,12 @@ type Consensus struct {
 type ConsensusOption func(*Consensus)
 
 func NewConsensus(options ...ConsensusOption) *Consensus {
-	cs := &Consensus{}
+	genesisTC := types.NewTimeoutCert(nil, types.ViewBeforeGenesis)
+	cs := &Consensus{
+		highQC:  &types.QuorumCertForGenesis,
+		highTC:  &genesisTC,
+		curView: types.GenesisView,
+	}
 
 	for _, opt := range options {
 		opt(cs)
@@ -105,6 +113,30 @@ func (cs *Consensus) OnStart() error {
 }
 
 func (cs *Consensus) OnStop() {}
+
+func (cs *Consensus) HighQC() *types.QuorumCert {
+	return cs.highQC
+}
+
+func (cs *Consensus) HighTC() *types.TimeoutCert {
+	return cs.highTC
+}
+
+func (cs *Consensus) SetHighQC(qc *types.QuorumCert) {
+	cs.highQC = qc
+}
+
+func (cs *Consensus) SetHighTC(tc *types.TimeoutCert) {
+	cs.highTC = tc
+}
+
+func (cs *Consensus) CurView() types.View {
+	return cs.curView
+}
+
+func (cs *Consensus) SetCurView(v types.View) {
+	cs.curView = v
+}
 
 // GetValidators returns a copy of the current validators.
 func (cs *Consensus) GetValidators() (int64, []*types.Validator) {
@@ -135,8 +167,12 @@ func (cs *Consensus) updatePrivValidatorPubKey() error {
 	if err != nil {
 		return err
 	}
-	cs.peerState.SetPrivValidatorPubKey(pubKey)
+	cs.privValidatorPubKey = pubKey
 	return nil
+}
+
+func (cs *Consensus) LocalAddress() tmcrypto.Address {
+	return cs.privValidatorPubKey.Address()
 }
 
 func (cs *Consensus) Propose(syncInfo *SyncInfo) error {
@@ -153,9 +189,9 @@ func (cs *Consensus) Propose(syncInfo *SyncInfo) error {
 }
 
 func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, error) {
-	proposerAddr := cs.peerState.LocalAddress()
+	proposerAddr := cs.LocalAddress()
 
-	block, _ := cs.blockExec.HsCreateProposalBlock(cs.peerState.CurView(), cs.state, cs.peerState.HighQC(), proposerAddr)
+	block, _ := cs.blockExec.HsCreateProposalBlock(cs.CurView(), cs.state, cs.HighQC(), proposerAddr)
 
 	return types.NewHsProposal(
 		types.View(1),
@@ -190,7 +226,8 @@ func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 		cs.commit(b)
 	}
 
-	cs.pacemaker.AdvanceView(NewSyncInfo().WithQC(*block.QuorumCert))
+	si := NewSyncInfo().WithQC(*block.QuorumCert)
+	cs.evsw.FireEvent(types.EventNewView, &NewViewMessage{si: &si})
 
 	// has vote
 	if cs.lastVoteView >= block.View {
@@ -211,7 +248,7 @@ func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 		Vote: &types.HsVote{
 			View:             block.View,
 			BlockID:          block.ID(),
-			ValidatorAddress: cs.peerState.LocalAddress(),
+			ValidatorAddress: cs.LocalAddress(),
 			EpochView:        types.View(1),
 			Timestamp:        time.Now(),
 			Signature:        sig,
@@ -294,7 +331,7 @@ func (cs *Consensus) commitInner(block *types.Block) error {
 }
 
 func (cs *Consensus) verifyQC(qc *types.QuorumCert) bool {
-	if qc.View() <= cs.peerState.HighQC().View() {
+	if qc.View() <= cs.HighQC().View() {
 		return true
 	}
 
@@ -303,7 +340,7 @@ func (cs *Consensus) verifyQC(qc *types.QuorumCert) bool {
 
 func (cs *Consensus) verifyTC(tc *types.TimeoutCert) bool {
 	// an old timeout cert is treated as verified by default
-	if tc.View() <= cs.peerState.HighTC().View() {
+	if tc.View() <= cs.HighTC().View() {
 		return true
 	}
 
@@ -318,7 +355,7 @@ func (cs *Consensus) handleVoteMessage(msg *VoteMessage, peerID p2p.ID) {
 		return
 	}
 
-	if block.View <= cs.peerState.HighQC().View() {
+	if block.View <= cs.HighQC().View() {
 		return
 	}
 

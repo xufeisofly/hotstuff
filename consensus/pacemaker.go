@@ -27,8 +27,7 @@ func (t oneShotTimer) Stop() bool {
 
 type pacemaker struct {
 	service.BaseService
-	// pacemaker makes steps based on current state of the peer
-	peerState   *PeerState
+
 	crypto      Crypto
 	leaderElect LeaderElect
 	duration    ViewDuration
@@ -40,23 +39,48 @@ type pacemaker struct {
 }
 
 func NewPacemaker(
-	ps *PeerState,
 	c Crypto,
 	leaderElect LeaderElect,
 	duration ViewDuration,
 ) Pacemaker {
 	return &pacemaker{
-		peerState:   ps,
 		crypto:      c,
 		leaderElect: leaderElect,
 		duration:    duration,
-
-		timer: oneShotTimer{time.AfterFunc(0, func() {})},
+		timer:       oneShotTimer{time.AfterFunc(0, func() {})},
 	}
 }
 
 func (p *pacemaker) SetLogger(l log.Logger) {
 	p.BaseService.Logger = l
+}
+
+func (p *pacemaker) HighQC() *types.QuorumCert {
+	return p.consensus.HighQC()
+}
+
+func (p *pacemaker) HighTC() *types.TimeoutCert {
+	return p.consensus.HighTC()
+}
+
+func (p *pacemaker) UpdateHighQC(qc *types.QuorumCert) {
+	if p.HighQC().View() < qc.View() {
+		p.consensus.SetHighQC(qc)
+	}
+}
+
+func (p *pacemaker) UpdateHighTC(tc *types.TimeoutCert) {
+	if p.HighTC().View() < tc.View() {
+		p.consensus.SetHighTC(tc)
+	}
+}
+
+func (p *pacemaker) CurView() types.View {
+	return p.consensus.CurView()
+}
+
+func (p *pacemaker) UpdateCurView(v types.View) {
+	p.consensus.SetCurView(v)
 }
 
 func (p *pacemaker) AdvanceView(si SyncInfo) {
@@ -66,12 +90,12 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 
 	timeout := false
 	if si.QC() != nil {
-		p.peerState.UpdateHighQC(si.QC())
+		p.UpdateHighQC(si.QC())
 	}
 
 	if si.TC() != nil {
 		timeout = true
-		p.peerState.UpdateHighTC(si.TC())
+		p.UpdateHighTC(si.TC())
 	}
 
 	if si.AggQC() != nil {
@@ -82,11 +106,11 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 			return
 		}
 
-		p.peerState.UpdateHighQC(&highQC)
+		p.UpdateHighQC(&highQC)
 	}
 
-	newView := math.MaxInt64(p.peerState.HighQC().View(), p.peerState.HighTC().View()) + 1
-	if newView <= p.peerState.CurView() {
+	newView := math.MaxInt64(p.HighQC().View(), p.HighTC().View()) + 1
+	if newView <= p.CurView() {
 		return
 	}
 
@@ -95,7 +119,7 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 		p.duration.ViewSucceeded()
 	}
 
-	p.peerState.UpdateCurView(newView)
+	p.UpdateCurView(newView)
 	p.duration.ViewStarted()
 	p.startTimer()
 
@@ -122,7 +146,7 @@ func (p *pacemaker) OnLocalTimeout() error {
 	p.duration.ViewTimeout()
 	defer p.startTimer()
 
-	view := p.peerState.CurView()
+	view := p.CurView()
 	if p.lastTimeout != nil && p.lastTimeout.View == view {
 		p.consensus.evsw.FireEvent(types.EventViewTimeout, p.lastTimeout)
 		return nil
@@ -140,8 +164,8 @@ func (p *pacemaker) OnLocalTimeout() error {
 		Sender:          p.peerState.LocalAddress(),
 		View:            view,
 		ViewHash:        viewHash,
-		EpochView:       p.peerState.CurEpochView(),
-		HighQC:          p.peerState.HighQC(),
+		EpochView:       types.View(1),
+		HighQC:          p.HighQC(),
 		ViewSignature:   sig,
 		HighQCSignature: nil, // TODO highqc signature
 	}
@@ -160,7 +184,7 @@ func (p *pacemaker) HandleNewViewMessage(newViewMsg *NewViewMessage) error {
 }
 
 func (p *pacemaker) HandleTimeoutMessage(timeoutMsg *TimeoutMessage) error {
-	curView := p.peerState.CurView()
+	curView := p.CurView()
 
 	si := NewSyncInfo().WithQC(*timeoutMsg.HighQC)
 	p.AdvanceView(si)

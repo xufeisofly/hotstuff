@@ -7,7 +7,6 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	tcrypto "github.com/xufeisofly/hotstuff/crypto"
-	tmcrypto "github.com/xufeisofly/hotstuff/crypto"
 	tmevents "github.com/xufeisofly/hotstuff/libs/events"
 	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 	"github.com/xufeisofly/hotstuff/libs/log"
@@ -317,11 +316,6 @@ type PeerState struct {
 
 	mtx sync.Mutex // NOTE: Modify below using setters, never directly.
 
-	highQC              *types.QuorumCert
-	highTC              *types.TimeoutCert
-	curView             types.View
-	privValidatorPubKey tmcrypto.PubKey
-
 	Stats *peerStateStats `json:"stats"` // Exposed.
 }
 
@@ -337,59 +331,19 @@ func (pss peerStateStats) String() string {
 }
 
 // NewPeerState returns a new PeerState for the given Peer
-func NewPeerState(peer p2p.Peer, privPubKey tmcrypto.PubKey) *PeerState {
-	genesisTC := types.NewTimeoutCert(nil, types.ViewBeforeGenesis)
+func NewPeerState(peer p2p.Peer) *PeerState {
 	return &PeerState{
-		peer:                peer,
-		logger:              log.NewNopLogger(),
-		highQC:              &types.QuorumCertForGenesis,
-		highTC:              &genesisTC,
-		curView:             types.GenesisView,
-		privValidatorPubKey: privPubKey,
-		Stats:               &peerStateStats{},
+		peer:   peer,
+		logger: log.NewNopLogger(),
+		Stats:  &peerStateStats{},
 	}
 }
 
 // SetLogger allows to set a logger on the peer state. Returns the peer state
 // itself.
-func (ps *PeerState) SetLogger(logger log.Logger) {
+func (ps *PeerState) SetLogger(logger log.Logger) *PeerState {
 	ps.logger = logger
-}
-
-func (ps *PeerState) SetPrivValidatorPubKey(privPubKey tmcrypto.PubKey) {
-	ps.privValidatorPubKey = privPubKey
-}
-
-func (ps *PeerState) LocalAddress() tmcrypto.Address {
-	return ps.privValidatorPubKey.Address()
-}
-
-func (ps *PeerState) HighQC() *types.QuorumCert {
-	return ps.highQC
-}
-
-func (ps *PeerState) HighTC() *types.TimeoutCert {
-	return ps.highTC
-}
-
-func (ps *PeerState) UpdateHighQC(qc *types.QuorumCert) {
-	if ps.highQC.View() < qc.View() {
-		ps.highQC = qc
-	}
-}
-
-func (ps *PeerState) UpdateHighTC(tc *types.TimeoutCert) {
-	if ps.highTC.View() < tc.View() {
-		ps.highTC = tc
-	}
-}
-
-func (ps *PeerState) CurView() types.View {
-	return ps.curView
-}
-
-func (ps *PeerState) UpdateCurView(v types.View) {
-	ps.curView = v
+	return ps
 }
 
 // ToJSON returns a json of PeerState.

@@ -48,6 +48,12 @@ type PriKey struct {
 	p *big.Int
 }
 
+func NewPriKey(sk []byte) *PriKey {
+	pri := &PriKey{p: &big.Int{}}
+	pri.p.SetBytes(sk)
+	return pri
+}
+
 // ToBytes marshals the private key to a byte slice.
 func (priv PriKey) Bytes() []byte {
 	return priv.p.Bytes()
@@ -76,15 +82,17 @@ type bls12Base struct {
 	pubKey PubKey
 	proof  ProofOfPossession
 
-	privValidatorPubKey crypto.PubKey
-	pubKeyFn            GetPubKeyFn
+	localAddr crypto.Address
+	pubKeyFn  GetPubKeyFn
 }
 
+// Get bls public key by validator address
 type GetPubKeyFn func(crypto.Address) (crypto.PubKey, bool)
 
-func New(pubKeyFn GetPubKeyFn) *bls12Base {
+func New(pubKeyFn GetPubKeyFn, addr crypto.Address) *bls12Base {
 	b := &bls12Base{
-		pubKeyFn: pubKeyFn,
+		pubKeyFn:  pubKeyFn,
+		localAddr: addr,
 	}
 	b.InitKeyPair()
 	return b
@@ -120,8 +128,8 @@ func (bls *bls12Base) Sign(message []byte) (crypto.QuorumSignature, error) {
 		return nil, fmt.Errorf("bls12: coreSign failed: %w", err)
 	}
 	addrSet := crypto.NewAddressSet()
-	addrSet.Add(bls.privValidatorPubKey.Address())
-	return &AggregateSignature{point: *p}, nil
+	addrSet.Add(bls.localAddr)
+	return &AggregateSignature{point: *p, participants: addrSet}, nil
 }
 
 func (bls *bls12Base) coreSign(message []byte, domainTag []byte) (*bls12.PointG2, error) {

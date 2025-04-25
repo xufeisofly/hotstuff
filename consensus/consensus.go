@@ -30,7 +30,8 @@ type Consensus struct {
 	service.BaseService
 
 	// config details
-	config *cfg.ConsensusConfig
+	config        *cfg.ConsensusConfig
+	privValidator types.PrivValidator
 
 	// crypto to encrypt and decrypt
 	crypto Crypto
@@ -50,7 +51,7 @@ type Consensus struct {
 	txNotifier txNotifier
 
 	// internal state
-	mtx tmsync.Mutex
+	mtx tmsync.RWMutex
 
 	peerState *PeerState
 
@@ -105,6 +106,39 @@ func (cs *Consensus) OnStart() error {
 
 func (cs *Consensus) OnStop() {}
 
+// GetValidators returns a copy of the current validators.
+func (cs *Consensus) GetValidators() (int64, []*types.Validator) {
+	cs.mtx.RLock()
+	defer cs.mtx.RUnlock()
+	return cs.state.LastBlockHeight, cs.state.Validators.Copy().Validators
+}
+
+// SetPrivValidator sets the private validator account for signing votes. It
+// immediately requests pubkey and caches it.
+func (cs *Consensus) SetPrivValidator(priv types.PrivValidator) {
+	cs.mtx.Lock()
+	defer cs.mtx.Unlock()
+
+	cs.privValidator = priv
+
+	if err := cs.updatePrivValidatorPubKey(); err != nil {
+		cs.Logger.Error("failed to get private validator pubkey", "err", err)
+	}
+}
+
+func (cs *Consensus) updatePrivValidatorPubKey() error {
+	if cs.privValidator == nil {
+		return nil
+	}
+
+	pubKey, err := cs.privValidator.GetPubKey()
+	if err != nil {
+		return err
+	}
+	cs.peerState.SetPrivValidatorPubKey(pubKey)
+	return nil
+}
+
 func (cs *Consensus) Propose(syncInfo *SyncInfo) error {
 	proposal, err := cs.createProposal(syncInfo)
 	if err != nil {
@@ -124,7 +158,7 @@ func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, erro
 	block, _ := cs.blockExec.HsCreateProposalBlock(cs.peerState.CurView(), cs.state, cs.peerState.HighQC(), proposerAddr)
 
 	return types.NewHsProposal(
-		cs.peerState.CurEpochView(),
+		types.View(1),
 		block,
 		syncInfo.TC(),
 	), nil
@@ -178,7 +212,7 @@ func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 			View:             block.View,
 			BlockID:          block.ID(),
 			ValidatorAddress: cs.peerState.LocalAddress(),
-			EpochView:        cs.peerState.CurEpochView(),
+			EpochView:        types.View(1),
 			Timestamp:        time.Now(),
 			Signature:        sig,
 		},

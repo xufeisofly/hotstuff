@@ -352,9 +352,12 @@ func NewPeerState(peer p2p.Peer, privPubKey tmcrypto.PubKey) *PeerState {
 
 // SetLogger allows to set a logger on the peer state. Returns the peer state
 // itself.
-func (ps *PeerState) SetLogger(logger log.Logger) *PeerState {
+func (ps *PeerState) SetLogger(logger log.Logger) {
 	ps.logger = logger
-	return ps
+}
+
+func (ps *PeerState) SetPrivValidatorPubKey(privPubKey tmcrypto.PubKey) {
+	ps.privValidatorPubKey = privPubKey
 }
 
 func (ps *PeerState) LocalAddress() tmcrypto.Address {

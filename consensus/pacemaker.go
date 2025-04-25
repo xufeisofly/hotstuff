@@ -69,7 +69,7 @@ func NewPacemaker(
 	duration ViewDuration,
 ) Pacemaker {
 	genesisTC := types.NewTimeoutCert(nil, types.ViewBeforeGenesis)
-	return &pacemaker{
+	pa := &pacemaker{
 		highQC:      &types.QuorumCertForGenesis,
 		highTC:      &genesisTC,
 		curView:     types.GenesisView,
@@ -78,6 +78,8 @@ func NewPacemaker(
 		duration:    duration,
 		timer:       oneShotTimer{time.AfterFunc(0, func() {})},
 	}
+	pa.BaseService = *service.NewBaseService(nil, "Pacemaker", pa)
+	return pa
 }
 
 func (p *pacemaker) SetLogger(l log.Logger) {
@@ -170,12 +172,19 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 }
 
 func (p *pacemaker) OnStart() error {
+	if err := p.evsw.Start(); err != nil {
+		return err
+	}
+
 	go p.receiveRoutine()
 	p.startTimer()
 	return nil
 }
 
 func (p *pacemaker) OnStop() {
+	if err := p.evsw.Stop(); err != nil {
+		p.Logger.Error("failed trying to stop eventSwitch", "error", err)
+	}
 	p.stopTimer()
 }
 

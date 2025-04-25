@@ -73,6 +73,7 @@ type ConsensusOption func(*Consensus)
 
 func NewConsensus(options ...ConsensusOption) *Consensus {
 	cs := &Consensus{}
+	cs.BaseService = *service.NewBaseService(nil, "Consensus", cs)
 
 	for _, opt := range options {
 		opt(cs)
@@ -94,11 +95,18 @@ func (cs *Consensus) String() string {
 }
 
 func (cs *Consensus) OnStart() error {
+	if err := cs.evsw.Start(); err != nil {
+		return err
+	}
 	go cs.receiveRoutine()
 	return nil
 }
 
-func (cs *Consensus) OnStop() {}
+func (cs *Consensus) OnStop() {
+	if err := cs.evsw.Stop(); err != nil {
+		cs.Logger.Error("failed trying to stop eventSwitch", "error", err)
+	}
+}
 
 // GetValidators returns a copy of the current validators.
 func (cs *Consensus) GetValidators() (int64, []*types.Validator) {

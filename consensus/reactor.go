@@ -103,7 +103,6 @@ func (conR *Reactor) GetChannels() []*p2p.ChannelDescriptor {
 }
 
 func (conR *Reactor) InitPeer(peer p2p.Peer) p2p.Peer {
-	// xufeisoflyishere
 	peerState := NewPeerState(peer).SetLogger(conR.Logger)
 	peer.Set(types.PeerStateKey, peerState)
 	return peer

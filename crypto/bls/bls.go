@@ -22,6 +22,16 @@ type PubKey struct {
 	p *bls12.PointG1
 }
 
+func NewPubKey(pk []byte) *PubKey {
+	g1, err := bls12.NewG1().FromCompressed(pk)
+	if err != nil {
+		panic(err)
+	}
+	return &PubKey{
+		p: g1,
+	}
+}
+
 // ToBytes marshals the public key to a byte slice.
 func (pub PubKey) Bytes() []byte {
 	return bls12.NewG1().ToCompressed(pub.p)
@@ -89,22 +99,28 @@ type bls12Base struct {
 // Get bls public key by validator address
 type GetPubKeyFn func(crypto.Address) (crypto.PubKey, bool)
 
-func New(pubKeyFn GetPubKeyFn, addr crypto.Address) *bls12Base {
+// If blsSk is nil, New will randomly create a bls key pair
+func New(blsSk *PriKey, pubKeyFn GetPubKeyFn, addr crypto.Address) *bls12Base {
 	b := &bls12Base{
 		pubKeyFn:  pubKeyFn,
 		localAddr: addr,
 	}
-	b.InitKeyPair()
+	b.InitKeyPair(blsSk)
 	return b
 }
 
-func (bls *bls12Base) InitKeyPair() {
-	// the private key is uniformly random integer such that 0 <= pk < r
-	sk, err := rand.Int(rand.Reader, curveOrder)
-	if err != nil {
-		panic(err)
+func (bls *bls12Base) InitKeyPair(blsSk *PriKey) {
+	if blsSk == nil {
+		// the private key is uniformly random integer such that 0 <= pk < r
+		sk, err := rand.Int(rand.Reader, curveOrder)
+		if err != nil {
+			panic(err)
+		}
+		bls.priKey = PriKey{p: sk}
+	} else {
+		bls.priKey = *blsSk
 	}
-	bls.priKey = PriKey{p: sk}
+
 	bls.pubKey = bls.priKey.Public()
 	bls.proof = bls.PopProve()
 }
@@ -189,6 +205,7 @@ func (bls *bls12Base) Verify(signature crypto.QuorumSignature, message []byte) b
 		if !ok {
 			return false
 		}
+		fmt.Println("------", ok)
 		return bls.coreVerify(pk.(*PubKey), message, &s.point, domain)
 	}
 
@@ -298,6 +315,7 @@ func (bls *bls12Base) coreVerify(pubKey *PubKey, message []byte, signature *bls1
 	engine := bls12.NewEngine()
 	engine.AddPairInv(&bls12.G1One, signature)
 	engine.AddPair(pubKey.p, messagePoint)
+	fmt.Println("=====4", engine.Result().IsOne())
 	return engine.Result().IsOne()
 }
 

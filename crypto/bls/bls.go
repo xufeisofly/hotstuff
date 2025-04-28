@@ -205,7 +205,6 @@ func (bls *bls12Base) Verify(signature crypto.QuorumSignature, message []byte) b
 		if !ok {
 			return false
 		}
-		fmt.Println("------", ok)
 		return bls.coreVerify(pk.(*PubKey), message, &s.point, domain)
 	}
 
@@ -315,7 +314,6 @@ func (bls *bls12Base) coreVerify(pubKey *PubKey, message []byte, signature *bls1
 	engine := bls12.NewEngine()
 	engine.AddPairInv(&bls12.G1One, signature)
 	engine.AddPair(pubKey.p, messagePoint)
-	fmt.Println("=====4", engine.Result().IsOne())
 	return engine.Result().IsOne()
 }
 

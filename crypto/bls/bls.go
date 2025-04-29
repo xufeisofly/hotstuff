@@ -80,6 +80,16 @@ type ProofOfPossession struct {
 	p *bls12.PointG2
 }
 
+func NewProofOfPossession(proof []byte) *ProofOfPossession {
+	g2, err := bls12.NewG2().FromCompressed(proof)
+	if err != nil {
+		panic(err)
+	}
+	return &ProofOfPossession{
+		p: g2,
+	}
+}
+
 func (proof ProofOfPossession) Bytes() []byte {
 	return bls12.NewG2().ToCompressed(proof.p)
 }

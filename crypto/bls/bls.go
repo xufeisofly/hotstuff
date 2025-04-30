@@ -119,14 +119,18 @@ func New(blsSk *PriKey, pubKeyFn GetPubKeyFn, addr crypto.Address) *bls12Base {
 	return b
 }
 
+func GenPrivKey() PriKey {
+	sk, err := rand.Int(rand.Reader, curveOrder)
+	if err != nil {
+		panic(err)
+	}
+	return PriKey{p: sk}
+}
+
 func (bls *bls12Base) InitKeyPair(blsSk *PriKey) {
 	if blsSk == nil {
 		// the private key is uniformly random integer such that 0 <= pk < r
-		sk, err := rand.Int(rand.Reader, curveOrder)
-		if err != nil {
-			panic(err)
-		}
-		bls.priKey = PriKey{p: sk}
+		bls.priKey = GenPrivKey()
 	} else {
 		bls.priKey = *blsSk
 	}

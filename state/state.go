@@ -377,15 +377,21 @@ func MakeGenesisState(genDoc *types.GenesisDoc) (State, error) {
 		Version:       InitStateVersion,
 		ChainID:       genDoc.ChainID,
 		InitialHeight: genDoc.InitialHeight,
+		InitialView:   genDoc.InitialView,
 
 		LastBlockHeight: 0,
 		LastBlockID:     types.BlockID{},
 		LastBlockTime:   genDoc.GenesisTime,
 
+		LastBlockView: 0,
+
 		NextValidators:              nextValidatorSet,
 		Validators:                  validatorSet,
 		LastValidators:              types.NewValidatorSet(nil),
 		LastHeightValidatorsChanged: genDoc.InitialHeight,
+
+		HsValidators:                   validatorSet,
+		LastViewConsensusParamsChanged: genDoc.InitialView,
 
 		ConsensusParams:                  *genDoc.ConsensusParams,
 		LastHeightConsensusParamsChanged: genDoc.InitialHeight,

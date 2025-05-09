@@ -109,7 +109,7 @@ type blockchain struct {
 
 var _ Blockchain = (*blockchain)(nil)
 
-func newBlockchain(blockStore sm.BlockStore, l log.Logger) Blockchain {
+func NewBlockchain(blockStore sm.BlockStore) Blockchain {
 	return &blockchain{
 		startBlock:           nil,
 		pruneView:            types.ViewBeforeGenesis,
@@ -118,8 +118,12 @@ func newBlockchain(blockStore sm.BlockStore, l log.Logger) Blockchain {
 		latestCommittedBlock: nil,
 		latestLockedBlock:    nil,
 		blockStore:           blockStore,
-		logger:               l,
+		logger:               log.NewNopLogger(),
 	}
+}
+
+func (bc *blockchain) SetLogger(l log.Logger) {
+	bc.logger = l
 }
 
 func (bc *blockchain) Store(block *types.Block) error {

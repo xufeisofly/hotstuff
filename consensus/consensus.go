@@ -22,11 +22,16 @@ type txNotifier interface {
 	TxsAvailable() <-chan struct{}
 }
 
+type evidencePool interface {
+	// reports conflicting votes to the evidence pool to be processed into evidence
+	ReportConflictingHsVotes(voteA, voteB *types.HsVote)
+}
+
 type Consensus struct {
 	service.BaseService
 
 	// config details
-	config        *cfg.ConsensusConfig
+	config        *cfg.HsConsensusConfig
 	privValidator types.PrivValidator
 
 	// crypto to encrypt and decrypt
@@ -44,6 +49,10 @@ type Consensus struct {
 
 	// notify us if txs sare available
 	txNotifier txNotifier
+
+	// add evidence to the pool
+	// when it's detected
+	evpool evidencePool
 
 	// internal state
 	mtx tmsync.RWMutex
@@ -71,7 +80,15 @@ type Consensus struct {
 
 type ConsensusOption func(*Consensus)
 
-func NewConsensus(options ...ConsensusOption) *Consensus {
+func NewConsensus(
+	config *cfg.HsConsensusConfig,
+	state sm.State,
+	blockExec *sm.BlockExecutor,
+	blockchain Blockchain,
+	txNotifier txNotifier,
+	evpool evidencePool,
+	options ...ConsensusOption,
+) *Consensus {
 	cs := &Consensus{}
 	cs.BaseService = *service.NewBaseService(nil, "Consensus", cs)
 

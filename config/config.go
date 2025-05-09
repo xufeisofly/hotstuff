@@ -74,6 +74,7 @@ type Config struct {
 	StateSync       *StateSyncConfig       `mapstructure:"statesync"`
 	FastSync        *FastSyncConfig        `mapstructure:"fastsync"`
 	Consensus       *ConsensusConfig       `mapstructure:"consensus"`
+	HsConsensus     *HsConsensusConfig     `mapstructure:"hs_consensus"`
 	Storage         *StorageConfig         `mapstructure:"storage"`
 	TxIndex         *TxIndexConfig         `mapstructure:"tx_index"`
 	Instrumentation *InstrumentationConfig `mapstructure:"instrumentation"`
@@ -1071,6 +1072,12 @@ func (cfg *ConsensusConfig) ValidateBasic() error {
 		return errors.New("double_sign_check_height can't be negative")
 	}
 	return nil
+}
+
+type HsConsensusConfig struct {
+	RootDir string `mapstructure:"home"`
+	WalPath string `mapstructure:"wal_file"`
+	walFile string // overrides WalPath if set
 }
 
 //-----------------------------------------------------------------------------

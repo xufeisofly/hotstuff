@@ -227,6 +227,12 @@ func (b *EventBus) PublishEventValidatorSetUpdates(data EventDataValidatorSetUpd
 	return b.Publish(EventValidatorSetUpdates, data)
 }
 
+// hotstuff
+
+func (b *EventBus) PublishEventHsCompleteProposal(data EventDataHsCompleteProposal) error {
+	return b.Publish(EventPropose, data)
+}
+
 // -----------------------------------------------------------------------------
 type NopEventBus struct{}
 

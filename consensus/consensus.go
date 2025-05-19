@@ -67,6 +67,10 @@ type Consensus struct {
 	// internalMsgQueue chan msgInfo
 	// timeoutTicker    TimeoutTicker
 
+	// we use eventBus to trigger msg broadcasts in the reactor,
+	// and to notify external subscribers, eg. through a websocket
+	eventBus *types.EventBus
+
 	// closed when we finish shutting down
 	done chan struct{}
 
@@ -103,12 +107,29 @@ func (cs *Consensus) SetLogger(l log.Logger) {
 	cs.BaseService.Logger = l
 }
 
+// SetEventBus sets event bus.
+func (cs *Consensus) SetEventBus(b *types.EventBus) {
+	cs.eventBus = b
+	cs.blockExec.SetEventBus(b)
+}
+
 func (cs *Consensus) StringIndented(indent string) string {
 	return ""
 }
 
 func (cs *Consensus) String() string {
 	return "Consensus"
+}
+
+func (cs *Consensus) CurView() types.View {
+	return cs.pacemaker.CurView()
+}
+
+// GetState returns a copy of the chain state.
+func (cs *Consensus) GetState() sm.State {
+	cs.mtx.RLock()
+	defer cs.mtx.RUnlock()
+	return cs.state.Copy()
 }
 
 func (cs *Consensus) OnStart() error {
@@ -166,6 +187,16 @@ func (cs *Consensus) Propose(syncInfo *SyncInfo) error {
 	proposal, err := cs.createProposal(syncInfo)
 	if err != nil {
 		return err
+	}
+
+	proposeEvent := types.EventDataHsCompleteProposal{
+		View:    proposal.Block.View,
+		BlockID: proposal.Block.ID(),
+	}
+	if cs.eventBus != nil {
+		if err := cs.eventBus.PublishEventHsCompleteProposal(proposeEvent); err != nil {
+			cs.Logger.Error("failed publishing new propose", "err", err)
+		}
 	}
 
 	// broadcast proposal msg

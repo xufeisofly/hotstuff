@@ -36,7 +36,7 @@ type Reactor struct {
 
 	mtx      tmsync.RWMutex
 	waitSync bool
-	// eventBus *types.EventBus
+	eventBus *types.EventBus
 
 	Metrics *Metrics
 }
@@ -187,6 +187,12 @@ func (conR *Reactor) Receive(chID byte, peer p2p.Peer, msgBytes []byte) {
 		Src:       peer,
 		Message:   uw,
 	})
+}
+
+// SetEventBus sets event bus.
+func (conR *Reactor) SetEventBus(b *types.EventBus) {
+	conR.eventBus = b
+	conR.cons.SetEventBus(b)
 }
 
 // WaitSync returns whether the consensus reactor is waiting for state/fast sync.

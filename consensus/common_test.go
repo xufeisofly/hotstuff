@@ -64,12 +64,11 @@ func ResetConfig(name string) *cfg.Config {
 // validator stub (a kvstore consensus peer we control)
 
 type validatorStub struct {
-	Index  int32 // Validator index. NOTE: we don't assume validator set changes.
-	Height int64
-	Round  int32
+	Index int32 // Validator index. NOTE: we don't assume validator set changes.
+	View  types.View
 	types.PrivValidator
 	VotingPower int64
-	lastVote    *types.Vote
+	lastVote    *types.HsVote
 }
 
 var testMinPower int64 = 10
@@ -82,78 +81,78 @@ func newValidatorStub(privValidator types.PrivValidator, valIndex int32) *valida
 	}
 }
 
-func (vs *validatorStub) signVote(
-	voteType tmproto.SignedMsgType,
-	hash []byte,
-	header types.PartSetHeader,
-) (*types.Vote, error) {
-	pubKey, err := vs.PrivValidator.GetPubKey()
-	if err != nil {
-		return nil, fmt.Errorf("can't get pubkey: %w", err)
-	}
+// func (vs *validatorStub) signVote(
+// 	voteType tmproto.SignedMsgType,
+// 	hash []byte,
+// 	header types.PartSetHeader,
+// ) (*types.Vote, error) {
+// 	pubKey, err := vs.PrivValidator.GetPubKey()
+// 	if err != nil {
+// 		return nil, fmt.Errorf("can't get pubkey: %w", err)
+// 	}
 
-	vote := &types.Vote{
-		ValidatorIndex:   vs.Index,
-		ValidatorAddress: pubKey.Address(),
-		Height:           vs.Height,
-		Round:            vs.Round,
-		Timestamp:        tmtime.Now(),
-		Type:             voteType,
-		BlockID:          types.BlockID{Hash: hash, PartSetHeader: header},
-	}
-	v := vote.ToProto()
-	if err := vs.PrivValidator.SignVote(config.ChainID(), v); err != nil {
-		return nil, fmt.Errorf("sign vote failed: %w", err)
-	}
+// 	vote := &types.Vote{
+// 		ValidatorIndex:   vs.Index,
+// 		ValidatorAddress: pubKey.Address(),
+// 		Height:           vs.Height,
+// 		Round:            vs.Round,
+// 		Timestamp:        tmtime.Now(),
+// 		Type:             voteType,
+// 		BlockID:          types.BlockID{Hash: hash, PartSetHeader: header},
+// 	}
+// 	v := vote.ToProto()
+// 	if err := vs.PrivValidator.SignVote(config.ChainID(), v); err != nil {
+// 		return nil, fmt.Errorf("sign vote failed: %w", err)
+// 	}
 
-	// ref: signVote in FilePV, the vote should use the privious vote info when the sign data is the same.
-	if signDataIsEqual(vs.lastVote, v) {
-		v.Signature = vs.lastVote.Signature
-		v.Timestamp = vs.lastVote.Timestamp
-	}
+// 	// ref: signVote in FilePV, the vote should use the privious vote info when the sign data is the same.
+// 	if signDataIsEqual(vs.lastVote, v) {
+// 		v.Signature = vs.lastVote.Signature
+// 		v.Timestamp = vs.lastVote.Timestamp
+// 	}
 
-	vote.Signature = v.Signature
-	vote.Timestamp = v.Timestamp
+// 	vote.Signature = v.Signature
+// 	vote.Timestamp = v.Timestamp
 
-	return vote, err
-}
+// 	return vote, err
+// }
 
-// Sign vote for type/hash/header
-func signVote(vs *validatorStub, voteType tmproto.SignedMsgType, hash []byte, header types.PartSetHeader) *types.Vote {
-	v, err := vs.signVote(voteType, hash, header)
-	if err != nil {
-		panic(fmt.Errorf("failed to sign vote: %v", err))
-	}
+// // Sign vote for type/hash/header
+// func signVote(vs *validatorStub, voteType tmproto.SignedMsgType, hash []byte, header types.PartSetHeader) *types.Vote {
+// 	v, err := vs.signVote(voteType, hash, header)
+// 	if err != nil {
+// 		panic(fmt.Errorf("failed to sign vote: %v", err))
+// 	}
 
-	vs.lastVote = v
+// 	vs.lastVote = v
 
-	return v
-}
+// 	return v
+// }
 
-func signVotes(
-	voteType tmproto.SignedMsgType,
-	hash []byte,
-	header types.PartSetHeader,
-	vss ...*validatorStub,
-) []*types.Vote {
-	votes := make([]*types.Vote, len(vss))
-	for i, vs := range vss {
-		votes[i] = signVote(vs, voteType, hash, header)
-	}
-	return votes
-}
+// func signVotes(
+// 	voteType tmproto.SignedMsgType,
+// 	hash []byte,
+// 	header types.PartSetHeader,
+// 	vss ...*validatorStub,
+// ) []*types.Vote {
+// 	votes := make([]*types.Vote, len(vss))
+// 	for i, vs := range vss {
+// 		votes[i] = signVote(vs, voteType, hash, header)
+// 	}
+// 	return votes
+// }
 
-func incrementHeight(vss ...*validatorStub) {
-	for _, vs := range vss {
-		vs.Height++
-	}
-}
+// func incrementHeight(vss ...*validatorStub) {
+// 	for _, vs := range vss {
+// 		vs.Height++
+// 	}
+// }
 
-func incrementRound(vss ...*validatorStub) {
-	for _, vs := range vss {
-		vs.Round++
-	}
-}
+// func incrementRound(vss ...*validatorStub) {
+// 	for _, vs := range vss {
+// 		vs.Round++
+// 	}
+// }
 
 type ValidatorStubsByPower []*validatorStub
 
@@ -390,21 +389,18 @@ func ensureNewTimeout(timeoutCh <-chan tmpubsub.Message, height int64, round int
 		"Timeout expired while waiting for NewTimeout event")
 }
 
-func ensureNewProposal(proposalCh <-chan tmpubsub.Message, height int64, round int32) {
+func ensureNewProposal(proposalCh <-chan tmpubsub.Message, view types.View) {
 	select {
 	case <-time.After(ensureTimeout):
 		panic("Timeout expired while waiting for NewProposal event")
 	case msg := <-proposalCh:
-		proposalEvent, ok := msg.Data().(types.EventDataCompleteProposal)
+		proposalEvent, ok := msg.Data().(types.EventDataHsCompleteProposal)
 		if !ok {
 			panic(fmt.Sprintf("expected a EventDataCompleteProposal, got %T. Wrong subscription channel?",
 				msg.Data()))
 		}
-		if proposalEvent.Height != height {
-			panic(fmt.Sprintf("expected height %v, got %v", height, proposalEvent.Height))
-		}
-		if proposalEvent.Round != round {
-			panic(fmt.Sprintf("expected round %v, got %v", round, proposalEvent.Round))
+		if proposalEvent.View != view {
+			panic(fmt.Sprintf("expected view %v, got %v", view, proposalEvent.View))
 		}
 	}
 }

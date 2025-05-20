@@ -91,10 +91,12 @@ func NewConsensus(
 	blockchain Blockchain,
 	txNotifier txNotifier,
 	evpool evidencePool,
+	pacemaker Pacemaker,
 	options ...ConsensusOption,
 ) *Consensus {
 	cs := &Consensus{}
 	cs.BaseService = *service.NewBaseService(nil, "Consensus", cs)
+	cs.pacemaker = pacemaker
 
 	for _, opt := range options {
 		opt(cs)

@@ -30,3 +30,7 @@ func subscribe(eventBus *types.EventBus, q tmpubsub.Query) <-chan tmpubsub.Messa
 	}
 	return sub.Out()
 }
+
+func mockQuorumCert(view types.View) types.QuorumCert {
+	return types.NewQuorumCert(nil, view, types.BlockID{})
+}

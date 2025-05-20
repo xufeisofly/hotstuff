@@ -106,13 +106,13 @@ func (p *pacemaker) CurView() types.View {
 	return p.curView
 }
 
-func (p *pacemaker) updateHighQC(qc *types.QuorumCert) {
+func (p *pacemaker) UpdateHighQC(qc *types.QuorumCert) {
 	if p.highQC.View() < qc.View() {
 		p.highQC = qc
 	}
 }
 
-func (p *pacemaker) updateHighTC(tc *types.TimeoutCert) {
+func (p *pacemaker) UpdateHighTC(tc *types.TimeoutCert) {
 	if p.highTC.View() < tc.View() {
 		p.highTC = tc
 	}
@@ -129,12 +129,12 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 
 	timeout := false
 	if si.QC() != nil {
-		p.updateHighQC(si.QC())
+		p.UpdateHighQC(si.QC())
 	}
 
 	if si.TC() != nil {
 		timeout = true
-		p.updateHighTC(si.TC())
+		p.UpdateHighTC(si.TC())
 	}
 
 	if si.AggQC() != nil {
@@ -145,7 +145,7 @@ func (p *pacemaker) AdvanceView(si SyncInfo) {
 			return
 		}
 
-		p.updateHighQC(&highQC)
+		p.UpdateHighQC(&highQC)
 	}
 
 	newView := math.MaxInt64(p.highQC.View(), p.highTC.View()) + 1

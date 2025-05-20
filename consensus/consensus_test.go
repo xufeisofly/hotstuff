@@ -14,6 +14,8 @@ func TestPropose(t *testing.T) {
 	cs, _ := randConsensus(1)
 
 	proposalCh := subscribe(cs.eventBus, types.EventQueryHsPropose)
+
+	// TODO propose
 	ensureNewProposal(proposalCh, cs.CurView())
 	// xufeisoflyishere
 }

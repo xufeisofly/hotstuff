@@ -266,13 +266,13 @@ func newConsensusWithConfigAndBlockStore(
 	cs.SetLogger(log.TestingLogger().With("module", "consensus"))
 	cs.SetPrivValidator(pv)
 
-	// eventBus := types.NewEventBus()
-	// eventBus.SetLogger(log.TestingLogger().With("module", "events"))
-	// err := eventBus.Start()
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// cs.SetEventBus(eventBus)
+	eventBus := types.NewEventBus()
+	eventBus.SetLogger(log.TestingLogger().With("module", "events"))
+	err := eventBus.Start()
+	if err != nil {
+		panic(err)
+	}
+	cs.SetEventBus(eventBus)
 	return cs
 }
 
@@ -283,6 +283,12 @@ func loadPrivValidator(config *cfg.Config) *privval.FilePV {
 	privValidator := privval.LoadOrGenFilePV(privValidatorKeyFile, privValidatorStateFile)
 	privValidator.Reset()
 	return privValidator
+}
+
+func incrementView(vss ...*validatorStub) {
+	for _, vs := range vss {
+		vs.View++
+	}
 }
 
 func randConsensus(nValidators int) (*Consensus, []*validatorStub) {
@@ -297,7 +303,7 @@ func randConsensus(nValidators int) (*Consensus, []*validatorStub) {
 		vss[i] = newValidatorStub(privVals[i], int32(i))
 	}
 	// since cs1 starts at 1
-	incrementHeight(vss[1:]...)
+	incrementView(vss[1:]...)
 
 	return cs, vss
 }

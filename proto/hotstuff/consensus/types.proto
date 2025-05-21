@@ -111,5 +111,7 @@ message Message {
     HasVote       has_vote        = 7;
     VoteSetMaj23  vote_set_maj23  = 8;
     VoteSetBits   vote_set_bits   = 9;
+    ProposalMessage hs_proposal = 10;
+    VoteMessage hs_vote = 11;
   }
 }

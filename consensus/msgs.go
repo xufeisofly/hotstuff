@@ -20,7 +20,7 @@ func MsgFromProto(p *tmcons.Message) (Message, error) {
 	}
 
 	switch msg := um.(type) {
-	case *tmcons.Proposal:
+	case *tmcons.ProposalMessage:
 		pbP, err := types.HsProposalFromProto(&msg.Proposal)
 		if err != nil {
 			return nil, fmt.Errorf("proposal msg to proto error: %w", err)
@@ -29,8 +29,8 @@ func MsgFromProto(p *tmcons.Message) (Message, error) {
 		pb = &ProposalMessage{
 			Proposal: pbP,
 		}
-	case *tmcons.Vote:
-		vote, err := types.VoteFromProto(msg.Vote)
+	case *tmcons.VoteMessage:
+		vote, err := types.HsVoteFromProto(&msg.Vote)
 		if err != nil {
 			return nil, fmt.Errorf("vote msg to proto error: %w", err)
 		}

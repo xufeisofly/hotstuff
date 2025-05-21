@@ -86,6 +86,7 @@ type ConsensusOption func(*Consensus)
 
 func NewConsensus(
 	config *cfg.HsConsensusConfig,
+	crypto Crypto,
 	state sm.State,
 	blockExec *sm.BlockExecutor,
 	blockchain Blockchain,

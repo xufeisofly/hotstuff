@@ -11,7 +11,7 @@ import (
 
 // 测试 proposer 打包广播 Proposal
 func TestPropose(t *testing.T) {
-	cs, _ := randConsensus(1)
+	cs, _ := newConsensus(1)
 
 	proposalCh := subscribe(cs.eventBus, types.EventQueryHsPropose)
 

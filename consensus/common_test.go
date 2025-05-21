@@ -18,6 +18,8 @@ import (
 	"github.com/xufeisofly/hotstuff/abci/example/kvstore"
 	abci "github.com/xufeisofly/hotstuff/abci/types"
 	cfg "github.com/xufeisofly/hotstuff/config"
+	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	tmos "github.com/xufeisofly/hotstuff/libs/os"
@@ -190,25 +192,32 @@ func (vss ValidatorStubsByPower) Swap(i, j int) {
 //-------------------------------------------------------------------------------
 // consensus states
 
-func newConsensus(state sm.State, pv types.PrivValidator, app abci.Application) *Consensus {
+func newConsensus(
+	state sm.State,
+	pv types.PrivValidator,
+	pvs []types.PrivValidator,
+	app abci.Application,
+) *Consensus {
 	config := cfg.ResetTestRoot("consensus_state_test")
-	return newConsensusWithConfig(config, state, pv, app)
+	return newConsensusWithConfig(config, state, pv, pvs, app)
 }
 
 func newConsensusWithConfig(
 	thisConfig *cfg.Config,
 	state sm.State,
 	pv types.PrivValidator,
+	pvs []types.PrivValidator,
 	app abci.Application,
 ) *Consensus {
 	blockDB := dbm.NewMemDB()
-	return newConsensusWithConfigAndBlockStore(thisConfig, state, pv, app, blockDB)
+	return newConsensusWithConfigAndBlockStore(thisConfig, state, pv, pvs, app, blockDB)
 }
 
 func newConsensusWithConfigAndBlockStore(
 	thisConfig *cfg.Config,
 	state sm.State,
 	pv types.PrivValidator,
+	pvs []types.PrivValidator,
 	app abci.Application,
 	blockDB dbm.DB,
 ) *Consensus {
@@ -262,7 +271,24 @@ func newConsensusWithConfigAndBlockStore(
 	}
 
 	blockExec := sm.NewBlockExecutor(stateStore, log.TestingLogger(), proxyAppConnCon, mempool, evpool)
-	cs := NewConsensus(thisConfig.HsConsensus, state, blockExec, blockchain, mempool, evpool)
+
+	leaderElect := NewLeaderElect(blockchain, state, log.TestingLogger())
+	viewDuration := NewFixedViewDuration(1 * time.Second)
+
+	pubKeyFn := func(addr crypto.Address) (crypto.PubKey, bool) {
+		for _, val := range pvs {
+			pk, _ := val.GetPubKey()
+			if pk.Address().Equal(addr) {
+				return pk, true
+			}
+		}
+		return nil, false
+	}
+
+	pk, _ := pv.GetPubKey()
+	cryptoCons := NewCrypto(bls.New(pv.GetBlsPriKey(), pubKeyFn, pk.Address()))
+	pacemaker := NewPacemaker(cryptoCons, leaderElect, viewDuration)
+	cs := NewConsensus(thisConfig.HsConsensus, cryptoCons, state, blockExec, blockchain, mempool, evpool, pacemaker)
 	cs.SetLogger(log.TestingLogger().With("module", "consensus"))
 	cs.SetPrivValidator(pv)
 
@@ -297,7 +323,7 @@ func randConsensus(nValidators int) (*Consensus, []*validatorStub) {
 
 	vss := make([]*validatorStub, nValidators)
 
-	cs := newConsensus(state, privVals[0], counter.NewApplication(true))
+	cs := newConsensus(state, privVals[0], privVals, counter.NewApplication(true))
 
 	for i := 0; i < nValidators; i++ {
 		vss[i] = newValidatorStub(privVals[i], int32(i))

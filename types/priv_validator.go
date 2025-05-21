@@ -15,10 +15,13 @@ import (
 // that signs votes and proposals, and never double signs.
 type PrivValidator interface {
 	GetPubKey() (crypto.PubKey, error)
-	GetBlsPubKey() (*bls.PubKey, error)
 
 	SignVote(chainID string, vote *tmproto.Vote) error
 	SignProposal(chainID string, proposal *tmproto.Proposal) error
+
+	// for hotstuff
+	GetBlsPubKey() (*bls.PubKey, error)
+	GetBlsPriKey() *bls.PriKey
 }
 
 type PrivValidatorsByAddress []PrivValidator
@@ -76,6 +79,10 @@ func (pv MockPV) GetPubKey() (crypto.PubKey, error) {
 func (pv MockPV) GetBlsPubKey() (*bls.PubKey, error) {
 	blsPubKey := pv.BlsPrivKey.Public()
 	return &blsPubKey, nil
+}
+
+func (pv MockPV) GetBlsPriKey() *bls.PriKey {
+	return pv.BlsPrivKey
 }
 
 // Implements PrivValidator.

@@ -153,7 +153,7 @@ func (bc *blockchain) Store(block *types.Block) error {
 		bc.addWrappedBlock(wrap(block))
 		bc.blocksAtView[block.View] = block
 		bc.addChild(bc.startBlock)
-		bc.SetQuorumCertFor(bc.startBlock.QuorumCert.BlockHash(), bc.startBlock.QuorumCert)
+		bc.SetQuorumCertFor(bc.startBlock.QuorumCert.BlockID().Hash, bc.startBlock.QuorumCert)
 		bc.startBlock = block
 		return nil
 	}
@@ -319,7 +319,7 @@ func (bc *blockchain) SetLatestCommittedBlock(block *types.Block) {
 		return
 	}
 
-	if block.SelfCommitQuorumCert == nil {
+	if block.SelfCommit == nil {
 		panic(fmt.Sprintf("block must have a CommitQC, view: %d", block.View))
 	}
 
@@ -388,7 +388,7 @@ func (bc *blockchain) QuorumCertRef(block *types.Block) *types.Block {
 	if block == nil || block.QuorumCert == nil {
 		return nil
 	}
-	return bc.Get(block.QuorumCert.BlockHash())
+	return bc.Get(block.QuorumCert.BlockID().Hash)
 }
 
 func (bc *blockchain) ParentRef(block *types.Block) *types.Block {

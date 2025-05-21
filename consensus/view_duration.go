@@ -105,11 +105,6 @@ func (v *viewDuration) GetDuration() time.Duration {
 	return time.Duration(duration * float64(time.Millisecond))
 }
 
-
-package synchronizer
-
-import "time"
-
 type fixedViewDuration struct {
 	duration time.Duration
 }

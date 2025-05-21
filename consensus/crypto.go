@@ -30,7 +30,7 @@ type Crypto interface {
 	VerifyAggregateQC(aggQC types.AggregateQC) (highQC types.QuorumCert, ok bool)
 }
 
-type crypto struct {
+type cryptoCons struct {
 	CryptoBase
 
 	logger log.Logger
@@ -39,19 +39,19 @@ type crypto struct {
 	sigCollect *sigCollect
 }
 
-var _ Crypto = (*crypto)(nil)
+var _ Crypto = (*cryptoCons)(nil)
 
 func NewCrypto(cryptoBase CryptoBase) Crypto {
-	return &crypto{
+	return &cryptoCons{
 		CryptoBase: cryptoBase,
 	}
 }
 
-func (c *crypto) SetLogger(l log.Logger) {
+func (c *cryptoCons) SetLogger(l log.Logger) {
 	c.logger = l
 }
 
-func (c *crypto) CollectPartialSignature(
+func (c *cryptoCons) CollectPartialSignature(
 	view types.View,
 	msgHash []byte,
 	partSig tcrypto.QuorumSignature,
@@ -111,18 +111,18 @@ func (c *crypto) CollectPartialSignature(
 	return aggSig, true
 }
 
-func (c *crypto) VerifyQuorumCert(qc types.QuorumCert) bool {
+func (c *cryptoCons) VerifyQuorumCert(qc types.QuorumCert) bool {
 	if qc.Signature().Participants().Len() < int(c.state.HsValidators.QuorumVotingPower()) {
 		return false
 	}
 	return c.Verify(qc.Signature(), qc.BlockID().Hash)
 }
 
-func (c *crypto) VerifyTimeoutCert(tc types.TimeoutCert) bool {
+func (c *cryptoCons) VerifyTimeoutCert(tc types.TimeoutCert) bool {
 	return false
 }
 
-func (c *crypto) VerifyAggregateQC(aggQC types.AggregateQC) (highQC types.QuorumCert, ok bool) {
+func (c *cryptoCons) VerifyAggregateQC(aggQC types.AggregateQC) (highQC types.QuorumCert, ok bool) {
 	return types.QuorumCert{}, false
 }
 

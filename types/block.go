@@ -20,7 +20,6 @@ import (
 	tmsync "github.com/xufeisofly/hotstuff/libs/sync"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 	tmversion "github.com/xufeisofly/hotstuff/proto/hotstuff/version"
-	"github.com/xufeisofly/hotstuff/types"
 	"github.com/xufeisofly/hotstuff/version"
 )
 
@@ -806,7 +805,7 @@ type Commit struct {
 }
 
 type HsCommit struct {
-	CommitQC *types.QuorumCert
+	CommitQC *QuorumCert
 }
 
 // NewCommit returns a new Commit.

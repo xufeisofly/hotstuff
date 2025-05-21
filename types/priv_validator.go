@@ -157,5 +157,6 @@ func (pv *ErroringMockPV) SignProposal(chainID string, proposal *tmproto.Proposa
 // NewErroringMockPV returns a MockPV that fails on each signing request. Again, for testing only.
 
 func NewErroringMockPV() *ErroringMockPV {
-	return &ErroringMockPV{MockPV{ed25519.GenPrivKey(), false, false}}
+	blsSk := bls.GenPrivKey()
+	return &ErroringMockPV{MockPV{ed25519.GenPrivKey(), &blsSk, false, false}}
 }

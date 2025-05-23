@@ -3,11 +3,27 @@ package consensus
 import (
 	"context"
 	"fmt"
+	"os"
 	"testing"
 
 	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
 	"github.com/xufeisofly/hotstuff/types"
 )
+
+func TestMain(m *testing.M) {
+	config = ResetConfig("consensus_reactor_test")
+	// consensusReplayConfig = ResetConfig("consensus_replay_test")
+	// configStateTest := ResetConfig("consensus_state_test")
+	// configMempoolTest := ResetConfig("consensus_mempool_test")
+	// configByzantineTest := ResetConfig("consensus_byzantine_test")
+	code := m.Run()
+	os.RemoveAll(config.RootDir)
+	// os.RemoveAll(consensusReplayConfig.RootDir)
+	// os.RemoveAll(configStateTest.RootDir)
+	// os.RemoveAll(configMempoolTest.RootDir)
+	// os.RemoveAll(configByzantineTest.RootDir)
+	os.Exit(code)
+}
 
 // 测试 proposer 打包广播 Proposal
 func TestPropose(t *testing.T) {

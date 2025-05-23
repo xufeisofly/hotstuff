@@ -97,6 +97,12 @@ func NewConsensus(
 ) *Consensus {
 	cs := &Consensus{}
 	cs.BaseService = *service.NewBaseService(nil, "Consensus", cs)
+	cs.crypto = crypto
+	cs.state = state
+	cs.blockExec = blockExec
+	cs.blockchain = blockchain
+	cs.txNotifier = txNotifier
+	cs.evpool = evpool
 	cs.pacemaker = pacemaker
 
 	for _, opt := range options {

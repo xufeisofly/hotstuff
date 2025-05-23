@@ -90,6 +90,7 @@ func DefaultConfig() *Config {
 		StateSync:       DefaultStateSyncConfig(),
 		FastSync:        DefaultFastSyncConfig(),
 		Consensus:       DefaultConsensusConfig(),
+		HsConsensus:     DefaultHsConsensusConfig(),
 		Storage:         DefaultStorageConfig(),
 		TxIndex:         DefaultTxIndexConfig(),
 		Instrumentation: DefaultInstrumentationConfig(),
@@ -106,6 +107,7 @@ func TestConfig() *Config {
 		StateSync:       TestStateSyncConfig(),
 		FastSync:        TestFastSyncConfig(),
 		Consensus:       TestConsensusConfig(),
+		HsConsensus:     TestHsConsensusConfig(),
 		Storage:         TestStorageConfig(),
 		TxIndex:         TestTxIndexConfig(),
 		Instrumentation: TestInstrumentationConfig(),
@@ -1078,6 +1080,29 @@ type HsConsensusConfig struct {
 	RootDir string `mapstructure:"home"`
 	WalPath string `mapstructure:"wal_file"`
 	walFile string // overrides WalPath if set
+}
+
+func DefaultHsConsensusConfig() *HsConsensusConfig {
+	return &HsConsensusConfig{
+		WalPath: filepath.Join(defaultDataDir, "cs.wal", "wal"),
+	}
+}
+
+func TestHsConsensusConfig() *HsConsensusConfig {
+	cfg := DefaultHsConsensusConfig()
+	return cfg
+}
+
+func (cfg *HsConsensusConfig) WalFile() string {
+	if cfg.walFile != "" {
+		return cfg.walFile
+	}
+	return rootify(cfg.WalPath, cfg.RootDir)
+}
+
+// SetWalFile sets the path to the write-ahead log file
+func (cfg *HsConsensusConfig) SetWalFile(walFile string) {
+	cfg.walFile = walFile
 }
 
 //-----------------------------------------------------------------------------

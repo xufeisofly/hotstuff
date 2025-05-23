@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
 	tmjson "github.com/xufeisofly/hotstuff/libs/json"
 	tmos "github.com/xufeisofly/hotstuff/libs/os"
@@ -29,17 +30,19 @@ const (
 
 // GenesisValidator is an initial validator.
 type GenesisValidator struct {
-	Address Address       `json:"address"`
-	PubKey  crypto.PubKey `json:"pub_key"`
-	Power   int64         `json:"power"`
-	Name    string        `json:"name"`
+	Address   Address       `json:"address"`
+	PubKey    crypto.PubKey `json:"pub_key"`
+	BlsPubKey *bls.PubKey   `json:"bls_pub_key"`
+	Power     int64         `json:"power"`
+	Name      string        `json:"name"`
 }
 
 // GenesisDoc defines the initial conditions for a tendermint blockchain, in particular its validator set.
 type GenesisDoc struct {
 	GenesisTime     time.Time                `json:"genesis_time"`
 	ChainID         string                   `json:"chain_id"`
-	InitialHeight   int64                    `json:"initial_height"`
+	InitialHeight   int64                    `json:"initial_height"` // for tendermint
+	InitialView     View                     `json:"initial_view"`   // for hotstuff
 	ConsensusParams *tmproto.ConsensusParams `json:"consensus_params,omitempty"`
 	Validators      []GenesisValidator       `json:"validators,omitempty"`
 	AppHash         tmbytes.HexBytes         `json:"app_hash"`
@@ -59,7 +62,7 @@ func (genDoc *GenesisDoc) SaveAs(file string) error {
 func (genDoc *GenesisDoc) ValidatorHash() []byte {
 	vals := make([]*Validator, len(genDoc.Validators))
 	for i, v := range genDoc.Validators {
-		vals[i] = NewValidator(v.PubKey, v.Power)
+		vals[i] = NewValidator(v.PubKey, v.BlsPubKey, v.Power)
 	}
 	vset := NewValidatorSet(vals)
 	return vset.Hash()
@@ -80,7 +83,12 @@ func (genDoc *GenesisDoc) ValidateAndComplete() error {
 	if genDoc.InitialHeight == 0 {
 		genDoc.InitialHeight = 1
 	}
-
+	if genDoc.InitialView < 0 {
+		return fmt.Errorf("initial_view cannot be negative (got %v)", genDoc.InitialView)
+	}
+	if genDoc.InitialView == 0 {
+		genDoc.InitialView = 1
+	}
 	if genDoc.ConsensusParams == nil {
 		genDoc.ConsensusParams = DefaultConsensusParams()
 	} else if err := ValidateConsensusParams(*genDoc.ConsensusParams); err != nil {

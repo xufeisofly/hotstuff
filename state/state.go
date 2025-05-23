@@ -51,9 +51,11 @@ type State struct {
 	// immutable
 	ChainID       string
 	InitialHeight int64 // should be 1, not 0, when starting from height 1
+	InitialView   types.View
 
 	// LastBlockHeight=0 at genesis (ie. block(H=0) does not exist)
-	LastBlockHeight int64
+	LastBlockHeight int64      // for tendermint
+	LastBlockView   types.View // for hotstuff
 	LastBlockID     types.BlockID
 	LastBlockTime   time.Time
 
@@ -63,18 +65,28 @@ type State struct {
 	// Note that if s.LastBlockHeight causes a valset change,
 	// we set s.LastHeightValidatorsChanged = s.LastBlockHeight + 1 + 1
 	// Extra +1 due to nextValSet delay.
-	NextValidators              *types.ValidatorSet
+	// 对于 hotstuff 来说，LastValidators 用于验证上一个 View 生成的 block 的 QC
+	// Validators 用于当前 View 的 block 的 QC，他会预先在 NextValidators 中生成
+	// 如果 Validators 发生变化，会在 NextView 生效，本次 View 不受影响
+
+	// for tendermint
+	NextValidators              *types.ValidatorSet // tendermint 的  NextValidators 是可以预测的，只是在 Validators 的基础上 IncrementProposerPriority，用于更新新的 Proposer，并没有更换 Validators 的实际成员。HotStuff 不是通过这种方式选择 Proposer 的，所以不需要 NextValidators
 	Validators                  *types.ValidatorSet
 	LastValidators              *types.ValidatorSet
 	LastHeightValidatorsChanged int64
 
+	// for hotstuff
+	HsValidators              *types.ValidatorSet
+	LastViewValidatorsChanged types.View
+
 	// Consensus parameters used for validating blocks.
 	// Changes returned by EndBlock and updated after Commit.
 	ConsensusParams                  tmproto.ConsensusParams
-	LastHeightConsensusParamsChanged int64
+	LastHeightConsensusParamsChanged int64      // for tendermint
+	LastViewConsensusParamsChanged   types.View // for hotstuff
 
 	// Merkle root of the results from executing prev block
-	LastResultsHash []byte
+	LastResultsHash []byte // for tendermint
 
 	// the latest AppHash we've received from calling abci.Commit()
 	AppHash []byte
@@ -86,8 +98,10 @@ func (state State) Copy() State {
 		Version:       state.Version,
 		ChainID:       state.ChainID,
 		InitialHeight: state.InitialHeight,
+		InitialView:   state.InitialView,
 
 		LastBlockHeight: state.LastBlockHeight,
+		LastBlockView:   state.LastBlockView,
 		LastBlockID:     state.LastBlockID,
 		LastBlockTime:   state.LastBlockTime,
 
@@ -96,8 +110,12 @@ func (state State) Copy() State {
 		LastValidators:              state.LastValidators.Copy(),
 		LastHeightValidatorsChanged: state.LastHeightValidatorsChanged,
 
+		HsValidators:              state.HsValidators,
+		LastViewValidatorsChanged: state.LastViewValidatorsChanged,
+
 		ConsensusParams:                  state.ConsensusParams,
 		LastHeightConsensusParamsChanged: state.LastHeightConsensusParamsChanged,
+		LastViewConsensusParamsChanged:   state.LastViewConsensusParamsChanged,
 
 		AppHash: state.AppHash,
 
@@ -261,10 +279,33 @@ func (state State) MakeBlock(
 	return block, block.MakePartSet(types.BlockPartSizeBytes)
 }
 
+func (state State) HsMakeBlock(
+	view types.View,
+	txs []types.Tx,
+	lastQC *types.QuorumCert,
+	evidence []types.Evidence,
+	proposerAddress []byte,
+) (*types.Block, *types.PartSet) {
+	// Build base block with block data.
+	block := types.HsMakeBlock(view, txs, lastQC, evidence)
+
+	// Fill rest of header with state data.
+	block.Header.HsPopulate(
+		state.Version.Consensus, state.ChainID,
+		time.Now(), lastQC.BlockID(),
+		state.Validators.Hash(), state.NextValidators.Hash(),
+		types.HashConsensusParams(state.ConsensusParams), state.AppHash,
+		proposerAddress,
+	)
+
+	return block, nil
+}
+
 // MedianTime computes a median time for a given Commit (based on Timestamp field of votes messages) and the
 // corresponding validator set. The computed time is always between timestamps of
 // the votes sent by honest processes, i.e., a faulty processes can not arbitrarily increase or decrease the
 // computed value.
+// 计算 commit 生成的时间，根据 validator 权重，hotstuff 目前还不确定是否需要
 func MedianTime(commit *types.Commit, validators *types.ValidatorSet) time.Time {
 	weightedTimes := make([]*tmtime.WeightedTime, len(commit.Signatures))
 	totalVotingPower := int64(0)
@@ -326,7 +367,7 @@ func MakeGenesisState(genDoc *types.GenesisDoc) (State, error) {
 	} else {
 		validators := make([]*types.Validator, len(genDoc.Validators))
 		for i, val := range genDoc.Validators {
-			validators[i] = types.NewValidator(val.PubKey, val.Power)
+			validators[i] = types.NewValidator(val.PubKey, val.BlsPubKey, val.Power)
 		}
 		validatorSet = types.NewValidatorSet(validators)
 		nextValidatorSet = types.NewValidatorSet(validators).CopyIncrementProposerPriority(1)
@@ -336,15 +377,21 @@ func MakeGenesisState(genDoc *types.GenesisDoc) (State, error) {
 		Version:       InitStateVersion,
 		ChainID:       genDoc.ChainID,
 		InitialHeight: genDoc.InitialHeight,
+		InitialView:   genDoc.InitialView,
 
 		LastBlockHeight: 0,
 		LastBlockID:     types.BlockID{},
 		LastBlockTime:   genDoc.GenesisTime,
 
+		LastBlockView: 0,
+
 		NextValidators:              nextValidatorSet,
 		Validators:                  validatorSet,
 		LastValidators:              types.NewValidatorSet(nil),
 		LastHeightValidatorsChanged: genDoc.InitialHeight,
+
+		HsValidators:                   validatorSet,
+		LastViewConsensusParamsChanged: genDoc.InitialView,
 
 		ConsensusParams:                  *genDoc.ConsensusParams,
 		LastHeightConsensusParamsChanged: genDoc.InitialHeight,

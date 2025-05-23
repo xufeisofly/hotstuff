@@ -35,7 +35,13 @@ const (
 	EventTimeoutWait      = "TimeoutWait"
 	EventUnlock           = "Unlock"
 	EventValidBlock       = "ValidBlock"
-	EventVote             = "Vote"
+	// EventVote             = "Vote"
+
+	// Hotstuff
+	EventPropose     = "Propose"
+	EventVote        = "Vote"
+	EventNewView     = "NewView"
+	EventViewTimeout = "ViewTimeout"
 )
 
 // ENCODING / DECODING
@@ -115,6 +121,12 @@ type EventDataCompleteProposal struct {
 	BlockID BlockID `json:"block_id"`
 }
 
+type EventDataHsCompleteProposal struct {
+	View View `json:"view"`
+
+	BlockID BlockID `json:"block_id"`
+}
+
 type EventDataVote struct {
 	Vote *Vote
 }
@@ -159,6 +171,12 @@ var (
 	EventQueryValidatorSetUpdates = QueryForEvent(EventValidatorSetUpdates)
 	EventQueryValidBlock          = QueryForEvent(EventValidBlock)
 	EventQueryVote                = QueryForEvent(EventVote)
+
+	// for hotstuff
+	EventQueryHsPropose     = QueryForEvent(EventPropose)
+	EventQueryHsVote        = QueryForEvent(EventVote)
+	EventQueryHsNewView     = QueryForEvent(EventNewView)
+	EventQueryHsViewTimeout = QueryForEvent(EventViewTimeout)
 )
 
 func EventQueryTxFor(tx Tx) tmpubsub.Query {

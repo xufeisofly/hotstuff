@@ -1,4 +1,4 @@
-package consensus
+package consensus_old
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/xufeisofly/hotstuff/consensus/types"
+	"github.com/xufeisofly/hotstuff/consensus_old/types"
 	"github.com/xufeisofly/hotstuff/crypto/merkle"
 	"github.com/xufeisofly/hotstuff/libs/autofile"
 	"github.com/xufeisofly/hotstuff/libs/log"

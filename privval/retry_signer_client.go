@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 	"github.com/xufeisofly/hotstuff/types"
 )
@@ -61,6 +62,14 @@ func (sc *RetrySignerClient) GetPubKey() (crypto.PubKey, error) {
 		time.Sleep(sc.timeout)
 	}
 	return nil, fmt.Errorf("exhausted all attempts to get pubkey: %w", err)
+}
+
+func (sc *RetrySignerClient) GetBlsPubKey() (*bls.PubKey, error) {
+	return nil, nil
+}
+
+func (sc *RetrySignerClient) GetBlsPriKey() *bls.PriKey {
+	return nil
 }
 
 func (sc *RetrySignerClient) SignVote(chainID string, vote *tmproto.Vote) error {

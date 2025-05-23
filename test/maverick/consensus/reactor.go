@@ -10,7 +10,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	tmcon "github.com/xufeisofly/hotstuff/consensus"
-	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	cstypes "github.com/xufeisofly/hotstuff/consensus_old/types"
 	"github.com/xufeisofly/hotstuff/libs/bits"
 	tmevents "github.com/xufeisofly/hotstuff/libs/events"
 	tmjson "github.com/xufeisofly/hotstuff/libs/json"

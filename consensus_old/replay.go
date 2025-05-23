@@ -1,4 +1,4 @@
-package consensus
+package consensus_old
 
 import (
 	"bytes"
@@ -305,6 +305,7 @@ func (h *Handshaker) ReplayBlocks(
 		for i, val := range h.genDoc.Validators {
 			validators[i] = types.NewValidator(val.PubKey, val.Power)
 		}
+		// ValidatorSet 是 genesis doc 获得，并同步给 app，后续不再更改
 		validatorSet := types.NewValidatorSet(validators)
 		nextVals := types.TM2PB.ValidatorUpdates(validatorSet)
 		csParams := types.TM2PB.ConsensusParams(h.genDoc.ConsensusParams)

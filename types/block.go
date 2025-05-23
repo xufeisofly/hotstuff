@@ -2,6 +2,7 @@ package types
 
 import (
 	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"strings"
@@ -132,6 +133,12 @@ func (b *Block) Hash() tmbytes.HexBytes {
 	}
 	b.fillHeader()
 	return b.Header.Hash()
+}
+
+func (b *Block) ID() BlockID {
+	return BlockID{
+		Hash: b.Hash(),
+	}
 }
 
 // MakePartSet returns a PartSet containing parts of a serialized block.
@@ -317,6 +324,24 @@ func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
 
 //-----------------------------------------------------------------------------
 
+// View is a crucial hotstuff concept, different with tendermint height, the views of
+// committed blocks might not be sequencial, it's more like a combination of Height and Round
+// in tendermint
+type View = int64
+
+func GetViewHash(v View) tmbytes.HexBytes {
+	var buf [8]byte
+	binary.BigEndian.PutUint64(buf[:], uint64(v))
+	return tmhash.Sum(buf[:])
+}
+
+const (
+	GenesisView       = View(1)
+	ViewBeforeGenesis = GenesisView - 1
+)
+
+type Hash = tmbytes.HexBytes
+
 // Header defines the structure of a Tendermint block header.
 // NOTE: changes to the Header should be duplicated in:
 // - header.Hash()
@@ -324,30 +349,37 @@ func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
 // - https://github.com/xufeisofly/hotstuff/blob/v0.34.x/spec/blockchain/blockchain.md
 type Header struct {
 	// basic block info
-	Version tmversion.Consensus `json:"version"`
-	ChainID string              `json:"chain_id"`
+	Version tmversion.Consensus `json:"version"`  // hs
+	ChainID string              `json:"chain_id"` // hs
 	Height  int64               `json:"height"`
-	Time    time.Time           `json:"time"`
+	Time    time.Time           `json:"time"` // hs
 
 	// prev block info
-	LastBlockID BlockID `json:"last_block_id"`
+	LastBlockID BlockID          `json:"last_block_id"` // hs
+	DataHash    tmbytes.HexBytes `json:"data_hash"`     // transactions
 
-	// hashes of block data
-	LastCommitHash tmbytes.HexBytes `json:"last_commit_hash"` // commit from validators from the last block
-	DataHash       tmbytes.HexBytes `json:"data_hash"`        // transactions
+	View       View        // View
+	QuorumCert *QuorumCert // QC for a previous block
+	SelfCommit *HsCommit   // Commit for self
+	// root hash of all results from the txs from this block
+	ResultsHash tmbytes.HexBytes `json:"results_hash"`
 
 	// hashes from the app output from the prev block
 	ValidatorsHash     tmbytes.HexBytes `json:"validators_hash"`      // validators for the current block
 	NextValidatorsHash tmbytes.HexBytes `json:"next_validators_hash"` // validators for the next block
 	ConsensusHash      tmbytes.HexBytes `json:"consensus_hash"`       // consensus params for current block
 	AppHash            tmbytes.HexBytes `json:"app_hash"`             // state after txs from the previous block
-	// root hash of all results from the txs from the previous block
-	// see `deterministicResponseDeliverTx` to understand which parts of a tx is hashed into here
-	LastResultsHash tmbytes.HexBytes `json:"last_results_hash"`
 
 	// consensus info
 	EvidenceHash    tmbytes.HexBytes `json:"evidence_hash"`    // evidence included in the block
 	ProposerAddress Address          `json:"proposer_address"` // original proposer of the block
+
+	// ---- not hotstuff ----
+	// hashes of block data
+	LastCommitHash tmbytes.HexBytes `json:"last_commit_hash"` // commit from validators from the last block
+	// root hash of all results from the txs from the previous block
+	// see `deterministicResponseDeliverTx` to understand which parts of a tx is hashed into here
+	LastResultsHash tmbytes.HexBytes `json:"last_results_hash"`
 }
 
 // Populate the Header with state-derived data.
@@ -368,6 +400,24 @@ func (h *Header) Populate(
 	h.ConsensusHash = consensusHash
 	h.AppHash = appHash
 	h.LastResultsHash = lastResultsHash
+	h.ProposerAddress = proposerAddress
+}
+
+func (h *Header) HsPopulate(
+	version tmversion.Consensus, chainID string,
+	timestamp time.Time, lastBlockID BlockID,
+	valHash, nextValHash []byte,
+	consensusHash, appHash []byte,
+	proposerAddress Address,
+) {
+	h.Version = version
+	h.ChainID = chainID
+	h.Time = timestamp
+	h.LastBlockID = lastBlockID
+	h.ValidatorsHash = valHash
+	h.NextValidatorsHash = nextValHash
+	h.ConsensusHash = consensusHash
+	h.AppHash = appHash
 	h.ProposerAddress = proposerAddress
 }
 
@@ -462,16 +512,19 @@ func (h *Header) Hash() tmbytes.HexBytes {
 		cdcEncode(h.Height),
 		pbt,
 		bzbi,
-		cdcEncode(h.LastCommitHash),
 		cdcEncode(h.DataHash),
 		cdcEncode(h.ValidatorsHash),
 		cdcEncode(h.NextValidatorsHash),
 		cdcEncode(h.ConsensusHash),
 		cdcEncode(h.AppHash),
-		cdcEncode(h.LastResultsHash),
+		cdcEncode(h.ResultsHash),
 		cdcEncode(h.EvidenceHash),
 		cdcEncode(h.ProposerAddress),
 	})
+}
+
+func (h *Header) ParentHash() tmbytes.HexBytes {
+	return h.LastBlockID.Hash
 }
 
 // StringIndented returns an indented string representation of the header.
@@ -749,6 +802,10 @@ type Commit struct {
 	// unmarshaling.
 	hash     tmbytes.HexBytes
 	bitArray *bits.BitArray
+}
+
+type HsCommit struct {
+	CommitQC *QuorumCert
 }
 
 // NewCommit returns a new Commit.

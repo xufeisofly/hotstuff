@@ -20,7 +20,7 @@ import (
 	bcv1 "github.com/xufeisofly/hotstuff/blockchain/v1"
 	bcv2 "github.com/xufeisofly/hotstuff/blockchain/v2"
 	cfg "github.com/xufeisofly/hotstuff/config"
-	cs "github.com/xufeisofly/hotstuff/consensus"
+	cs "github.com/xufeisofly/hotstuff/consensus_old"
 	"github.com/xufeisofly/hotstuff/crypto"
 	"github.com/xufeisofly/hotstuff/evidence"
 

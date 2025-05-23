@@ -320,6 +320,10 @@ func (vals *ValidatorSet) TotalVotingPower() int64 {
 	return vals.totalVotingPower
 }
 
+func (vals *ValidatorSet) QuorumVotingPower() int64 {
+	return vals.TotalVotingPower()*2/3 + 1
+}
+
 // GetProposer returns the current proposer. If the validator set is empty, nil
 // is returned.
 func (vals *ValidatorSet) GetProposer() (proposer *Validator) {

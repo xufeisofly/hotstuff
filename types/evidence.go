@@ -563,7 +563,7 @@ func NewMockDuplicateVoteEvidence(height int64, time time.Time, chainID string) 
 func NewMockDuplicateVoteEvidenceWithValidator(height int64, time time.Time,
 	pv PrivValidator, chainID string) *DuplicateVoteEvidence {
 	pubKey, _ := pv.GetPubKey()
-	val := NewValidator(pubKey, 10)
+	val := NewValidator(pubKey, nil, 10)
 	voteA := makeMockVote(height, 0, 0, pubKey.Address(), randBlockID(), time)
 	vA := voteA.ToProto()
 	_ = pv.SignVote(chainID, vA)

@@ -1,6 +1,7 @@
 package bytes
 
 import (
+	"bytes"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -62,4 +63,8 @@ func (bz HexBytes) Format(s fmt.State, verb rune) {
 	default:
 		s.Write([]byte(fmt.Sprintf("%X", []byte(bz))))
 	}
+}
+
+func (bz HexBytes) Equal(b HexBytes) bool {
+	return bytes.Equal(bz, b)
 }

@@ -255,6 +255,7 @@ func persistentPeersString(config *cfg.Config) (string, error) {
 		if err != nil {
 			return "", err
 		}
+		// nodeKey.ID() 就是 node 账户的 address
 		persistentPeers[i] = p2p.IDAddressString(nodeKey.ID(), fmt.Sprintf("%s:%d", hostnameOrIP(i), p2pPort))
 	}
 	return strings.Join(persistentPeers, ","), nil

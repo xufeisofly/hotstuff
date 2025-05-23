@@ -1,4 +1,4 @@
-package consensus
+package consensus_old
 
 import (
 	abci "github.com/xufeisofly/hotstuff/abci/types"

@@ -10,6 +10,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	"github.com/xufeisofly/hotstuff/crypto/ed25519"
 	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
 	tmjson "github.com/xufeisofly/hotstuff/libs/json"
@@ -48,6 +49,9 @@ type FilePVKey struct {
 	Address types.Address  `json:"address"`
 	PubKey  crypto.PubKey  `json:"pub_key"`
 	PrivKey crypto.PrivKey `json:"priv_key"`
+
+	BlsPubKey *bls.PubKey `json:"bls_pub_key"`
+	BlsPriKey *bls.PriKey `json:"bls_pri_key"`
 
 	filePath string
 }
@@ -246,6 +250,14 @@ func (pv *FilePV) GetAddress() types.Address {
 // Implements PrivValidator.
 func (pv *FilePV) GetPubKey() (crypto.PubKey, error) {
 	return pv.Key.PubKey, nil
+}
+
+func (pv *FilePV) GetBlsPubKey() (*bls.PubKey, error) {
+	return pv.Key.BlsPubKey, nil
+}
+
+func (pv *FilePV) GetBlsPriKey() *bls.PriKey {
+	return pv.Key.BlsPriKey
 }
 
 // SignVote signs a canonical representation of the vote, along with the

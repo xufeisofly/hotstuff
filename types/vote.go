@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	tmbytes "github.com/xufeisofly/hotstuff/libs/bytes"
 	"github.com/xufeisofly/hotstuff/libs/protoio"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
@@ -44,6 +45,7 @@ func NewConflictingVoteError(vote1, vote2 *Vote) *ErrVoteConflictingVotes {
 
 // Address is hex bytes.
 type Address = crypto.Address
+type AddressStr = crypto.AddressStr
 
 // Vote represents a prevote, precommit, or commit vote from validators for
 // consensus.
@@ -243,4 +245,109 @@ func VoteFromProto(pv *tmproto.Vote) (*Vote, error) {
 	vote.Signature = pv.Signature
 
 	return vote, vote.ValidateBasic()
+}
+
+// HsVote message for hotstuff
+type HsVote struct {
+	View             View                   `json:"view"`
+	BlockID          BlockID                `json:"block_id"`
+	ValidatorAddress Address                `json:"validator_address"`
+	EpochView        View                   `json:"epoch_view"`
+	Timestamp        time.Time              `json:"timestamp"`
+	Signature        crypto.QuorumSignature `json:"signature"`
+}
+
+func (vote *HsVote) String() string {
+	if vote == nil {
+		return nilVoteStr
+	}
+
+	return fmt.Sprintf("Vote{%X %v/%v %X %X @ %s}",
+		tmbytes.Fingerprint(vote.ValidatorAddress),
+		vote.EpochView,
+		vote.View,
+		tmbytes.Fingerprint(vote.BlockID.Hash),
+		tmbytes.Fingerprint(vote.Signature.ToBytes()),
+		CanonicalTime(vote.Timestamp),
+	)
+}
+
+func (vote *HsVote) Copy() *HsVote {
+	voteCopy := *vote
+	return &voteCopy
+}
+
+func (vote *HsVote) ValidateBasic() error {
+	if vote.View < 0 {
+		return errors.New("negative View")
+	}
+
+	if err := vote.BlockID.ValidateBasic(); err != nil {
+		return fmt.Errorf("wrong BlockID: %v", err)
+	}
+
+	// BlockID.ValidateBasic would not err if we for instance have an empty hash but a
+	// non-empty PartsSetHeader:
+	if !vote.BlockID.IsZero() && !vote.BlockID.IsComplete() {
+		return fmt.Errorf("blockID must be either empty or complete, got: %v", vote.BlockID)
+	}
+
+	if len(vote.ValidatorAddress) != crypto.AddressSize {
+		return fmt.Errorf("expected ValidatorAddress size to be %d bytes, got %d bytes",
+			crypto.AddressSize,
+			len(vote.ValidatorAddress),
+		)
+	}
+
+	if vote.Signature == nil || len(vote.Signature.ToBytes()) == 0 {
+		return errors.New("signature is missing")
+	}
+
+	return nil
+}
+
+func (vote *HsVote) ToProto() *tmproto.HsVote {
+	if vote == nil {
+		return nil
+	}
+
+	return &tmproto.HsVote{
+		View:             vote.View,
+		BlockID:          vote.BlockID.ToProto(),
+		EpochView:        vote.EpochView,
+		Time:             vote.Timestamp,
+		ValidatorAddress: vote.ValidatorAddress,
+		Signature:        vote.Signature.ToBytes(),
+	}
+}
+
+func HsVoteFromProto(pv *tmproto.HsVote) (*HsVote, error) {
+	if pv == nil {
+		return nil, errors.New("nil vote")
+	}
+
+	blockID, err := BlockIDFromProto(&pv.BlockID)
+	if err != nil {
+		return nil, err
+	}
+
+	sig, err := bls.AggregateSignatureFromBytes(pv.Signature)
+	if err != nil {
+		return nil, err
+	}
+
+	vote := &HsVote{
+		View:             pv.View,
+		BlockID:          *blockID,
+		EpochView:        pv.EpochView,
+		Timestamp:        pv.Time,
+		ValidatorAddress: pv.ValidatorAddress,
+		Signature:        sig,
+	}
+
+	return vote, vote.ValidateBasic()
+}
+
+func HsVoteSignBytes(chainID string, vote *tmproto.HsVote) []byte {
+	return []byte{}
 }

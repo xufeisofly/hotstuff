@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	"github.com/xufeisofly/hotstuff/crypto/ed25519"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
 )
@@ -17,6 +18,10 @@ type PrivValidator interface {
 
 	SignVote(chainID string, vote *tmproto.Vote) error
 	SignProposal(chainID string, proposal *tmproto.Proposal) error
+
+	// for hotstuff
+	GetBlsPubKey() (*bls.PubKey, error)
+	GetBlsPriKey() *bls.PriKey
 }
 
 type PrivValidatorsByAddress []PrivValidator
@@ -49,24 +54,35 @@ func (pvs PrivValidatorsByAddress) Swap(i, j int) {
 // Only use it for testing.
 type MockPV struct {
 	PrivKey              crypto.PrivKey
+	BlsPrivKey           *bls.PriKey
 	breakProposalSigning bool
 	breakVoteSigning     bool
 }
 
 func NewMockPV() MockPV {
-	return MockPV{ed25519.GenPrivKey(), false, false}
+	blsPrivKey := bls.GenPrivKey()
+	return MockPV{ed25519.GenPrivKey(), &blsPrivKey, false, false}
 }
 
 // NewMockPVWithParams allows one to create a MockPV instance, but with finer
 // grained control over the operation of the mock validator. This is useful for
 // mocking test failures.
-func NewMockPVWithParams(privKey crypto.PrivKey, breakProposalSigning, breakVoteSigning bool) MockPV {
-	return MockPV{privKey, breakProposalSigning, breakVoteSigning}
+func NewMockPVWithParams(privKey crypto.PrivKey, blsPrivKey *bls.PriKey, breakProposalSigning, breakVoteSigning bool) MockPV {
+	return MockPV{privKey, blsPrivKey, breakProposalSigning, breakVoteSigning}
 }
 
 // Implements PrivValidator.
 func (pv MockPV) GetPubKey() (crypto.PubKey, error) {
 	return pv.PrivKey.PubKey(), nil
+}
+
+func (pv MockPV) GetBlsPubKey() (*bls.PubKey, error) {
+	blsPubKey := pv.BlsPrivKey.Public()
+	return &blsPubKey, nil
+}
+
+func (pv MockPV) GetBlsPriKey() *bls.PriKey {
+	return pv.BlsPrivKey
 }
 
 // Implements PrivValidator.
@@ -141,5 +157,6 @@ func (pv *ErroringMockPV) SignProposal(chainID string, proposal *tmproto.Proposa
 // NewErroringMockPV returns a MockPV that fails on each signing request. Again, for testing only.
 
 func NewErroringMockPV() *ErroringMockPV {
-	return &ErroringMockPV{MockPV{ed25519.GenPrivKey(), false, false}}
+	blsSk := bls.GenPrivKey()
+	return &ErroringMockPV{MockPV{ed25519.GenPrivKey(), &blsSk, false, false}}
 }

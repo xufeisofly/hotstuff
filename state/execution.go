@@ -110,6 +110,25 @@ func (blockExec *BlockExecutor) CreateProposalBlock(
 	return state.MakeBlock(height, txs, commit, evidence, proposerAddr)
 }
 
+func (blockExec *BlockExecutor) HsCreateProposalBlock(
+	view types.View,
+	state State, lastQC *types.QuorumCert,
+	proposerAddr []byte,
+) (*types.Block, *types.PartSet) {
+
+	maxBytes := state.ConsensusParams.Block.MaxBytes
+	maxGas := state.ConsensusParams.Block.MaxGas
+
+	evidence, evSize := blockExec.evpool.PendingEvidence(state.ConsensusParams.Evidence.MaxBytes)
+
+	// Fetch a limited amount of valid txs
+	maxDataBytes := types.MaxDataBytes(maxBytes, evSize, state.Validators.Size())
+
+	txs := blockExec.mempool.ReapMaxBytesMaxGas(maxDataBytes, maxGas)
+
+	return state.HsMakeBlock(view, txs, lastQC, evidence, proposerAddr)
+}
+
 // ValidateBlock validates the given block against the given state.
 // If the block is invalid, it returns an error.
 // Validation does not mutate state, but does require historical information from the stateDB,
@@ -128,6 +147,7 @@ func (blockExec *BlockExecutor) ValidateBlock(state State, block *types.Block) e
 // It's the only function that needs to be called
 // from outside this package to process and commit an entire block.
 // It takes a blockID to avoid recomputing the parts hash.
+// 这个函数才是真正执行 Txs 的函数，需要调用 App 层
 func (blockExec *BlockExecutor) ApplyBlock(
 	state State, blockID types.BlockID, block *types.Block,
 ) (State, int64, error) {
@@ -137,6 +157,7 @@ func (blockExec *BlockExecutor) ApplyBlock(
 	}
 
 	startTime := time.Now().UnixNano()
+	// 调用 DeliverTx(block.txs)
 	abciResponses, err := execBlockOnProxyApp(
 		blockExec.logger, blockExec.proxyApp, block, blockExec.store, state.InitialHeight,
 	)
@@ -149,6 +170,7 @@ func (blockExec *BlockExecutor) ApplyBlock(
 	fail.Fail() // XXX
 
 	// Save the results before we commit.
+	// 将 DeliverTx 返回的结果存入 store
 	if err := blockExec.store.SaveABCIResponses(block.Height, abciResponses); err != nil {
 		return state, 0, err
 	}
@@ -156,6 +178,7 @@ func (blockExec *BlockExecutor) ApplyBlock(
 	fail.Fail() // XXX
 
 	// validate the validator updates and convert to tendermint types
+	// App 层同时还返回了 validator 应该更新的 info
 	abciValUpdates := abciResponses.EndBlock.ValidatorUpdates
 	err = validateValidatorUpdates(abciValUpdates, state.ConsensusParams.Validator)
 	if err != nil {
@@ -171,12 +194,14 @@ func (blockExec *BlockExecutor) ApplyBlock(
 	}
 
 	// Update the state with the block and responses.
+	// 根据 App 层的返回，更新 state，返回更新后的 state(仅在内存，还没有 commit)
 	state, err = updateState(state, blockID, &block.Header, abciResponses, validatorUpdates)
 	if err != nil {
 		return state, 0, fmt.Errorf("commit failed for application: %v", err)
 	}
 
 	// Lock mempool, commit app state, update mempoool.
+	// 提交新的 state，更新 mempool
 	appHash, retainHeight, err := blockExec.Commit(state, block, abciResponses.DeliverTxs)
 	if err != nil {
 		return state, 0, fmt.Errorf("commit failed for application: %v", err)
@@ -188,6 +213,7 @@ func (blockExec *BlockExecutor) ApplyBlock(
 	fail.Fail() // XXX
 
 	// Update the app hash and save the state.
+	// store 中保存一下当前 state 快照
 	state.AppHash = appHash
 	if err := blockExec.store.Save(state); err != nil {
 		return state, 0, err

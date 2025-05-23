@@ -15,7 +15,7 @@ import (
 
 	cfg "github.com/xufeisofly/hotstuff/config"
 	tmcon "github.com/xufeisofly/hotstuff/consensus"
-	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	cstypes "github.com/xufeisofly/hotstuff/consensus_old/types"
 	"github.com/xufeisofly/hotstuff/crypto"
 	tmevents "github.com/xufeisofly/hotstuff/libs/events"
 	"github.com/xufeisofly/hotstuff/libs/fail"

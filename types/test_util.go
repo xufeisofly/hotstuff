@@ -99,3 +99,19 @@ func MakeBlock(height int64, txs []Tx, lastCommit *Commit, evidence []Evidence) 
 	block.fillHeader()
 	return block
 }
+
+func HsMakeBlock(view View, txs []Tx, lastQC *QuorumCert, evidence []Evidence) *Block {
+	block := &Block{
+		Header: Header{
+			Version:    tmversion.Consensus{Block: version.BlockProtocol, App: 0},
+			View:       view,
+			QuorumCert: lastQC,
+		},
+		Data: Data{
+			Txs: txs,
+		},
+		Evidence: EvidenceData{Evidence: evidence},
+	}
+	block.fillHeader()
+	return block
+}

@@ -1,4 +1,4 @@
-package consensus
+package consensus_old
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/xufeisofly/hotstuff/abci/example/counter"
-	cstypes "github.com/xufeisofly/hotstuff/consensus/types"
+	cstypes "github.com/xufeisofly/hotstuff/consensus_old/types"
 	"github.com/xufeisofly/hotstuff/crypto/tmhash"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"

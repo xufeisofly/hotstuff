@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/xufeisofly/hotstuff/crypto"
+	"github.com/xufeisofly/hotstuff/crypto/bls"
 	cryptoenc "github.com/xufeisofly/hotstuff/crypto/encoding"
 	privvalproto "github.com/xufeisofly/hotstuff/proto/hotstuff/privval"
 	tmproto "github.com/xufeisofly/hotstuff/proto/hotstuff/types"
@@ -88,6 +89,14 @@ func (sc *SignerClient) GetPubKey() (crypto.PubKey, error) {
 	}
 
 	return pk, nil
+}
+
+func (sc *SignerClient) GetBlsPubKey() (*bls.PubKey, error) {
+	return nil, nil
+}
+
+func (sc *SignerClient) GetBlsPriKey() *bls.PriKey {
+	return nil
 }
 
 // SignVote requests a remote signer to sign a vote

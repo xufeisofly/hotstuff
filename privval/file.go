@@ -46,10 +46,12 @@ func voteToStep(vote *tmproto.Vote) int8 {
 
 // FilePVKey stores the immutable part of PrivValidator.
 type FilePVKey struct {
-	Address   types.Address  `json:"address"`
-	PubKey    crypto.PubKey  `json:"pub_key"`
-	BlsPubKey *bls.PubKey    `json:"bls_pub_key"`
-	PrivKey   crypto.PrivKey `json:"priv_key"`
+	Address types.Address  `json:"address"`
+	PubKey  crypto.PubKey  `json:"pub_key"`
+	PrivKey crypto.PrivKey `json:"priv_key"`
+
+	BlsPubKey *bls.PubKey `json:"bls_pub_key"`
+	BlsPriKey *bls.PriKey `json:"bls_pri_key"`
 
 	filePath string
 }
@@ -252,6 +254,10 @@ func (pv *FilePV) GetPubKey() (crypto.PubKey, error) {
 
 func (pv *FilePV) GetBlsPubKey() (*bls.PubKey, error) {
 	return pv.Key.BlsPubKey, nil
+}
+
+func (pv *FilePV) GetBlsPriKey() *bls.PriKey {
+	return pv.Key.BlsPriKey
 }
 
 // SignVote signs a canonical representation of the vote, along with the

@@ -592,7 +592,7 @@ func randConsensusNet(nValidators int, testName string,
 		vals := types.TM2PB.ValidatorUpdates(state.HsValidators)
 		app.InitChain(abci.RequestInitChain{Validators: vals})
 
-		css[i] = newConsensusWithConfigAndBlockStore(thisConfig, state, privVals[i], app, stateDB)
+		css[i] = newConsensusWithConfigAndBlockStore(thisConfig, state, privVals[i], privVals, app, stateDB)
 		css[i].SetLogger(logger.With("validator", i, "module", "consensus"))
 	}
 	return css, func() {
@@ -651,7 +651,7 @@ func randConsensusNetWithPeers(
 		app.InitChain(abci.RequestInitChain{Validators: vals})
 		// sm.SaveState(stateDB,state)	//height 1's validatorsInfo already saved in LoadStateFromDBOrGenesisDoc above
 
-		css[i] = newConsensusWithConfig(thisConfig, state, privVal, app)
+		css[i] = newConsensusWithConfig(thisConfig, state, privVal, privVals, app)
 		css[i].SetLogger(logger.With("validator", i, "module", "consensus"))
 	}
 	return css, genDoc, peer0Config, func() {

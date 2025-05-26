@@ -104,6 +104,7 @@ func NewConsensus(
 	cs.txNotifier = txNotifier
 	cs.evpool = evpool
 	cs.pacemaker = pacemaker
+	cs.evsw = tmevents.NewEventSwitch()
 
 	for _, opt := range options {
 		opt(cs)

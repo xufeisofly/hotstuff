@@ -288,7 +288,16 @@ func newConsensusWithConfigAndBlockStore(
 	pk, _ := pv.GetPubKey()
 	cryptoCons := NewCrypto(bls.New(pv.GetBlsPriKey(), pubKeyFn, pk.Address()))
 	pacemaker := NewPacemaker(cryptoCons, leaderElect, viewDuration)
-	cs := NewConsensus(thisConfig.HsConsensus, cryptoCons, state, blockExec, blockchain, mempool, evpool, pacemaker)
+	cs := NewConsensus(
+		thisConfig.HsConsensus,
+		cryptoCons,
+		state,
+		blockExec,
+		blockchain,
+		mempool,
+		evpool,
+		pacemaker,
+	)
 	cs.SetLogger(log.TestingLogger().With("module", "consensus"))
 	cs.SetPrivValidator(pv)
 

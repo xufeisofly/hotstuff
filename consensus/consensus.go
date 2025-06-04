@@ -221,11 +221,13 @@ func (cs *Consensus) createProposal(syncInfo *SyncInfo) (*types.HsProposal, erro
 
 	block, _ := cs.blockExec.HsCreateProposalBlock(cs.pacemaker.CurView(), cs.state, cs.pacemaker.HighQC(), proposerAddr)
 
-	return types.NewHsProposal(
-		types.View(1),
-		block,
-		syncInfo.TC(),
-	), nil
+	var tc *types.TimeoutCert
+	if syncInfo != nil {
+		tc = syncInfo.TC()
+	}
+	proposal := types.NewHsProposal(types.View(1), block, tc)
+
+	return proposal, nil
 }
 
 func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) error {

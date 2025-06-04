@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	tmpubsub "github.com/xufeisofly/hotstuff/libs/pubsub"
 	"github.com/xufeisofly/hotstuff/types"
 )
@@ -31,10 +32,20 @@ func TestPropose(t *testing.T) {
 
 	proposalCh := subscribe(cs.eventBus, types.EventQueryHsPropose)
 
-	// TODO propose
-	si := NewSyncInfo().WithQC(mockQuorumCert(1))
-	cs.Propose(&si)
+	cs.Propose(nil)
 	ensureNewProposal(proposalCh, cs.CurView())
+}
+
+func TestProposeWithNewestQC(t *testing.T) {
+	cs, _ := randConsensus(1)
+
+	proposalCh := subscribe(cs.eventBus, types.EventQueryHsPropose)
+
+	cs.pacemaker.AdvanceView(NewSyncInfo().WithQC(mockQuorumCert(types.View(2))))
+
+	cs.Propose(nil)
+	ensureNewProposal(proposalCh, cs.CurView())
+	assert.Equal(t, types.View(2), cs.CurView())
 }
 
 // 测试 proposer 选举

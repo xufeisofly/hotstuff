@@ -222,8 +222,7 @@ func newConsensusWithConfigAndBlockStore(
 	blockDB dbm.DB,
 ) *Consensus {
 	// Get BlockStore
-	blockStore := store.NewBlockStore(blockDB)
-	blockchain := NewBlockchain(blockStore)
+	blockStore := store.NewHsBlockStore(store.NewBlockStore(blockDB))
 
 	// one for mempool, one for consensus
 	mtx := new(tmsync.Mutex)
@@ -271,8 +270,7 @@ func newConsensusWithConfigAndBlockStore(
 	}
 
 	blockExec := sm.NewBlockExecutor(stateStore, log.TestingLogger(), proxyAppConnCon, mempool, evpool)
-
-	leaderElect := NewLeaderElect(blockchain, state, log.TestingLogger())
+	leaderElect := NewLeaderElect(blockStore, state, log.TestingLogger())
 	viewDuration := NewFixedViewDuration(1 * time.Second)
 
 	pubKeyFn := func(addr crypto.Address) (crypto.PubKey, bool) {
@@ -293,7 +291,7 @@ func newConsensusWithConfigAndBlockStore(
 		cryptoCons,
 		state,
 		blockExec,
-		blockchain,
+		blockStore,
 		mempool,
 		evpool,
 		pacemaker,

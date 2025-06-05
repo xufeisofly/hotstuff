@@ -1,0 +1,37 @@
+package store
+
+import (
+	"fmt"
+
+	"github.com/xufeisofly/hotstuff/types"
+)
+
+// qc referenced block not found
+type ErrNotFoundQcRefBlock struct {
+	Hash types.Hash
+	View types.View
+}
+
+func (err ErrNotFoundQcRefBlock) Error() string {
+	return fmt.Sprintf("qc ref block not found, view: %d, hash: %s", err.View, err.Hash)
+}
+
+// parent block not found
+type ErrNotFoundParentBlock struct {
+	Hash types.Hash
+	View types.View
+}
+
+func (err ErrNotFoundParentBlock) Error() string {
+	return fmt.Sprintf("parent block not found, view: %d, hash: %s", err.View, err.Hash)
+}
+
+// block not found
+type ErrNotFoundBlock struct {
+	Hash types.Hash
+	View types.View
+}
+
+func (err ErrNotFoundBlock) Error() string {
+	return fmt.Sprintf("block not found, view: %d, hash: %s", err.View, err.Hash)
+}

@@ -9,6 +9,7 @@ import (
 	tcrypto "github.com/xufeisofly/hotstuff/crypto"
 	"github.com/xufeisofly/hotstuff/libs/log"
 	sm "github.com/xufeisofly/hotstuff/state"
+	"github.com/xufeisofly/hotstuff/store"
 	"github.com/xufeisofly/hotstuff/types"
 )
 
@@ -17,28 +18,28 @@ type LeaderElect interface {
 }
 
 type leaderElect struct {
-	blockchain Blockchain
+	blockStore sm.HsBlockStore
 	state      sm.State
 	logger     log.Logger
 }
 
-func NewLeaderElect(blockchain Blockchain, state sm.State, l log.Logger) LeaderElect {
+func NewLeaderElect(blockStore sm.HsBlockStore, state sm.State, l log.Logger) LeaderElect {
 	return &leaderElect{
-		blockchain: blockchain,
+		blockStore: blockStore,
 		state:      state,
 		logger:     l,
 	}
 }
 
 func (l *leaderElect) GetLeader(view types.View) *types.Validator {
-	qc := QuorumCertBeforeGenesis()
-	committedBlock := l.blockchain.LatestCommittedBlock()
+	qc := store.QuorumCertBeforeGenesis()
+	committedBlock := l.blockStore.LatestCommittedBlock()
 	if committedBlock != nil {
 		qc = *committedBlock.SelfCommit.CommitQC
 	}
 
 	// 对于创始 QC，默认使用 0 号 validator 作为 proposer
-	if qc.View() == types.ViewBeforeGenesis || qc.View() == types.GenesisView {
+	if qc.View() == types.ViewBeforeGenesis {
 		_, val := l.state.HsValidators.GetByIndex(0)
 		return val
 	}

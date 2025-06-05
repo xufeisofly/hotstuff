@@ -39,7 +39,7 @@ type Consensus struct {
 	pacemaker Pacemaker
 
 	// store blocks and commits
-	blockchain Blockchain // 使用 Blockchain 作为存储，不要使用 tendermint 的 BlockStore，结构不同
+	blockStore sm.HsBlockStore // 使用 Blockchain 作为存储，不要使用 tendermint 的 BlockStore，结构不同
 
 	// create and execute blocks
 	blockExec   *sm.BlockExecutor
@@ -89,7 +89,7 @@ func NewConsensus(
 	crypto Crypto,
 	state sm.State,
 	blockExec *sm.BlockExecutor,
-	blockchain Blockchain,
+	blockStore sm.HsBlockStore,
 	txNotifier txNotifier,
 	evpool evidencePool,
 	pacemaker Pacemaker,
@@ -100,7 +100,7 @@ func NewConsensus(
 	cs.crypto = crypto
 	cs.state = state
 	cs.blockExec = blockExec
-	cs.blockchain = blockchain
+	cs.blockStore = blockStore
 	cs.txNotifier = txNotifier
 	cs.evpool = evpool
 	cs.pacemaker = pacemaker
@@ -250,7 +250,7 @@ func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 	cs.blockExec.ValidateBlock(cs.state, block)
 
 	// accept block
-	cs.blockchain.Store(block)
+	cs.blockStore.Store(block)
 
 	if b := cs.getBlockToCommit(block); b != nil {
 		cs.commit(b)
@@ -288,32 +288,32 @@ func (cs *Consensus) handleProposalMessage(msg *ProposalMessage, peerID p2p.ID) 
 }
 
 func (cs *Consensus) checkVoteRule(block *types.Block) bool {
-	qcBlock := cs.blockchain.QuorumCertRef(block)
-	if qcBlock != nil && qcBlock.View > cs.blockchain.LatestLockedBlock().View {
+	qcBlock := cs.blockStore.QuorumCertRef(block)
+	if qcBlock != nil && qcBlock.View > cs.blockStore.LatestLockedBlock().View {
 		return true
-	} else if cs.blockchain.Extends(block, cs.blockchain.LatestLockedBlock()) {
+	} else if cs.blockStore.Extends(block, cs.blockStore.LatestLockedBlock()) {
 		return true
 	}
 	return false
 }
 
 func (cs *Consensus) getBlockToCommit(block *types.Block) *types.Block {
-	block1 := cs.blockchain.QuorumCertRef(block)
+	block1 := cs.blockStore.QuorumCertRef(block)
 	if block1 == nil {
 		return nil
 	}
 
-	block2 := cs.blockchain.QuorumCertRef(block1)
+	block2 := cs.blockStore.QuorumCertRef(block1)
 	if block2 == nil {
 		return nil
 	}
 
 	// update latest locked block
-	if block2.View > cs.blockchain.LatestLockedBlock().View {
-		cs.blockchain.SetLatestLockedBlock(block2)
+	if block2.View > cs.blockStore.LatestLockedBlock().View {
+		cs.blockStore.SetLatestLockedBlock(block2)
 	}
 
-	block3 := cs.blockchain.QuorumCertRef(block2)
+	block3 := cs.blockStore.QuorumCertRef(block2)
 	if block3 == nil {
 		return nil
 	}
@@ -332,7 +332,7 @@ func (cs *Consensus) commit(block *types.Block) {
 		return
 	}
 
-	forkedBlocks, err := cs.blockchain.PruneTo(block.Hash())
+	forkedBlocks, err := cs.blockStore.PruneTo(block.Hash())
 	if err != nil {
 		cs.Logger.Error("prune failed", "blockHash", block.Hash(), "err", err)
 		return
@@ -343,10 +343,10 @@ func (cs *Consensus) commit(block *types.Block) {
 }
 
 func (cs *Consensus) commitInner(block *types.Block) error {
-	if cs.blockchain.LatestCommittedBlock().View >= block.View {
+	if cs.blockStore.LatestCommittedBlock().View >= block.View {
 		return nil
 	}
-	if parent := cs.blockchain.ParentRef(block); parent != nil {
+	if parent := cs.blockStore.ParentRef(block); parent != nil {
 		err := cs.commitInner(parent)
 		if err != nil {
 			return err
@@ -378,7 +378,7 @@ func (cs *Consensus) verifyTC(tc *types.TimeoutCert) bool {
 
 func (cs *Consensus) handleVoteMessage(msg *VoteMessage, peerID p2p.ID) {
 	blockHash := msg.Vote.BlockID.Hash
-	block := cs.blockchain.Get(blockHash)
+	block := cs.blockStore.Get(blockHash)
 	if block == nil {
 		// TODO synchronizing block from neighbor node
 		return
